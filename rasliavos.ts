@@ -1,38 +1,3 @@
-class LanguageLTS {
-    #language: string;
-    #ltsVersions: Array<number>;
-
-    constructor(language: string, ltsVersions: Array<number>) {
-        this.#language = language;
-        this.#ltsVersions = ltsVersions;
-    };
-
-    get language(): string {
-        return this.#language;
-    }
-
-    set language(value: string) {
-        this.#language = value;
-    }
-
-    get ltsVersions(): Array<number> {
-        return this.#ltsVersions;
-    };
-
-    set ltsVersions(value: Array<number>) {
-        this.#ltsVersions = value;
-    };
-
-    validateJSONinput(jsonObject: JSON): void {
-    /**
-     * @param {JSON} jsonObject - JSON returned from sendRequest().
-     *
-    */
-
-    };
-};
-
-
 async function sendRequest(language: string): Promise<{}> {
     /**
      * @param {string} language - name of the language.
@@ -73,6 +38,8 @@ function getNlatestVersions(numOfVersions: number): Array<number> {
     let ltsVersions: Array<number> = [];
     return ltsVersions;
 };
+
+import { LanguageLTS } from "./classes";
 
 function run(language: string) {
     const languageLTS = new LanguageLTS(language, new Array<number>);
