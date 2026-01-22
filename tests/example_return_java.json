@@ -1,0 +1,263 @@
+{
+  "schema_version": "1.2.0",
+  "generated_at": "2026-01-22T00:11:38+00:00",
+  "last_modified": "2026-01-22T00:10:55+00:00",
+  "result": {
+    "name": "amazon-corretto",
+    "aliases": [
+      "corretto"
+    ],
+    "label": "Amazon Corretto",
+    "category": "lang",
+    "tags": [
+      "amazon",
+      "java-distribution",
+      "lang"
+    ],
+    "versionCommand": "java -version",
+    "identifiers": [
+      {
+        "type": "cpe",
+        "id": "cpe:/a:amazon:corretto"
+      },
+      {
+        "type": "cpe",
+        "id": "cpe:2.3:a:amazon:corretto"
+      }
+    ],
+    "labels": {
+      "eoas": null,
+      "discontinued": null,
+      "eol": "Security Support",
+      "eoes": null
+    },
+    "links": {
+      "icon": "https://cdn.jsdelivr.net/npm/simple-icons/icons/openjdk.svg",
+      "html": "https://endoflife.date/amazon-corretto",
+      "releasePolicy": "https://aws.amazon.com/corretto/faqs/"
+    },
+    "releases": [
+      {
+        "name": "25",
+        "codename": null,
+        "label": "25 (LTS)",
+        "releaseDate": "2025-09-16",
+        "isLts": true,
+        "ltsFrom": null,
+        "isEol": false,
+        "eolFrom": "2032-10-31",
+        "isMaintained": true,
+        "latest": {
+          "name": "25.0.2.10.1",
+          "date": "2026-01-20",
+          "link": "https://github.com/corretto/corretto-25/releases/tag/25.0.2.10.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "24",
+        "codename": null,
+        "label": "24",
+        "releaseDate": "2025-03-18",
+        "isLts": false,
+        "ltsFrom": null,
+        "isEol": true,
+        "eolFrom": "2025-10-31",
+        "isMaintained": false,
+        "latest": {
+          "name": "24.0.2.12.1",
+          "date": "2025-07-16",
+          "link": "https://github.com/corretto/corretto-24/releases/tag/24.0.2.12.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "23",
+        "codename": null,
+        "label": "23",
+        "releaseDate": "2024-09-17",
+        "isLts": false,
+        "ltsFrom": null,
+        "isEol": true,
+        "eolFrom": "2025-04-30",
+        "isMaintained": false,
+        "latest": {
+          "name": "23.0.2.7.1",
+          "date": "2025-01-21",
+          "link": "https://github.com/corretto/corretto-23/releases/tag/23.0.2.7.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "22",
+        "codename": null,
+        "label": "22",
+        "releaseDate": "2024-03-19",
+        "isLts": false,
+        "ltsFrom": null,
+        "isEol": true,
+        "eolFrom": "2024-10-15",
+        "isMaintained": false,
+        "latest": {
+          "name": "22.0.2.9.1",
+          "date": "2024-07-16",
+          "link": "https://github.com/corretto/corretto-22/releases/tag/22.0.2.9.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "21",
+        "codename": null,
+        "label": "21 (LTS)",
+        "releaseDate": "2023-08-25",
+        "isLts": true,
+        "ltsFrom": null,
+        "isEol": false,
+        "eolFrom": "2030-10-31",
+        "isMaintained": true,
+        "latest": {
+          "name": "21.0.10.7.1",
+          "date": "2026-01-20",
+          "link": "https://github.com/corretto/corretto-21/releases/tag/21.0.10.7.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "20",
+        "codename": null,
+        "label": "20",
+        "releaseDate": "2023-02-23",
+        "isLts": false,
+        "ltsFrom": null,
+        "isEol": true,
+        "eolFrom": "2023-10-17",
+        "isMaintained": false,
+        "latest": {
+          "name": "20.0.2.10.1",
+          "date": "2023-08-23",
+          "link": "https://github.com/corretto/corretto-20/releases/tag/20.0.2.10.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "19",
+        "codename": null,
+        "label": "19",
+        "releaseDate": "2022-08-17",
+        "isLts": false,
+        "ltsFrom": null,
+        "isEol": true,
+        "eolFrom": "2023-04-19",
+        "isMaintained": false,
+        "latest": {
+          "name": "19.0.2.7.1",
+          "date": "2023-01-17",
+          "link": "https://github.com/corretto/corretto-19/releases/tag/19.0.2.7.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "18",
+        "codename": null,
+        "label": "18",
+        "releaseDate": "2022-02-26",
+        "isLts": false,
+        "ltsFrom": null,
+        "isEol": true,
+        "eolFrom": "2022-10-18",
+        "isMaintained": false,
+        "latest": {
+          "name": "18.0.2.9.1",
+          "date": "2022-07-19",
+          "link": "https://github.com/corretto/corretto-18/releases/tag/18.0.2.9.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "17",
+        "codename": null,
+        "label": "17 (LTS)",
+        "releaseDate": "2021-08-24",
+        "isLts": true,
+        "ltsFrom": null,
+        "isEol": false,
+        "eolFrom": "2029-10-31",
+        "isMaintained": true,
+        "latest": {
+          "name": "17.0.18.8.1",
+          "date": "2026-01-20",
+          "link": "https://github.com/corretto/corretto-17/releases/tag/17.0.18.8.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "16",
+        "codename": null,
+        "label": "16",
+        "releaseDate": "2021-03-16",
+        "isLts": false,
+        "ltsFrom": null,
+        "isEol": true,
+        "eolFrom": "2021-10-19",
+        "isMaintained": false,
+        "latest": {
+          "name": "16.0.2.7.1",
+          "date": "2022-04-19",
+          "link": "https://github.com/corretto/corretto-jdk/blob/release-16.0.2.7.1/CHANGELOG.md"
+        },
+        "custom": null
+      },
+      {
+        "name": "15",
+        "codename": null,
+        "label": "15",
+        "releaseDate": "2020-08-26",
+        "isLts": false,
+        "ltsFrom": null,
+        "isEol": true,
+        "eolFrom": "2021-04-20",
+        "isMaintained": false,
+        "latest": {
+          "name": "15.0.2.7.1",
+          "date": "2021-01-22",
+          "link": "https://github.com/corretto/corretto-jdk/blob/216fca10a21d6a26ca2846d4ca2861ea644a7a1e/CHANGELOG.md#january-2021-critical-patch-update-corretto-version-150271"
+        },
+        "custom": null
+      },
+      {
+        "name": "11",
+        "codename": null,
+        "label": "11 (LTS)",
+        "releaseDate": "2019-02-18",
+        "isLts": true,
+        "ltsFrom": null,
+        "isEol": false,
+        "eolFrom": "2032-01-31",
+        "isMaintained": true,
+        "latest": {
+          "name": "11.0.30.7.1",
+          "date": "2026-01-20",
+          "link": "https://github.com/corretto/corretto-11/releases/tag/11.0.30.7.1"
+        },
+        "custom": null
+      },
+      {
+        "name": "8",
+        "codename": null,
+        "label": "8 (LTS)",
+        "releaseDate": "2019-01-31",
+        "isLts": true,
+        "ltsFrom": null,
+        "isEol": false,
+        "eolFrom": "2030-12-31",
+        "isMaintained": true,
+        "latest": {
+          "name": "8.482.08.1",
+          "date": "2026-01-20",
+          "link": "https://github.com/corretto/corretto-8/releases/tag/8.482.08.1"
+        },
+        "custom": null
+      }
+    ]
+  }
+}
