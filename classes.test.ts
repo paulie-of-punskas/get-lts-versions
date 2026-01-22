@@ -20,7 +20,7 @@ test("LanguageLTS - use getters and setters", () => {
     expect(testObject.ltsVersions).toStrictEqual(new Array<number>);
 });
 
-test("LanguageReleases - JSON Go", () => {
+test("LanguageLatestRelease - JSON Go", () => {
     const jsonDataGo = new Array(testDataGo.result.releases);
 
     let testLanguageReleasesArray: Array<LanguageLatestRelease> = new Array<LanguageLatestRelease>;
@@ -34,7 +34,7 @@ test("LanguageReleases - JSON Go", () => {
     };
 });
 
-test("LanguageReleases - JSON Java", () => {
+test("LanguageLatestRelease - JSON Java", () => {
     const jsonDataJava = new Array(testDataJava.result.releases);
 
     let testLanguageReleasesArray: Array<LanguageLatestRelease> = new Array<LanguageLatestRelease>;
@@ -48,7 +48,7 @@ test("LanguageReleases - JSON Java", () => {
     };
 });
 
-test("LanguageReleases - JSON Python", () => {
+test("LanguageLatestRelease - JSON Python", () => {
     const jsonDataPython = new Array(testDataPython.result.releases);
 
     let testLanguageReleasesArray: Array<LanguageLatestRelease> = new Array<LanguageLatestRelease>;
