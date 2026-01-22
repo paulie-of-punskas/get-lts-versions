@@ -1,7 +1,7 @@
 import { LanguageLTS, LanguageLatestRelease, LanguageReleases } from "./classes"
 import testDataGo from "./tests/example_return_go.json";
-import testDataPython from "./tests/example_return_python.json";
 import testDataJava from "./tests/example_return_java.json";
+import testDataPython from "./tests/example_return_python.json";
 
 test("LanguageLTS - can be created", () => {
     const testObject: LanguageLTS = new LanguageLTS("test", [0, 1, 2]);
@@ -35,7 +35,7 @@ test("LanguageReleases - JSON Go", () => {
 });
 
 test("LanguageReleases - JSON Java", () => {
-    const jsonDataJava = new Array(testDataGo.result.releases);
+    const jsonDataJava = new Array(testDataJava.result.releases);
 
     let testLanguageReleasesArray: Array<LanguageLatestRelease> = new Array<LanguageLatestRelease>;
     expect(testLanguageReleasesArray instanceof Array).toBe(true);
@@ -49,7 +49,7 @@ test("LanguageReleases - JSON Java", () => {
 });
 
 test("LanguageReleases - JSON Python", () => {
-    const jsonDataPython = new Array(testDataGo.result.releases);
+    const jsonDataPython = new Array(testDataPython.result.releases);
 
     let testLanguageReleasesArray: Array<LanguageLatestRelease> = new Array<LanguageLatestRelease>;
     expect(testLanguageReleasesArray instanceof Array).toBe(true);
