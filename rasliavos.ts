@@ -30,20 +30,3 @@ async function sendRequest(language: string): Promise<{}> {
     };
 };
 
-function getNlatestVersions(numOfVersions: number): Array<number> {
-    /**
-     * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
-     * then return max supported number of versions.
-     */
-    let ltsVersions: Array<number> = [];
-    return ltsVersions;
-};
-
-import { LanguageLTS } from "./classes";
-
-function run(language: string) {
-    const languageLTS = new LanguageLTS(language, new Array<number>);
-    let returnedJSON = sendRequest("python");
-    // languageLTS.validateJSONinput(returnedJSON);
-};
-
