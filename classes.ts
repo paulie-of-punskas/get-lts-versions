@@ -74,12 +74,4 @@ export class LanguageLTS {
     public set ltsVersions(value: Array<number>) {
         this.#ltsVersions = value;
     };
-
-    validateJSONinput(jsonObject: JSON): void {
-    /**
-     * @param {JSON} jsonObject - JSON returned from sendRequest().
-     *
-    */
-
-    };
 };
