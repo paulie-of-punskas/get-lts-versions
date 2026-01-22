@@ -14,6 +14,6 @@ test('LanguageLTS - use getters and setters', () => {
     testObject.ltsVersions = new Array<number>;
 
     expect(testObject.language).toBe("labas");
-    // expect(testObject.ltsVersions).toStrictEqual("");
+    expect(testObject.ltsVersions).toStrictEqual(new Array<number>);
 
 });
