@@ -1,5 +1,5 @@
 export class LanguageLTS {
-    #language: string;
+    #language: string
     #ltsVersions: Array<number>;
 
     constructor(language: string, ltsVersions: Array<number>) {
@@ -7,19 +7,19 @@ export class LanguageLTS {
         this.#ltsVersions = ltsVersions;
     };
 
-    get language(): string {
+    public get language(): string {
         return this.#language;
     }
 
-    set language(value: string) {
+    public set language(value: string) {
         this.#language = value;
     }
 
-    get ltsVersions(): Array<number> {
+    public get ltsVersions(): Array<number> {
         return this.#ltsVersions;
     };
 
-    set ltsVersions(value: Array<number>) {
+    public set ltsVersions(value: Array<number>) {
         this.#ltsVersions = value;
     };
 
