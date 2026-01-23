@@ -48,6 +48,8 @@ test("getNlatestVersions, Golang, N=3 - expect returned array, size of 2", () =>
 /////////////////////////////////////////////////////////
 import * as https from "https";
 
+// Below test will only work, if local server is running
+// Can be insantiated with `python3 -m http.server` within tests/
 test("Mock behaviour", async () => {
     const url = "http://localhost:8000/example_return_go.json";
     const header = new Headers();
@@ -66,7 +68,8 @@ test("Mock behaviour", async () => {
             return {};
         };
         const result = await response.text();
-        console.log(getNlatestVersions(result, 3));
+        const ltsVersions: Array<string> = getNlatestVersions(result, 3);
+        expect(ltsVersions).toHaveLength(2);
     } catch(error) {
         if (error instanceof Error) {
             console.error(`Caught an error: ${error.message}`);
