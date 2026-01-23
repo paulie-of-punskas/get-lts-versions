@@ -1,5 +1,6 @@
 import { EOLresponse } from "./classes";
 import { isJSONok, getNlatestVersions } from "./json.utilities";
+import {exec} from 'child_process';
 
 // import fs from "fs";
 
@@ -42,7 +43,6 @@ test("getNlatestVersions, Golang, N=3 - expect returned array, size of 2", () =>
     expect(result).toHaveLength(2);
 });
 
-
 //////////////////////////////////////////////////////////
 // Integration tests with mocks
 /////////////////////////////////////////////////////////
@@ -50,34 +50,71 @@ import * as https from "https";
 
 // Below test will only work, if local server is running
 // Can be insantiated with `python3 -m http.server` within tests/
-test("Mock behaviour", async () => {
-    const url = "http://localhost:8000/example_return_go.json";
-    const header = new Headers();
-    header.append("Content-Type", "application/json");
+// test("Mock behaviour", async () => {
+//     const url = "http://localhost:8000/example_return_go.json";
+//     const header = new Headers();
+//     header.append("Content-Type", "application/json");
 
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: header,
+//     try {
+//         const response = await fetch(url, {
+//             method: "GET",
+//             headers: header,
+//         });
+//         if (!response.ok) {
+//             console.error(`Response status: ${response.status}`);
+//             return {};
+//         } else if (response.status == 404) {
+//             console.error(`not found on https://endoflife.date.`);
+//             return {};
+//         };
+//         const result = await response.text();
+//         const ltsVersions: Array<string> = getNlatestVersions(result, 3);
+//         expect(ltsVersions).toHaveLength(2);
+//     } catch(error) {
+//         if (error instanceof Error) {
+//             console.error(`Caught an error: ${error.message}`);
+//         }
+//         return {};
+//     };
+// });
+
+import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import axios from "axios";
+
+describe('Python HTTP Server Tests', () => {
+    let pythonServer: ChildProcessWithoutNullStreams | null = null;
+    const serverPort = 8000;
+
+    beforeAll(async () => {
+        // Spawn Python HTTP server
+        pythonServer = spawn("python3", ["-m", "http.server", String(serverPort), "--directory", "./tests"], {
+            detached: true,
+            stdio: 'ignore'
         });
-        if (!response.ok) {
-            console.error(`Response status: ${response.status}`);
-            return {};
-        } else if (response.status == 404) {
-            console.error(`not found on https://endoflife.date.`);
-            return {};
-        };
-        const result = await response.text();
-        const ltsVersions: Array<string> = getNlatestVersions(result, 3);
-        expect(ltsVersions).toHaveLength(2);
-    } catch(error) {
-        if (error instanceof Error) {
-            console.error(`Caught an error: ${error.message}`);
-        }
-        return {};
-    };
+        await new Promise(resolve => setTimeout(resolve, 500));
+    });
 
+    afterAll(async () => {
+        if (pythonServer) {
+            try {
+                process.kill(-pythonServer.pid);
+            } catch (error) {
+                console.error(`Error stopping Python server: ${error}`);
+            }
+        }
+    });
+
+    it("should serve files correctly", async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/example_return_go.json");
+            console.log(response.data);
+            expect(response.status).toBe(200);
+        } catch (error) {
+            console.error(`File serving failed: ${error}`);
+        }
+    });
 });
+
 
 // jest.mock("https");
 
