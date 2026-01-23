@@ -2,9 +2,9 @@ export class EOLresponse {
     schemaVersion: string
     generatedAt: string
     lastModified: string
-    result: Array<EOLresponseResult>
+    result: EOLresponseResult
 
-    constructor(schemaVersion: string, generatedAt: string, lastModified: string, result: Array<EOLresponseResult>) {
+    constructor(schemaVersion: string, generatedAt: string, lastModified: string, result: EOLresponseResult) {
         this.schemaVersion = schemaVersion
         this.generatedAt = generatedAt
         this.lastModified = lastModified
@@ -13,65 +13,32 @@ export class EOLresponse {
 };
 
 export class EOLresponseResult {
-    name: string
-    aliases: Array<string>
-    label: string
-    category: string
-    tags: Array<string>
-    versionCommand: string
-    identifiers: Array<Object>
-    labels: Object
-    links: Object
     releases: Array<LanguageReleases>
 
-    constructor(name: string, aliases: Array<string>, label: string, category: string, tags: Array<string>,
-        versionCommand: string, identifiers: Array<Object>, labels: Object, links: Object,
-        releases: Array<LanguageReleases>) {
-        this.name = name
-        this.aliases = aliases
-        this.label = label
-        this.category = category
-        this.tags = tags
-        this.versionCommand = versionCommand
-        this.identifiers = identifiers
-        this.labels = labels
-        this.links = links
+    constructor(releases: Array<LanguageReleases>) {
         this.releases = releases
     };
 };
 
-
-// Will be used as array of LanguageReleases
+// Will be used as array of LanguageReleases. Some attributes might not be available, e.g. eoasFrom for every language.
 export class LanguageReleases {
-    name: string
-    codename: string
-    label: string
-    releaseDate: string
     isLts: boolean
     ltsFrom: string
     isEol: boolean
     eolFrom: string
-    isMaintained: boolean
+    eoasFrom: string
     latest: LanguageLatestRelease
-    custom: string
 
-    constructor(name: string, codename: string, label: string, releaseDate: string, isLts: boolean,
-        ltsFrom: string, isEol: boolean, eolFrom: string, isMaintained: boolean, latest: LanguageLatestRelease,
-        custom: string) {
-        this.name = name
-        this.codename = codename
-        this.label = label
-        this.releaseDate = releaseDate
+    constructor(isLts: boolean, ltsFrom: string, isEol: boolean, eolFrom: string, eoasFrom: string,
+        latest: LanguageLatestRelease) {
         this.isLts = isLts
         this.ltsFrom = ltsFrom
         this.isEol = isEol
         this.eolFrom = eolFrom
-        this.isMaintained = isMaintained
+        this.eoasFrom = eoasFrom
         this.latest = latest
-        this.custom = custom
     }
 };
-
 
 export class LanguageLatestRelease {
     name: string
@@ -83,16 +50,9 @@ export class LanguageLatestRelease {
         this.date = date;
         this.link = link;
     }
-
-    // public get name(): string {
-    //     return this.name;
-    // }
-
-    // public set name(value: string) {
-    //     this.name = value;
-    // }
 };
 
+// Object that will be returned to user
 export class LanguageLTS {
     #language: string
     #ltsVersions: Array<number>
