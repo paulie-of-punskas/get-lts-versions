@@ -5,6 +5,7 @@ JS/TS used for fetching Long Term Support versions. Can be used within GitLab or
 ### Klausimai
 - ar kurt objekta, kiekviena karta dirbant su JSON?
 - imt end of active support ("eoasFrom") ar end of security support ("eolFrom")?
+  - by default, imt "eolFrom"
 
 ### Testu paleidimas
 `npm test` arba `jest --collectCoverage`. `Jest` turi but globaliai uzinstaliuotas
