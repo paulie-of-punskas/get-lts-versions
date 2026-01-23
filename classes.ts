@@ -10,9 +10,9 @@ export class EOLresponse {
         this.lastModified = lastModified
         this.result = result
 
-        // if (result === undefined) {
-        //     throw new Error("EOLresponse: result parameter is required.");
-        // }
+        if (result === undefined) {
+            throw new Error("EOLresponse: result parameter is required.");
+        }
     }
 };
 
@@ -22,9 +22,9 @@ export class EOLresponseResult {
     constructor(releases: Array<LanguageReleases>) {
         this.releases = releases
 
-        // if (releases === undefined) {
-        //     throw new Error("EOLresponseResult: releases parameter is required.");
-        // }
+        if (releases === undefined) {
+            throw new Error("EOLresponseResult: releases parameter is required.");
+        }
     };
 };
 
@@ -46,9 +46,9 @@ export class LanguageReleases {
         this.eoasFrom = eoasFrom
         this.latest = latest
 
-        // if (!isLts || !ltsFrom || isEol || !eolFrom || !eoasFrom || !latest) {
-        //     throw new Error("LanguageReleases: all parameters are required.");
-        // }
+        if (!isLts || !ltsFrom || isEol || !eolFrom || !eoasFrom || !latest) {
+            throw new Error("LanguageReleases: all parameters are required.");
+        }
     }
 };
 
