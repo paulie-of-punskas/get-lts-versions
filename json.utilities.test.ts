@@ -53,8 +53,8 @@ test("Mock behaviour", async () => {
             console.error(`not found on https://endoflife.date.`);
             return {};
         };
-        const result = await response.json();
-        console.log(result.result.releases);
+        const result = await response.text();
+        console.log(getNlatestVersions(result, 3));
     } catch(error) {
         if (error instanceof Error) {
             console.error(`Caught an error: ${error.message}`);
