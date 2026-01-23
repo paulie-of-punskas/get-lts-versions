@@ -32,9 +32,9 @@ test("isJSONok, expect false - {result = {releases = ''}, }", () => {
     expect(isJSONok(JSON.stringify(jsonFile))).toBe(false);
 });
 
-// test("getNlatestVersions - ...", () => {
-//     getNlatestVersions(testDataPython, 3);
-// });
+test("getNlatestVersions - ...", () => {
+    getNlatestVersions(JSON.stringify(testDataPython), 3);
+});
 
 
 

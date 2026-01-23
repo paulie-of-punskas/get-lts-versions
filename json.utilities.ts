@@ -33,13 +33,13 @@ export function isJSONok(jsonInput: string): boolean {
     return true;
 }
 
-export function getNlatestVersions(jsonInput: string, numOfVersions: number): Array<number> {
+export function getNlatestVersions(jsonInput: string, numOfVersions: number): Array<string> {
     /**
      * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
      * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
      * then return max supported number of versions.
      */
-    let ltsVersions: Array<number> = [];
+    let ltsVersions: Array<string> = [];
     let maxAvailableVersions: number;
 
     const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
@@ -48,7 +48,7 @@ export function getNlatestVersions(jsonInput: string, numOfVersions: number): Ar
     const responseResultJson: EOLresponseResult = new EOLresponseResult(responseJson.result.releases);
     const responseJsonLanguageReleases: Array<LanguageReleases> = new Array<LanguageReleases>;
 
-    // If numOfVersions is more than available, then loop through available
+    // If numOfVersions is greater than available, then loop through available
     if (numOfVersions > responseJsonLanguageReleases.length) {
         maxAvailableVersions = numOfVersions;
     } else {
@@ -56,11 +56,10 @@ export function getNlatestVersions(jsonInput: string, numOfVersions: number): Ar
     }
 
     for (let j = 0; j < maxAvailableVersions; j++ ) {
-        // if
-        responseJsonLanguageReleases.push(responseResultJson.releases[j]);
+        if (responseResultJson.releases[j]?.latest.name !== null && responseResultJson.releases[j]?.latest.name !== undefined && responseResultJson.releases[j]?.isEol == false) {
+            ltsVersions.push(String(responseResultJson.releases[j]?.latest.name).valueOf());
+        }
     };
-
-    console.log(responseJsonLanguageReleases.length);
 
     return ltsVersions;
 };
