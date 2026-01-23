@@ -41,9 +41,9 @@ test("LanguageLatestRelease - JSON Go", () => {
 
     for (var j = 0; j < jsonDataGo[0].length; j++) {
         testLanguageReleasesArray.push(new LanguageLatestRelease(jsonDataGo[0][j].latest.name, jsonDataGo[0][j].latest.date, jsonDataGo[0][j].latest.link));
-        expect(testLanguageReleasesArray[j].name.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].date.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].link.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     };
 });
 
@@ -55,9 +55,9 @@ test("LanguageLatestRelease - JSON Java", () => {
 
     for (var j = 0; j < jsonDataJava[0].length; j++) {
         testLanguageReleasesArray.push(new LanguageLatestRelease(jsonDataJava[0][j].latest.name, jsonDataJava[0][j].latest.date, jsonDataJava[0][j].latest.link));
-        expect(testLanguageReleasesArray[j].name.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].date.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].link.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     };
 });
 
@@ -69,8 +69,8 @@ test("LanguageLatestRelease - JSON Python", () => {
 
     for (var j = 0; j < jsonDataPython[0].length; j++) {
         testLanguageReleasesArray.push(new LanguageLatestRelease(jsonDataPython[0][j].latest.name, jsonDataPython[0][j].latest.date, jsonDataPython[0][j].latest.link));
-        expect(testLanguageReleasesArray[j].name.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].date.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].link.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     };
 });

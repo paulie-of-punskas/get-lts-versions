@@ -32,10 +32,15 @@ test("isJSONok, expect false - {result = {releases = ''}, }", () => {
     expect(isJSONok(JSON.stringify(jsonFile))).toBe(false);
 });
 
-test("getNlatestVersions - ...", () => {
-    getNlatestVersions(JSON.stringify(testDataPython), 3);
+test("getNlatestVersions, Python, N=3 - expect returned array, size of 3", () => {
+    const result: Array<string> = getNlatestVersions(JSON.stringify(testDataPython), 3);
+    expect(result).toHaveLength(3);
 });
 
+test("getNlatestVersions, Golang, N=3 - expect returned array, size of 2", () => {
+    const result: Array<string> = getNlatestVersions(JSON.stringify(testDataGo), 3);
+    expect(result).toHaveLength(2);
+});
 
 
 //////////////////////////////////////////////////////////
