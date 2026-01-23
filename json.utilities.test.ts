@@ -1,3 +1,4 @@
+import { EOLresponse } from "./classes";
 import { isJSONok, getNlatestVersions } from "./json.utilities";
 
 // import fs from "fs";
@@ -7,7 +8,7 @@ import testDataPython from "./tests/example_return_python.json";
 
 test("isJSONok, expect true - read example_return_go", () => {
     const testJSONdata = testDataGo;
-    expect(isJSONok(testJSONdata)).toBe(true);
+    expect(isJSONok(JSON.stringify(testJSONdata))).toBe(true);
 });
 
 test("isJSONok, expect false - read empty JSON", () => {
@@ -15,14 +16,20 @@ test("isJSONok, expect false - read empty JSON", () => {
     expect(isJSONok(testJSONdata)).toBe(false);
 });
 
+test("isJSONok, expect false - {}", () => {
+    const jsonInput = JSON.stringify("{}");
+    expect(isJSONok(JSON.stringify(jsonInput))).toBe(false);
+});
+
 test("isJSONok, expect false - {result = ''}", () => {
-    const testJSONdata = {result: ""};
-    expect(isJSONok(testJSONdata)).toBe(false);
+    const jsonInput = JSON.stringify({result: ""});
+    expect(isJSONok(JSON.stringify(jsonInput))).toBe(false);
 });
 
 test("isJSONok, expect false - {result = {releases = ''}, }", () => {
-    const testJSONdata = {result: {releases: ""}};
-    expect(isJSONok(testJSONdata)).toBe(false);
+    const jsonInput = JSON.stringify({releases: {result: ""}});
+    const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
+    expect(isJSONok(JSON.stringify(jsonFile))).toBe(false);
 });
 
 // test("getNlatestVersions - ...", () => {
