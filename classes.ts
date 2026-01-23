@@ -10,21 +10,21 @@ export class EOLresponse {
         this.lastModified = lastModified
         this.result = result
 
-        if (result === undefined) {
-            throw new Error("EOLresponse: result parameter is required.");
-        }
+        // if (result === undefined) {
+        //     throw new Error("EOLresponse: result parameter is required.");
+        // }
     }
 };
 
 export class EOLresponseResult {
-    releases: Array<LanguageReleases>
+    public releases: Array<LanguageReleases>
 
     constructor(releases: Array<LanguageReleases>) {
         this.releases = releases
 
-        if (releases === undefined) {
-            throw new Error("EOLresponseResult: releases parameter is required.");
-        }
+        // if (releases === undefined) {
+        //     throw new Error("EOLresponseResult: releases parameter is required.");
+        // }
     };
 };
 
@@ -46,9 +46,9 @@ export class LanguageReleases {
         this.eoasFrom = eoasFrom
         this.latest = latest
 
-        if (!isLts || !ltsFrom || isEol || !eolFrom || !eoasFrom || !latest) {
-            throw new Error("LanguageReleases: all parameters are required.");
-        }
+        // if (!isLts || !ltsFrom || isEol || !eolFrom || !eoasFrom || !latest) {
+        //     throw new Error("LanguageReleases: all parameters are required.");
+        // }
     }
 };
 
@@ -66,27 +66,11 @@ export class LanguageLatestRelease {
 
 // Object that will be returned to user
 export class LanguageLTS {
-    #language: string
-    #ltsVersions: Array<number>
+    language: string
+    ltsVersions: Array<number>
 
     constructor(language: string, ltsVersions: Array<number>) {
-        this.#language = language;
-        this.#ltsVersions = ltsVersions;
-    };
-
-    public get language(): string {
-        return this.#language;
+        this.language = language;
+        this.ltsVersions = ltsVersions;
     }
-
-    public set language(value: string) {
-        this.#language = value;
-    }
-
-    public get ltsVersions(): Array<number> {
-        return this.#ltsVersions;
-    };
-
-    public set ltsVersions(value: Array<number>) {
-        this.#ltsVersions = value;
-    };
 };
