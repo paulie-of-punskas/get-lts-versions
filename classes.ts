@@ -1,3 +1,46 @@
+export class EOLresponse {
+    schemaVersion: string
+    generatedAt: string
+    lastModified: string
+    result: Array<EOLresponseResult>
+
+    constructor(schemaVersion: string, generatedAt: string, lastModified: string, result: Array<EOLresponseResult>) {
+        this.schemaVersion = schemaVersion
+        this.generatedAt = generatedAt
+        this.lastModified = lastModified
+        this.result = result
+    }
+};
+
+export class EOLresponseResult {
+    name: string
+    aliases: Array<string>
+    label: string
+    category: string
+    tags: Array<string>
+    versionCommand: string
+    identifiers: Array<Object>
+    labels: Object
+    links: Object
+    releases: Array<LanguageReleases>
+
+    constructor(name: string, aliases: Array<string>, label: string, category: string, tags: Array<string>,
+        versionCommand: string, identifiers: Array<Object>, labels: Object, links: Object,
+        releases: Array<LanguageReleases>) {
+        this.name = name
+        this.aliases = aliases
+        this.label = label
+        this.category = category
+        this.tags = tags
+        this.versionCommand = versionCommand
+        this.identifiers = identifiers
+        this.labels = labels
+        this.links = links
+        this.releases = releases
+    };
+};
+
+
 // Will be used as array of LanguageReleases
 export class LanguageReleases {
     name: string

@@ -1,4 +1,6 @@
-export function isJSONok(jsonFile: JSON): boolean {
+import { EOLresponse, EOLresponseResult, LanguageReleases, LanguageLatestRelease } from "./classes";
+
+export function isJSONok(jsonFile: EOLresponse): boolean {
     /**
      * Function checks if returned JSON has expected attributes and structure.
      *
@@ -18,11 +20,20 @@ export function isJSONok(jsonFile: JSON): boolean {
     return true;
 }
 
-export function getNlatestVersions(numOfVersions: number): Array<number> {
+export function getNlatestVersions(jsonFile: EOLresponse, numOfVersions: number): Array<number> {
     /**
+     * @param {EOLresponse} jsonFile - JSON file containing data returned by https://endoflife.date API.
      * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
      * then return max supported number of versions.
      */
     let ltsVersions: Array<number> = [];
+
+
+
+    const releases: Array<LanguageReleases> = jsonFile.result;
+
+    for (var j = 0; j < releases.length; j++) {
+
+    }
     return ltsVersions;
 };
