@@ -23,25 +23,14 @@ describe("isJSONok():", () => {
     });
 
     // not sure about this test
-    // it("should return false, if input is {releases: {result: ''}", () => {
-    //     expect(isJSONok(JSON.stringify({result: {releases: ""}}))).toBe(false);
-    // });
+    it("should return true, if input is {releases: {result: ''}", () => {
+        expect(isJSONok(JSON.stringify({result: {releases: ""}}))).toBe(true);
+    });
 
     it("should return true, for locally imported Go data", () => {
         // get JSON as a string
         const jsonInputAsString :string = JSON.stringify(testDataGo);
-        // console.log(typeof jsonInputAsString);
         expect(isJSONok(jsonInputAsString)).toBe(true);
-        // console.log(isJSONok(jsonInputAsString));
-
-        // convert to EOLresponse
-        const eolFile: EOLresponse = JSON.parse(jsonInputAsString) as EOLresponse;
-        console.log(`eolFile type: ${typeof eolFile.result}`);
-//        console.log(eolFile.result);
-        console.log(typeof eolFile.result.releases);
-
-        const eolFileResp: EOLresponseResult = new EOLresponseResult(eolFile.result.releases);
-        console.log(`eolFileResp type: ${typeof eolFileResp.releases}`);
     });
 });
 

@@ -1,14 +1,17 @@
-import { isJSONok, getNlatestVersions } from "./json.utilities";
+import { isJSONok, getNlatestVersions } from "./src/json.utilities";
+import { sendRequest } from "./src/request";
 
 function run(language: string, numOfVersions: number): Array<string> {
 
-    let returnedJSON = String(sendRequest(language)).valueOf();
+    let returnedJSON: Promise<string> = sendRequest(language);
 
-    if (!isJSONok(returnedJSON)) {
+    const returnedJSONasString :string = JSON.stringify(returnedJSON);
+
+    if (!isJSONok(returnedJSONasString)) {
         console.error("Could not find required attributes within JSON file.");
         return new Array<string>;
     }
-    return getNlatestVersions(returnedJSON, numOfVersions);
+    return getNlatestVersions(returnedJSONasString, numOfVersions);
 };
 
-run("python", 3);
+// run("python", 3);
