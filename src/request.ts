@@ -4,9 +4,8 @@ export async function sendRequest(language: string): Promise<string> {
      * @returns {Promise<string>} Promise, that resolves as string.
      */
 
-    const url :string = "https://endoflife.date/api/v1/products/`${language.toLowerCase()`";
-
-    const header = new Headers();
+    const url :string = `https://endoflife.date/api/v1/products/${language.toLowerCase()}`;
+    const header :Headers = new Headers();
     header.append("Content-Type", "application/json");
 
     try {
