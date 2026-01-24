@@ -1,7 +1,7 @@
-import { EOLresponse, EOLresponseResult, LanguageLTS, LanguageLatestRelease, LanguageReleases } from "./classes"
-import testDataGo from "./tests/example_return_go.json";
-import testDataJava from "./tests/example_return_java.json";
-import testDataPython from "./tests/example_return_python.json";
+import { EOLresponse, EOLresponseResult, LanguageLTS, LanguageLatestRelease, LanguageReleases } from "../src/classes"
+import testDataGo from "../test/data/example_return_go.json";
+import testDataJava from "../test/data/example_return_java.json";
+import testDataPython from "../test/data/example_return_python.json";
 
 test("EOLresponse - throw error if empty input", () => {
     expect(() => new EOLresponse(undefined)).toThrow('EOLresponse: result parameter is required.');

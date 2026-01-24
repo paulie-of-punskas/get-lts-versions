@@ -1,0 +1,48 @@
+
+name: Test - get LTS versions
+on:
+  push:
+
+jobs:
+  get-lts-versions:
+    name: Fetch LTS versions
+    runs-on: ubuntu-latest
+    env:
+      node-version: 24
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Check for Golang LTS versions
+        id: go
+        uses: ./
+        with:
+          language: "go"
+          versions_to_fetch: "3"
+
+      - name: Print returned value for Golang
+        shell: bash
+        run: echo "${{ steps.go.outputs.lts_versions }}"
+
+      - name: Check for Python LTS versions
+        id: python
+        uses: ./
+        with:
+          language: "python"
+          versions_to_fetch: "3"
+
+      - name: Print returned value for Python
+        shell: bash
+        run: echo "${{ steps.python.outputs.lts_versions }}"
