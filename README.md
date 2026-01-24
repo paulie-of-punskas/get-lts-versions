@@ -1,6 +1,4 @@
-[![CI - Node 20.x, 22.x, 24.x](https://github.com/paulie-of-punskas/ts-get_lts_versions/actions/workflows/ci.yaml/badge.svg)](https://github.com/paulie-of-punskas/ts-get_lts_versions/actions/workflows/ci.yaml)
-
-![CI - Node 20.x, 22.x, 24.x](https://github.com/paulie-of-punskas/ts-get_lts_versions/actions/workflows/ci.yaml/badge.svg)
+![CI - Node 20, 22, 24](https://github.com/paulie-of-punskas/ts-get_lts_versions/actions/workflows/ci.yaml/badge.svg)
 
 # js-get_lts_versions
 
