@@ -37,5 +37,5 @@ jobs:
     - name: Run tests and code coverage
       shell: bash
       run: |
-	npm install jest
-	jest --collectCoverage --verbose
+	  	npm install jest
+		jest --collectCoverage --verbose
