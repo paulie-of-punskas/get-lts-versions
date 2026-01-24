@@ -1,34 +1,58 @@
-// Will be used as array of LanguageReleases
+export class EOLresponse {
+    schemaVersion: string
+    generatedAt: string
+    lastModified: string
+    result: EOLresponseResult
+
+    constructor(schemaVersion: string, generatedAt: string, lastModified: string,
+        result: EOLresponseResult) {
+        this.schemaVersion = schemaVersion
+        this.generatedAt = generatedAt
+        this.lastModified = lastModified
+        this.result = result
+
+        if (result === undefined) {
+            throw new Error("EOLresponse: result parameter is required.");
+        }
+    }
+};
+
+export class EOLresponseResult {
+    public releases: Array<LanguageReleases>
+
+    constructor(releases: Array<LanguageReleases>) {
+        this.releases = releases
+
+        if (releases === undefined) {
+            throw new Error("EOLresponseResult: releases parameter is required.");
+        }
+    };
+};
+
+// Will be used as array of LanguageReleases. Some attributes might not be available,
+// e.g. eoasFrom for every language.
 export class LanguageReleases {
-    name: string
-    codename: string
-    label: string
-    releaseDate: string
     isLts: boolean
     ltsFrom: string
     isEol: boolean
     eolFrom: string
-    isMaintained: boolean
+    eoasFrom: string
     latest: LanguageLatestRelease
-    custom: string
 
-    constructor(name: string, codename: string, label: string, releaseDate: string, isLts: boolean,
-        ltsFrom: string, isEol: boolean, eolFrom: string, isMaintained: boolean, latest: LanguageLatestRelease,
-        custom: string) {
-        this.name = name
-        this.codename = codename
-        this.label = label
-        this.releaseDate = releaseDate
+    constructor(isLts: boolean, ltsFrom: string, isEol: boolean, eolFrom: string, eoasFrom: string,
+        latest: LanguageLatestRelease) {
         this.isLts = isLts
         this.ltsFrom = ltsFrom
         this.isEol = isEol
         this.eolFrom = eolFrom
-        this.isMaintained = isMaintained
+        this.eoasFrom = eoasFrom
         this.latest = latest
-        this.custom = custom
+
+        if (!isLts || !ltsFrom || isEol || !eolFrom || !eoasFrom || !latest) {
+            throw new Error("LanguageReleases: all parameters are required.");
+        }
     }
 };
-
 
 export class LanguageLatestRelease {
     name: string
@@ -40,38 +64,15 @@ export class LanguageLatestRelease {
         this.date = date;
         this.link = link;
     }
-
-    // public get name(): string {
-    //     return this.name;
-    // }
-
-    // public set name(value: string) {
-    //     this.name = value;
-    // }
 };
 
+// Object that will be returned to user
 export class LanguageLTS {
-    #language: string
-    #ltsVersions: Array<number>
+    language: string
+    ltsVersions: Array<number>
 
     constructor(language: string, ltsVersions: Array<number>) {
-        this.#language = language;
-        this.#ltsVersions = ltsVersions;
-    };
-
-    public get language(): string {
-        return this.#language;
+        this.language = language;
+        this.ltsVersions = ltsVersions;
     }
-
-    public set language(value: string) {
-        this.#language = value;
-    }
-
-    public get ltsVersions(): Array<number> {
-        return this.#ltsVersions;
-    };
-
-    public set ltsVersions(value: Array<number>) {
-        this.#ltsVersions = value;
-    };
 };

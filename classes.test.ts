@@ -1,7 +1,20 @@
-import { LanguageLTS, LanguageLatestRelease, LanguageReleases } from "./classes"
+import { EOLresponse, EOLresponseResult, LanguageLTS, LanguageLatestRelease, LanguageReleases } from "./classes"
 import testDataGo from "./tests/example_return_go.json";
 import testDataJava from "./tests/example_return_java.json";
 import testDataPython from "./tests/example_return_python.json";
+
+test("EOLresponse - throw error if empty input", () => {
+    expect(() => new EOLresponse(undefined)).toThrow('EOLresponse: result parameter is required.');
+});
+
+test("EOLresponse - throw error if empty input", () => {
+    expect(() => new EOLresponseResult(undefined)).toThrow('EOLresponseResult: releases parameter is required.');
+});
+
+test("LanguageReleaeses - throw error if empty input", () => {
+    expect(() => new LanguageReleases()).toThrow("LanguageReleases: all parameters are required.");
+    expect(() => new LanguageReleases("xx", "qq")).toThrow("LanguageReleases: all parameters are required.");
+});
 
 test("LanguageLTS - can be created", () => {
     const testObject: LanguageLTS = new LanguageLTS("test", [0, 1, 2]);
@@ -28,9 +41,9 @@ test("LanguageLatestRelease - JSON Go", () => {
 
     for (var j = 0; j < jsonDataGo[0].length; j++) {
         testLanguageReleasesArray.push(new LanguageLatestRelease(jsonDataGo[0][j].latest.name, jsonDataGo[0][j].latest.date, jsonDataGo[0][j].latest.link));
-        expect(testLanguageReleasesArray[j].name.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].date.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].link.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     };
 });
 
@@ -42,9 +55,9 @@ test("LanguageLatestRelease - JSON Java", () => {
 
     for (var j = 0; j < jsonDataJava[0].length; j++) {
         testLanguageReleasesArray.push(new LanguageLatestRelease(jsonDataJava[0][j].latest.name, jsonDataJava[0][j].latest.date, jsonDataJava[0][j].latest.link));
-        expect(testLanguageReleasesArray[j].name.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].date.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].link.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     };
 });
 
@@ -56,8 +69,8 @@ test("LanguageLatestRelease - JSON Python", () => {
 
     for (var j = 0; j < jsonDataPython[0].length; j++) {
         testLanguageReleasesArray.push(new LanguageLatestRelease(jsonDataPython[0][j].latest.name, jsonDataPython[0][j].latest.date, jsonDataPython[0][j].latest.link));
-        expect(testLanguageReleasesArray[j].name.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].date.length).toBeGreaterThan(0);
-        expect(testLanguageReleasesArray[j].link.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     };
 });
