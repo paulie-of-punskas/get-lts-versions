@@ -1,0 +1,31 @@
+
+name: Test - get LTS versions
+on:
+  push:
+
+jobs:
+  get-lts-versions:
+    name: Fetch LTS versions
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 24.x
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Check for Golang LTS versions
+        uses: ./
+        with:
+          language: "go"
+          versions_number: "3"
