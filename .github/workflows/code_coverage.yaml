@@ -23,16 +23,8 @@ jobs:
           node-version: ${{ env.node-version }}
           cache: 'npm'
 
-      - name: Run npm CI
-        shell: bash
-        run: npm ci
-
-      - name: Run tests and code coverage
+      - name: Run code coverage
         shell: bash
         run: | 
-          npm install jest --global
           jest --collectCoverage --verbose
       
-      - name: Build
-        shell: bash
-        run: npm run build --if-present
