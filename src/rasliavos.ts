@@ -1,12 +1,10 @@
-async function sendRequest(url: string, language: string): Promise<string> {
+async function sendRequest(language: string): Promise<string> {
     /**
      * @param {string} language - name of the language.
      * @returns {Promise<string>} Promise, that resolves as string.
      */
 
-    if (url === null) {
-        const url :string = "https://endoflife.date/api/v1/products/`${language.toLowerCase()`";
-    }
+    const url :string = "https://endoflife.date/api/v1/products/`${language.toLowerCase()`";
 
     const header = new Headers();
     header.append("Content-Type", "application/json");

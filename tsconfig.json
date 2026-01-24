@@ -11,13 +11,22 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-
     "isolatedModules": true,
-
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    // TypeScript to JavaScript conversion related:
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    // "strict": true, // defined above
+    "noImplicitAny": false,
+    // "esModuleInterop": true // defined above
   },
   "$schema": "https://www.schemastore.org/tsconfig",
   "display": "Strictest",
-  "_version": "2.0.0"
+  "_version": "2.0.0",
+  "exclude": ["node_modules"],
+  "include": ["src", "tests"]
 }
