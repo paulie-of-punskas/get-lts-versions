@@ -22,7 +22,11 @@ jobs:
         with:
           node-version: ${{ env.node-version }}
           cache: 'npm'
-
+          
+      - name: Run npm CI
+        shell: bash
+        run: npm ci
+        
       - name: Install jest and run code coverage
         shell: bash
         run: |
