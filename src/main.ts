@@ -15,11 +15,11 @@ export async function run(language: string, numOfVersions: number): Promise<stri
             throw new Error("Returned JSON has incorrect/new structure.");
         }
 
-        return getNlatestVersions(returnedJSON, numOfVersions);
+        core.setOutput("lts_versions", getNlatestVersions(returnedJSON, numOfVersions));
     } catch (error) {
         console.error(`Error in run function: ${error}`);
         throw error;
     }
 }
 
-run(core.getInput("language"), Number(core.getInput("versions_number")));
+run(core.getInput("language"), Number(core.getInput("versions_to_fetch")));
