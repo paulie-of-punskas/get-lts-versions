@@ -34,7 +34,7 @@ jobs:
 
       - name: Print returned value for Golang
         shell: bash
-        run: echo " ${{ steps.go.lts_versions }}"
+        run: echo "${{ steps.go.outputs.lts_versions }}"
 
       - name: Check for Python LTS versions
         id: python
@@ -45,4 +45,4 @@ jobs:
 
       - name: Print returned value for Python
         shell: bash
-        run: echo " ${{ steps.python.lts_versions }}"
+        run: echo "${{ steps.python.outputs.lts_versions }}"
