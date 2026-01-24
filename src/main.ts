@@ -1,7 +1,8 @@
-import { isJSONok, getNlatestVersions } from "./src/json.utilities";
-import { sendRequest } from "./src/request";
+import { isJSONok, getNlatestVersions } from "./json.utilities";
+import { sendRequest } from "./request";
+import * as core from "@actions/core";
 
-function run(language: string, numOfVersions: number): Array<string> {
+async function run(language: string, numOfVersions: number): Promise<string[]> {
 
     let returnedJSON: Promise<string> = sendRequest(language);
 
@@ -14,4 +15,4 @@ function run(language: string, numOfVersions: number): Array<string> {
     return getNlatestVersions(returnedJSONasString, numOfVersions);
 };
 
-// run("python", 3);
+run(core.getInput("language"), Number(core.getInput("versions_number")));
