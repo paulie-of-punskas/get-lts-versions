@@ -2,7 +2,7 @@ import { isJSONok, getNlatestVersions } from "./json.utilities";
 import { sendRequest } from "./request";
 import * as core from "@actions/core";
 
-export async function run(language: string, numOfVersions: number): Promise<string[]> {
+export async function run(language: string, numOfVersions: number) {
 
     if (!language || numOfVersions <= 0) {
         throw new Error("Invalid input parameters");
