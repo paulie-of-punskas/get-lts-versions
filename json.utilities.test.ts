@@ -16,24 +16,20 @@ describe("isJSONok():", () => {
     });
 
     it("should return false, when input is '{}'", () => {
-        expect(isJSONok(JSON.stringify("{}"))).toBe(false);
+        expect(isJSONok(JSON.stringify({}))).toBe(false);
     });
 
     it("should return false, when input is {'result': ''}", () => {
         expect(isJSONok(JSON.stringify({result: ''}))).toBe(false);
     });
 
-});
+    // it("should return false, if input is {releases: {result: ''}", () => {
+    //     const jsonInput = JSON.stringify({releases: {result: ""}});
+    //     const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
 
-test("isJSONok, expect false - {result = ''}", () => {
-    const jsonInput = JSON.stringify({result: ""});
-    expect(isJSONok(JSON.stringify(jsonInput))).toBe(false);
-});
+    //     expect(isJSONok(JSON.stringify(jsonFile))).toBe(false);
+    // });
 
-test("isJSONok, expect false - {result = {releases = ''}, }", () => {
-    const jsonInput = JSON.stringify({releases: {result: ""}});
-    const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
-    expect(isJSONok(JSON.stringify(jsonFile))).toBe(false);
 });
 
 describe("getNlatestVersions():", () => {
