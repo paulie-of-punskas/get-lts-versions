@@ -30,3 +30,9 @@ jobs:
         with:
           language: "go"
           versions_number: "3"
+
+      - name: Check for Python LTS versions
+        uses: ./
+        with:
+          language: "python"
+          versions_number: "3"
