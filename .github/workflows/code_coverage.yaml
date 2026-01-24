@@ -23,8 +23,9 @@ jobs:
           node-version: ${{ env.node-version }}
           cache: 'npm'
 
-      - name: Run code coverage
+      - name: Install jest and run code coverage
         shell: bash
-        run: | 
+        run: |
+          npm install jest --global
           jest --collectCoverage --verbose
       
