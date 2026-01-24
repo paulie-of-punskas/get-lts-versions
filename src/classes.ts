@@ -18,7 +18,7 @@ export class EOLresponse {
 };
 
 export class EOLresponseResult {
-    public releases: Array<LanguageReleases>
+    releases: Array<LanguageReleases>
 
     constructor(releases: Array<LanguageReleases>) {
         this.releases = releases
