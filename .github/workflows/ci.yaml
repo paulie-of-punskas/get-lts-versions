@@ -18,24 +18,25 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Run CI
-      shell: bash
-      run: npm ci
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Run CI
+        shell: bash
+        run: npm ci
       
-    - name: Build
-      shell: bash
-      run: npm run build --if-present
+      - name: Build
+        shell: bash
+        run: npm run build --if-present
       
-    - name: Run tests and code coverage
-      shell: bash
-      run: |
-	  	npm install jest
-		jest --collectCoverage --verbose
+      - name: Run tests and code coverage
+        shell: bash
+        run: | 
+          npm install jest
+          jest --collectCoverage --verbose
