@@ -30,7 +30,7 @@ jobs:
         uses: ./
         with:
           language: "go"
-          versions_number: "3"
+          versions_to_fetch: "3"
 
       - name: Print returned value for Golang
         shell: bash
@@ -41,7 +41,7 @@ jobs:
         uses: ./
         with:
           language: "python"
-          versions_number: "3"
+          versions_to_fetch: "3"
 
       - name: Print returned value for Python
         shell: bash
