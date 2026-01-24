@@ -4,7 +4,8 @@ export class EOLresponse {
     lastModified: string
     result: EOLresponseResult
 
-    constructor(schemaVersion: string, generatedAt: string, lastModified: string, result: EOLresponseResult) {
+    constructor(schemaVersion: string, generatedAt: string, lastModified: string,
+        result: EOLresponseResult) {
         this.schemaVersion = schemaVersion
         this.generatedAt = generatedAt
         this.lastModified = lastModified
@@ -28,7 +29,8 @@ export class EOLresponseResult {
     };
 };
 
-// Will be used as array of LanguageReleases. Some attributes might not be available, e.g. eoasFrom for every language.
+// Will be used as array of LanguageReleases. Some attributes might not be available,
+// e.g. eoasFrom for every language.
 export class LanguageReleases {
     isLts: boolean
     ltsFrom: string
