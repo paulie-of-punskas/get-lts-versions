@@ -2,17 +2,24 @@ import { isJSONok, getNlatestVersions } from "./json.utilities";
 import { sendRequest } from "./request";
 import * as core from "@actions/core";
 
-async function run(language: string, numOfVersions: number): Promise<string[]> {
+export async function run(language: string, numOfVersions: number): Promise<string[]> {
 
-    let returnedJSON: Promise<string> = sendRequest(language);
-
-    const returnedJSONasString :string = JSON.stringify(returnedJSON);
-
-    if (!isJSONok(returnedJSONasString)) {
-        console.error("Could not find required attributes within JSON file.");
-        return new Array<string>;
+    if (!language || numOfVersions <= 0) {
+        throw new Error("Invalid input parameters");
     }
-    return getNlatestVersions(returnedJSONasString, numOfVersions);
-};
+
+    try {
+        const returnedJSON: string = await sendRequest(language);
+
+        if (!isJSONok(returnedJSON)) {
+            throw new Error("Returned JSON has incorrect/new structure.");
+        }
+
+        return getNlatestVersions(returnedJSON, numOfVersions);
+    } catch (error) {
+        console.error(`Error in run function: ${error}`);
+        throw error;
+    }
+}
 
 run(core.getInput("language"), Number(core.getInput("versions_number")));
