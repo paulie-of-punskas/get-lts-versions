@@ -26,15 +26,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - name: Run npm CI
+        shell: bash
+        run: npm ci
+
       - name: Run tests and code coverage
         shell: bash
         run: | 
           npm install jest --global
           jest --collectCoverage --verbose
-
-      - name: Run CI
-        shell: bash
-        run: npm ci
       
       - name: Build
         shell: bash
