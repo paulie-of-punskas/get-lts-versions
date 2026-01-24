@@ -1,0 +1,15 @@
+name: "Get Long Term Support versions for programming language"
+description: "Action returns an array of N latest long term support versions"
+inputs:
+  language:
+    description: Name of the programming language
+    required: true
+    default: "go"
+  versions_to_fetch:
+    description: How many long term support versions to fetch and return
+    required: true
+    default: "3"
+
+runs:
+  using: "node24"
+  main: "dist/index.js"

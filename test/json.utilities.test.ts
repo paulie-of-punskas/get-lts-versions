@@ -1,8 +1,7 @@
-import { EOLresponse } from "./classes";
-import { isJSONok, getNlatestVersions } from "./json.utilities";
+import { isJSONok, getNlatestVersions } from "../src/json.utilities";
 
-import testDataGo from "./tests/example_return_go.json";
-import testDataPython from "./tests/example_return_python.json";
+import testDataGo from "../test/data/example_return_go.json";
+import testDataPython from "../test/data/example_return_python.json";
 
 describe("isJSONok():", () => {
     const testJSONdata = testDataGo;
@@ -23,13 +22,16 @@ describe("isJSONok():", () => {
         expect(isJSONok(JSON.stringify({result: ''}))).toBe(false);
     });
 
-    // it("should return false, if input is {releases: {result: ''}", () => {
-    //     const jsonInput = JSON.stringify({releases: {result: ""}});
-    //     const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
+    // not sure about this test
+    it("should return true, if input is {releases: {result: ''}", () => {
+        expect(isJSONok(JSON.stringify({result: {releases: ""}}))).toBe(true);
+    });
 
-    //     expect(isJSONok(JSON.stringify(jsonFile))).toBe(false);
-    // });
-
+    it("should return true, for locally imported Go data", () => {
+        // get JSON as a string
+        const jsonInputAsString :string = JSON.stringify(testDataGo);
+        expect(isJSONok(jsonInputAsString)).toBe(true);
+    });
 });
 
 describe("getNlatestVersions():", () => {
@@ -81,6 +83,7 @@ describe("getNlatestVersions():", () => {
 
 import { spawn, ChildProcessWithoutNullStreams } from "child_process";
 import axios from "axios";
+import { EOLresponse, EOLresponseResult } from "../src/classes";
 
 describe("Python HTTP Server Tests", () => {
     let pythonServer: ChildProcessWithoutNullStreams | null = null;
@@ -88,7 +91,7 @@ describe("Python HTTP Server Tests", () => {
 
     beforeAll(async () => {
         // Spawn Python HTTP server
-        pythonServer = spawn("python3", ["-m", "http.server", String(serverPort), "--directory", "./tests"], {
+        pythonServer = spawn("python3", ["-m", "http.server", String(serverPort), "--directory", "./test/data"], {
             detached: true,
             stdio: 'ignore'
         });
@@ -104,6 +107,16 @@ describe("Python HTTP Server Tests", () => {
             }
         }
     });
+
+    // it("should return 404, while serving files", async () => {
+    //     try {
+    //         const response = await axios.get("http://localhost:8000/example_return_xxx.json");
+    //         expect(response.status).toBe(404);
+    //         // expect(isJSONok(JSON.stringify(response.data))).toBe(true);
+    //     } catch (error) {
+    //         console.error(`File serving failed: ${error}`);
+    //     }
+    // });
 
     it("should serve files correctly", async () => {
         try {
