@@ -26,13 +26,23 @@ jobs:
         run: npm run build
 
       - name: Check for Golang LTS versions
+        id: go
         uses: ./
         with:
           language: "go"
           versions_number: "3"
 
+      - name: Print returned value for Golang
+        shell: bash
+        run: echo " ${{ steps.go.lts_versions }}"
+
       - name: Check for Python LTS versions
+        id: python
         uses: ./
         with:
           language: "python"
           versions_number: "3"
+
+      - name: Print returned value for Python
+        shell: bash
+        run: echo " ${{ steps.python.lts_versions }}"
