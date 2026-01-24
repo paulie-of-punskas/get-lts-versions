@@ -1,10 +1,13 @@
-async function sendRequest(language: string): Promise<{}> {
+async function sendRequest(url: string, language: string): Promise<string> {
     /**
      * @param {string} language - name of the language.
-     * @returns {JSON} JSON object.
+     * @returns {Promise<string>} Promise, that resolves as string.
      */
 
-    const url = "https://endoflife.date/api/v1/products/`${language.toLowerCase()`";
+    if (url === null) {
+        const url :string = "https://endoflife.date/api/v1/products/`${language.toLowerCase()`";
+    }
+
     const header = new Headers();
     header.append("Content-Type", "application/json");
 
@@ -15,18 +18,18 @@ async function sendRequest(language: string): Promise<{}> {
         });
         if (!response.ok) {
             console.error(`Response status: ${response.status}`);
-            return {};
+            return "";
         } else if (response.status == 404) {
             console.error(`${language} was not found on https://endoflife.date.`);
-            return {};
+            return "";
         };
-        const result = await response.json();
+        const result = await response.text();
         return result;
     } catch(error) {
         if (error instanceof Error) {
             console.error(`Caught an error: ${error.message}`);
         }
-        return {};
+        return "";
     };
 };
 
