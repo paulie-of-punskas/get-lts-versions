@@ -1,4 +1,4 @@
-import { EOLresponse, EOLresponseResult, LanguageReleases } from "../src/classes";
+import { EOLresponse, EOLresponseResult, LanguageReleases } from "./classes";
 
 export function isJSONok(jsonInput: string): boolean {
     /**

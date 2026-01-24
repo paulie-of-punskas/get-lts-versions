@@ -1,4 +1,4 @@
-async function sendRequest(language: string): Promise<string> {
+export async function sendRequest(language: string): Promise<string> {
     /**
      * @param {string} language - name of the language.
      * @returns {Promise<string>} Promise, that resolves as string.
