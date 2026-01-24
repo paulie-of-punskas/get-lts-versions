@@ -7,8 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
-    name: CI - Node ${{ matrix.node-version }}
+  run-code-coverage:
+    name: Code coverage - Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     env:
       node-version: 24
