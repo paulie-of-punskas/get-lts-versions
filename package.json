@@ -2,12 +2,12 @@
   "author": "paulie-aus-punskas a.k.a. paulie-of-punskas",
   "version": "0.1.1",
   "repository": {
-    "url": "https://github.com/actions/typescript-action",
-    "url2": "https://codeberg.org/paulie-aus-punskas/ts-get_lts_versions"
+    "url": "https://github.com/paulie-of-punskas/get_lts_versions",
+    "url2": "https://codeberg.org/paulie-aus-punskas/get_lts_versions"
   },
   "bugs": {
-    "url": "https://github.com/paulie-of-punskas/ts-get_lts_versions/issues",
-    "url2": "https://codeberg.org/paulie-aus-punskas/ts-get_lts_versions/issues"
+    "url": "https://github.com/paulie-of-punskas/get_lts_versions/issues",
+    "url2": "https://codeberg.org/paulie-aus-punskas/get_lts_versions/issues"
   },
   "keywords": [
     "actions",
