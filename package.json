@@ -1,5 +1,6 @@
 {
   "author": "paulie-aus-punskas a.k.a. paulie-of-punskas",
+  "version": "0.1.1",
   "repository": {
     "url": "https://github.com/actions/typescript-action",
     "url2": "https://codeberg.org/paulie-aus-punskas/ts-get_lts_versions"
