@@ -3,6 +3,12 @@ import { sendRequest } from "./request";
 import * as core from "@actions/core";
 
 export async function run(language: string, numOfVersions: number) {
+    /**
+     * @param {string} language - name of the language.
+     * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
+     * then return max supported number of versions.
+     * @returns {Array} is returned to GitHub Actions runner environment.
+     */
 
     if (!language || numOfVersions <= 0) {
         throw new Error("Invalid input parameters");
