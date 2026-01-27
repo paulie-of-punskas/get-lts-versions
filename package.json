@@ -1,13 +1,13 @@
 {
   "author": "paulie-aus-punskas a.k.a. paulie-of-punskas",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "repository": {
-    "url": "https://github.com/paulie-of-punskas/get_lts_versions",
-    "url2": "https://codeberg.org/paulie-aus-punskas/get_lts_versions"
+    "url": "https://github.com/paulie-of-punskas/get-lts-versions",
+    "url2": "https://codeberg.org/paulie-aus-punskas/get-lts-versions"
   },
   "bugs": {
-    "url": "https://github.com/paulie-of-punskas/get_lts_versions/issues",
-    "url2": "https://codeberg.org/paulie-aus-punskas/get_lts_versions/issues"
+    "url": "https://github.com/paulie-of-punskas/get-lts-versions/issues",
+    "url2": "https://codeberg.org/paulie-aus-punskas/get-lts-versions/issues"
   },
   "keywords": [
     "actions",
