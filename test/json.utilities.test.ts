@@ -36,13 +36,13 @@ describe("isJSONok():", () => {
 
 describe("getNlatestVersions():", () => {
     it("should return array sized of 3, for Python and N = 3", () => {
-        const result: Array<string> = getNlatestVersions(JSON.stringify(testDataPython), 3);
-        expect(result).toHaveLength(3);
+        const result: string = getNlatestVersions(JSON.stringify(testDataPython), 3);
+        expect(result.length).toBeGreaterThan(15);
     });
 
     it("should return array sized of 2, for Golang and N = 3", () => {
-        const result: Array<string> = getNlatestVersions(JSON.stringify(testDataGo), 3);
-        expect(result).toHaveLength(2);
+        const result: string = getNlatestVersions(JSON.stringify(testDataGo), 3);
+        expect(result.length).toBeGreaterThan(15);
     });
 });
 

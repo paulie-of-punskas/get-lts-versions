@@ -25779,7 +25779,7 @@ function getNlatestVersions(jsonInput, numOfVersions) {
         }
     }
     ;
-    return ltsVersions;
+    return JSON.stringify(ltsVersions);
 }
 ;
 
