@@ -33,7 +33,7 @@ export function isJSONok(jsonInput: string): boolean {
     return true;
 }
 
-export function getNlatestVersions(jsonInput: string, numOfVersions: number): Array<string> {
+export function getNlatestVersions(jsonInput: string, numOfVersions: number): string {
     /**
      * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
      * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
@@ -61,5 +61,5 @@ export function getNlatestVersions(jsonInput: string, numOfVersions: number): Ar
         }
     };
 
-    return ltsVersions;
+    return JSON.stringify(ltsVersions);
 };
