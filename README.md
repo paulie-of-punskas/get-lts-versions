@@ -8,7 +8,7 @@ Script sends a GET request to https://endoflife.date API and returns an array wi
 If larger number of LTS is requested, then function returns max supported number of versions.
 
 ## How it works - action
-Action runs a "dist/index.js", and returns returns an array of LTS strings - `lts_versions`.
+Action runs a "dist/index.js", and returns an array of LTS strings - `lts_versions`.
 It can be then reused in a different step/job.
 
 Below is the example, for setting up Java LTS:
@@ -53,6 +53,7 @@ jobs:
     strategy:
       matrix:
         lts_java_version: ${{ fromJson(needs.get-java-lts.outputs.lts_version) }}
+
     steps:
       - name: Set up latest JDK for x64
         uses: actions/setup-java@v4
