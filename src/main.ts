@@ -1,5 +1,5 @@
-import { isJSONok, getNlatestVersions } from "./json.utilities";
-import { sendRequest } from "./request";
+import { isJSONok, getNlatestVersions } from "./json.utilities.js";
+import { sendRequest } from "./request.js";
 import * as core from "@actions/core";
 
 export async function run(language: string, numOfVersions: number) {
