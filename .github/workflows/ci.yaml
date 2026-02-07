@@ -36,4 +36,6 @@ jobs:
 
       - name: Build
         shell: bash
-        run: rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript
+        run: |
+          npm install --global rollup @rollup/plugin-commonjs @rollup/plugin-node-resolve
+          rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript
