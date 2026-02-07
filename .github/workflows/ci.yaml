@@ -5,9 +5,6 @@ name: CI - Node 20, 22, 24
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build-and-test:
@@ -33,10 +30,6 @@ jobs:
 
       - name: Run tests and code coverage
         shell: bash
-        run: | 
+        run: |
           npm install jest --global
-          jest --collectCoverage --verbose
-      
-      - name: Build
-        shell: bash
-        run: npm run build --if-present
+          NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest --verbose

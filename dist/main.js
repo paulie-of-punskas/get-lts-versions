@@ -27388,4 +27388,4 @@ async function run(language, numOfVersions) {
 run(coreExports.getInput("language"), Number(coreExports.getInput("versions_to_fetch")));
 
 export { run };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=main.js.map
