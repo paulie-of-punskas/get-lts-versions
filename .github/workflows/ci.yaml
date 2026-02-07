@@ -33,9 +33,3 @@ jobs:
         run: |
           npm install jest --global
           NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest --verbose
-
-      - name: Build
-        shell: bash
-        run: |
-          npm install --global rollup @rollup/plugin-commonjs @rollup/plugin-node-resolve
-          rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript
