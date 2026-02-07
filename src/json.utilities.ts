@@ -62,17 +62,14 @@ export function getNlatestVersions(
     jsonFile.result,
   );
 
-  const responseResultJson: EOLresponseResult = new EOLresponseResult(
-    responseJson.result.releases,
-  );
-  const responseJsonLanguageReleases: Array<LanguageReleases> =
-    new Array<LanguageReleases>();
+  const responseResultJson: EOLresponseResult = new EOLresponseResult(responseJson.result.releases);
+  // const responseJsonLanguageReleases: Array<LanguageReleases> = new Array<LanguageReleases>();
 
   // If numOfVersions is greater than available, then loop through available
-  if (numOfVersions > responseJsonLanguageReleases.length) {
-    maxAvailableVersions = numOfVersions;
+  if (numOfVersions > responseResultJson.releases.length) {
+    maxAvailableVersions = responseResultJson.releases.length;
   } else {
-    maxAvailableVersions = responseJsonLanguageReleases.length;
+    maxAvailableVersions = numOfVersions;
   }
 
   for (let j = 0; j < maxAvailableVersions; j++) {
