@@ -51,7 +51,6 @@ class EOLresponseResult {
             throw new Error("EOLresponseResult: releases parameter is required.");
         }
     }
-    ;
 }
 
 function isJSONok(jsonInput) {
@@ -59,8 +58,8 @@ function isJSONok(jsonInput) {
      * Function checks if returned JSON has expected attributes and structure.
      *
      * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
-    */
-    if (typeof jsonInput !== 'string' || jsonInput === null)
+     */
+    if (typeof jsonInput !== "string" || jsonInput === null)
         return false;
     const jsonFile = JSON.parse(jsonInput);
     if (!jsonFile.hasOwnProperty("result"))
@@ -96,16 +95,18 @@ function getNlatestVersions(jsonInput, numOfVersions) {
     const jsonFile = JSON.parse(jsonInput);
     const responseJson = new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
     const responseResultJson = new EOLresponseResult(responseJson.result.releases);
-    const responseJsonLanguageReleases = new Array;
+    // const responseJsonLanguageReleases: Array<LanguageReleases> = new Array<LanguageReleases>();
     // If numOfVersions is greater than available, then loop through available
-    if (numOfVersions > responseJsonLanguageReleases.length) {
-        maxAvailableVersions = numOfVersions;
+    if (numOfVersions > responseResultJson.releases.length) {
+        maxAvailableVersions = responseResultJson.releases.length;
     }
     else {
-        maxAvailableVersions = responseJsonLanguageReleases.length;
+        maxAvailableVersions = numOfVersions;
     }
     for (let j = 0; j < maxAvailableVersions; j++) {
-        if (responseResultJson.releases[j]?.latest.name !== null && responseResultJson.releases[j]?.latest.name !== undefined && responseResultJson.releases[j]?.isEol == false) {
+        if (responseResultJson.releases[j]?.latest.name !== null &&
+            responseResultJson.releases[j]?.latest.name !== undefined &&
+            responseResultJson.releases[j]?.isEol == false) {
             ltsVersions.push(String(responseResultJson.releases[j]?.latest.name).valueOf());
         }
     }
@@ -125,7 +126,7 @@ async function sendRequest(language) {
             method: "GET",
             headers: header,
         });
-        if (!response.ok) {
+        if (!response.ok && response.status != 404) {
             console.error(`Response status: ${response.status}`);
             return "";
         }
@@ -133,7 +134,6 @@ async function sendRequest(language) {
             console.error(`${language} was not found on https://endoflife.date.`);
             return "";
         }
-        ;
         const result = await response.text();
         return result;
     }

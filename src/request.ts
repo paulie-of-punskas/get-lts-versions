@@ -13,7 +13,7 @@ export async function sendRequest(language: string): Promise<string> {
       method: "GET",
       headers: header,
     });
-    if (!response.ok) {
+    if (!response.ok && response.status != 404) {
       console.error(`Response status: ${response.status}`);
       return "";
     } else if (response.status == 404) {

@@ -1,4 +1,4 @@
-import { EOLresponse, EOLresponseResult, LanguageReleases } from "./classes.js";
+import { EOLresponse, EOLresponseResult } from "./classes.js";
 
 export function isJSONok(jsonInput: string): boolean {
   /**
@@ -62,7 +62,9 @@ export function getNlatestVersions(
     jsonFile.result,
   );
 
-  const responseResultJson: EOLresponseResult = new EOLresponseResult(responseJson.result.releases);
+  const responseResultJson: EOLresponseResult = new EOLresponseResult(
+    responseJson.result.releases,
+  );
   // const responseJsonLanguageReleases: Array<LanguageReleases> = new Array<LanguageReleases>();
 
   // If numOfVersions is greater than available, then loop through available

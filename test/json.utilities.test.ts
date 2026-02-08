@@ -1,7 +1,7 @@
 import { isJSONok, getNlatestVersions } from "../src/json.utilities";
 
-import testDataGo from "../test/data/example_return_go.json";
-import testDataPython from "../test/data/example_return_python.json";
+import testDataGo from "../test/data/example_return_go.json" with { type: "json" };
+import testDataPython from "../test/data/example_return_python.json" with { type: "json" };
 
 describe("isJSONok():", () => {
   const testJSONdata = testDataGo;
@@ -40,12 +40,16 @@ describe("getNlatestVersions():", () => {
       JSON.stringify(testDataPython),
       3,
     );
-    expect(result.length).toBeGreaterThan(15);
+
+    const resultAsArray = result.split(",");
+    expect(resultAsArray.length).toBe(3);
   });
 
   it("should return array sized of 2, for Golang and N = 3", () => {
     const result: string = getNlatestVersions(JSON.stringify(testDataGo), 3);
-    expect(result.length).toBeGreaterThan(15);
+
+    const resultAsArray = result.split(",");
+    expect(resultAsArray.length).toBe(2);
   });
 });
 
@@ -85,7 +89,7 @@ describe("getNlatestVersions():", () => {
 
 import { spawn, ChildProcessWithoutNullStreams } from "child_process";
 import axios from "axios";
-import { EOLresponse, EOLresponseResult } from "../src/classes";
+// import { EOLresponse, EOLresponseResult } from "../src/classes";
 
 describe("Python HTTP Server Tests", () => {
   let pythonServer: ChildProcessWithoutNullStreams | null = null;
