@@ -27315,7 +27315,6 @@ function getNlatestVersions(jsonInput, numOfVersions) {
     const responseResultJson = new EOLresponseResult(responseJson.result.releases);
     // If numOfVersions is greater than available, then loop through available
     if (numOfVersions > responseResultJson.releases.length) {
-        coreExports.notice(`Requested (${numOfVersions}) number of versions is not available. Will return max available: ${responseResultJson.releases.length}`);
         maxAvailableVersions = responseResultJson.releases.length;
     }
     else {
@@ -27327,6 +27326,9 @@ function getNlatestVersions(jsonInput, numOfVersions) {
             responseResultJson.releases[j]?.isEol == false) {
             ltsVersions.push(String(responseResultJson.releases[j]?.latest.name).valueOf());
         }
+    }
+    if (numOfVersions != ltsVersions.length) {
+        coreExports.notice(`Requested (${numOfVersions}) number of versions is not available. Returning max available: ${ltsVersions.length}`);
     }
     return JSON.stringify(ltsVersions);
 }

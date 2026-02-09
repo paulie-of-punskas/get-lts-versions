@@ -69,7 +69,6 @@ export function getNlatestVersions(
 
   // If numOfVersions is greater than available, then loop through available
   if (numOfVersions > responseResultJson.releases.length) {
-    core.notice(`Requested (${numOfVersions}) number of versions is not available. Will return max available: ${responseResultJson.releases.length}`);
     maxAvailableVersions = responseResultJson.releases.length;
   } else {
     maxAvailableVersions = numOfVersions;
@@ -85,6 +84,12 @@ export function getNlatestVersions(
         String(responseResultJson.releases[j]?.latest.name).valueOf(),
       );
     }
+  }
+
+  if (numOfVersions != ltsVersions.length) {
+    core.notice(
+      `Requested (${numOfVersions}) number of versions is not available. Returning max available: ${ltsVersions.length}`,
+    );
   }
 
   return JSON.stringify(ltsVersions);
