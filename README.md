@@ -4,7 +4,7 @@
 JS/TS script & GitHub Action used for fetching Long Term Support versions. Can be used within GitHub Action, should work within GitLab as well, with slight modification.
 
 ## How it works - script
-Script sends a GET request to https://endoflife.date API and returns an array with corresponding data.
+By default, script sends a GET request to https://endoflife.date API and returns an array with corresponding data.
 If larger number of LTS is requested, then function returns max supported number of versions.
 
 ## How it works - action
