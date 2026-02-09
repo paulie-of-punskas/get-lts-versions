@@ -53,98 +53,6 @@ class EOLresponseResult {
     }
 }
 
-function isJSONok(jsonInput) {
-    /**
-     * Function checks if returned JSON has expected attributes and structure.
-     *
-     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
-     */
-    if (typeof jsonInput !== "string" || jsonInput === null)
-        return false;
-    const jsonFile = JSON.parse(jsonInput);
-    if (!jsonFile.hasOwnProperty("result"))
-        return false;
-    try {
-        new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error(`Caught an error while instantiating EOLresponse: ${error.message}`);
-        }
-        return false;
-    }
-    try {
-        new EOLresponseResult(jsonFile.result.releases);
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error(`Caught an error while instantiating EOLresponseResult: ${error.message}`);
-        }
-        return false;
-    }
-    return true;
-}
-function getNlatestVersions(jsonInput, numOfVersions) {
-    /**
-     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
-     * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
-     * then return max supported number of versions.
-     */
-    let ltsVersions = [];
-    let maxAvailableVersions;
-    const jsonFile = JSON.parse(jsonInput);
-    const responseJson = new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
-    const responseResultJson = new EOLresponseResult(responseJson.result.releases);
-    // const responseJsonLanguageReleases: Array<LanguageReleases> = new Array<LanguageReleases>();
-    // If numOfVersions is greater than available, then loop through available
-    if (numOfVersions > responseResultJson.releases.length) {
-        maxAvailableVersions = responseResultJson.releases.length;
-    }
-    else {
-        maxAvailableVersions = numOfVersions;
-    }
-    for (let j = 0; j < maxAvailableVersions; j++) {
-        if (responseResultJson.releases[j]?.latest.name !== null &&
-            responseResultJson.releases[j]?.latest.name !== undefined &&
-            responseResultJson.releases[j]?.isEol == false) {
-            ltsVersions.push(String(responseResultJson.releases[j]?.latest.name).valueOf());
-        }
-    }
-    return JSON.stringify(ltsVersions);
-}
-
-async function sendRequest(language) {
-    /**
-     * @param {string} language - name of the language.
-     * @returns {Promise<string>} Promise, that resolves as string.
-     */
-    const url = `https://endoflife.date/api/v1/products/${language.toLowerCase()}`;
-    const header = new Headers();
-    header.append("Content-Type", "application/json");
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: header,
-        });
-        if (!response.ok && response.status != 404) {
-            console.error(`Response status: ${response.status}`);
-            return "";
-        }
-        else if (response.status == 404) {
-            console.error(`${language} was not found on https://endoflife.date.`);
-            return "";
-        }
-        const result = await response.text();
-        return result;
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error(`Caught an error: ${error.message}`);
-        }
-        return "";
-    }
-}
-
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 var core = {};
@@ -27362,6 +27270,99 @@ function requireCore () {
 }
 
 var coreExports = requireCore();
+
+function isJSONok(jsonInput) {
+    /**
+     * Function checks if returned JSON has expected attributes and structure.
+     *
+     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
+     */
+    if (typeof jsonInput !== "string" || jsonInput === null)
+        return false;
+    const jsonFile = JSON.parse(jsonInput);
+    if (!jsonFile.hasOwnProperty("result"))
+        return false;
+    try {
+        new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Caught an error while instantiating EOLresponse: ${error.message}`);
+        }
+        return false;
+    }
+    try {
+        new EOLresponseResult(jsonFile.result.releases);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Caught an error while instantiating EOLresponseResult: ${error.message}`);
+        }
+        return false;
+    }
+    return true;
+}
+function getNlatestVersions(jsonInput, numOfVersions) {
+    /**
+     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
+     * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
+     * then return max supported number of versions.
+     */
+    let ltsVersions = [];
+    let maxAvailableVersions;
+    const jsonFile = JSON.parse(jsonInput);
+    const responseJson = new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
+    const responseResultJson = new EOLresponseResult(responseJson.result.releases);
+    // If numOfVersions is greater than available, then loop through available
+    if (numOfVersions > responseResultJson.releases.length) {
+        coreExports.notice(`Requested (${numOfVersions}) number of versions is not available. Will return max available: ${responseResultJson.releases.length}`);
+        maxAvailableVersions = responseResultJson.releases.length;
+    }
+    else {
+        maxAvailableVersions = numOfVersions;
+    }
+    for (let j = 0; j < maxAvailableVersions; j++) {
+        if (responseResultJson.releases[j]?.latest.name !== null &&
+            responseResultJson.releases[j]?.latest.name !== undefined &&
+            responseResultJson.releases[j]?.isEol == false) {
+            ltsVersions.push(String(responseResultJson.releases[j]?.latest.name).valueOf());
+        }
+    }
+    return JSON.stringify(ltsVersions);
+}
+
+async function sendRequest(language, endpointURL = "https://endoflife.date/api/v1/products/") {
+    /**
+     * @param {string} language - name of the language.
+     * @param {string} endpointURL - optional, URL with endpoint. By default it's https://endoflife.date/api/v1/products/
+     * @returns {Promise<string>} Promise, that resolves as string.
+     */
+    const url = `${endpointURL}/${language.toLowerCase()}`;
+    const header = new Headers();
+    header.append("Content-Type", "application/json");
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: header,
+        });
+        if (!response.ok && response.status != 404) {
+            console.error(`Response status: ${response.status}`);
+            return "";
+        }
+        else if (response.status == 404) {
+            console.error(`${language} was not found on ${endpointURL}.`);
+            return "";
+        }
+        const result = await response.text();
+        return result;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Caught an error: ${error.message}`);
+        }
+        return "";
+    }
+}
 
 async function run(language, numOfVersions) {
     /**
