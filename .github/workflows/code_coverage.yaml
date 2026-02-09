@@ -22,14 +22,13 @@ jobs:
         with:
           node-version: ${{ env.node-version }}
           cache: 'npm'
-          
+
       - name: Run npm CI
         shell: bash
         run: npm ci
-        
+
       - name: Install jest and run code coverage
         shell: bash
         run: |
           npm install jest --global
-          jest --collectCoverage --verbose
-      
+          NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest --verbose --collectCoverage
