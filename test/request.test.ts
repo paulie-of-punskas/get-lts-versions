@@ -10,48 +10,53 @@ describe("sendRequest()", () => {
 
 global.fetch = jest.fn();
 const mockedFetch = global.fetch as jest.Mock;
-const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+const consoleErrorSpy = jest
+  .spyOn(console, "error")
+  .mockImplementation(() => {});
 
 describe("sendRequest() - mock", () => {
-	beforeEach(() => {
-		mockedFetch.mockClear();
-	});
+  beforeEach(() => {
+    mockedFetch.mockClear();
+  });
 
-	test("should return an array on success", async () => {
-		const mockResponseText = "['version1', 'version2']";
+  test("should return an array on success", async () => {
+    const mockResponseText = "['version1', 'version2']";
 
-		mockedFetch.mockResolvedValue({
-			ok: true,
-			status: 200,
-			text: jest.fn().mockResolvedValue(mockResponseText),
-		});
+    mockedFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: jest.fn().mockResolvedValue(mockResponseText),
+    });
 
-		const result: string = await sendRequest("java");
-		expect(result).toBe(mockResponseText);
-	});
+    const result: string = await sendRequest("java");
+    expect(result).toBe(mockResponseText);
+  });
 
-	test("simulate 404", async () => {
-		const mockResponseText = "";
+  test("simulate 404", async () => {
+    const mockResponseText = "";
 
-		mockedFetch.mockResolvedValue({
-			ok: false,
-			status: 404,
-			text: jest.fn().mockResolvedValue(mockResponseText),
-		});
+    mockedFetch.mockResolvedValue({
+      ok: false,
+      status: 404,
+      text: jest.fn().mockResolvedValue(mockResponseText),
+    });
 
-		const result: string = await sendRequest("golang");
-		expect(result).toBe(mockResponseText);
-	});
+    const result: string = await sendRequest("golang");
+    expect(result).toBe(mockResponseText);
+  });
 
-	test("simulate network error", async () => {
-		const networkError = new Error("Network request failed");
-		mockedFetch.mockResolvedValue({
-			ok: false,
-			status: 400,
-		});
+  test("simulate network error", async () => {
+    const networkError = new Error("Network request failed");
+    mockedFetch.mockResolvedValue({
+      ok: false,
+      status: 400,
+    });
 
-		const result: string = await sendRequest("python", "https://malformed_url.90s");
-		expect(result).toBe("");
-		expect(consoleErrorSpy).toHaveBeenCalledWith("Response status: 400");
-	});
+    const result: string = await sendRequest(
+      "python",
+      "https://malformed_url.90s",
+    );
+    expect(result).toBe("");
+    expect(consoleErrorSpy).toHaveBeenCalledWith("Response status: 400");
+  });
 });
