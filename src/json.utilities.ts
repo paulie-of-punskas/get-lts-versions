@@ -1,4 +1,5 @@
 import { EOLresponse, EOLresponseResult } from "./classes.js";
+import * as core from "@actions/core";
 
 export function isJSONok(jsonInput: string): boolean {
   /**
@@ -65,10 +66,10 @@ export function getNlatestVersions(
   const responseResultJson: EOLresponseResult = new EOLresponseResult(
     responseJson.result.releases,
   );
-  // const responseJsonLanguageReleases: Array<LanguageReleases> = new Array<LanguageReleases>();
 
   // If numOfVersions is greater than available, then loop through available
   if (numOfVersions > responseResultJson.releases.length) {
+    core.notice(`Requested (${numOfVersions}) number of versions is not available. Will return max available: ${responseResultJson.releases.length}`);
     maxAvailableVersions = responseResultJson.releases.length;
   } else {
     maxAvailableVersions = numOfVersions;
