@@ -88,7 +88,7 @@ export function getNlatestVersions(
 
   if (numOfVersions != ltsVersions.length) {
     core.notice(
-      `Requested (${numOfVersions}) number of versions is not available. Returning max available: ${ltsVersions.length}`,
+      `Requested (${numOfVersions}) number of versions is not available. Returning max available: ${ltsVersions.length}.`,
     );
   }
 
