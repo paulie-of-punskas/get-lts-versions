@@ -27328,7 +27328,7 @@ function getNlatestVersions(jsonInput, numOfVersions) {
         }
     }
     if (numOfVersions != ltsVersions.length) {
-        coreExports.notice(`Requested (${numOfVersions}) number of versions is not available. Returning max available: ${ltsVersions.length}`);
+        coreExports.notice(`Requested (${numOfVersions}) number of versions is not available. Returning max available: ${ltsVersions.length}.`);
     }
     return JSON.stringify(ltsVersions);
 }
