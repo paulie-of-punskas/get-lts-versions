@@ -33,7 +33,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get LTS for java - v012
+      - name: Get LTS for java - v013
         uses: paulie-of-punskas/get-lts-versions@2c1d8ce4bdddd6d6dffc557b7c5f373ed14fc626 #v0.1.3
         id: getJavaVersion
         with:
