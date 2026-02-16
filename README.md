@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get LTS for java - v012
-        uses: paulie-of-punskas/get-lts-versions@521947edbf993d2701ed4974b1a01aa58a95b64b #v0.1.2
+        uses: paulie-of-punskas/get-lts-versions@2c1d8ce4bdddd6d6dffc557b7c5f373ed14fc626 #v0.1.3
         id: getJavaVersion
         with:
           language: "eclipse-temurin"
