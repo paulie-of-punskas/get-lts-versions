@@ -38,33 +38,5 @@
   "dependencies": {
     "@actions/core": "^2.0.0",
     "@actions/github": "^8.0.1"
-  },
-  "overrides": {
-    "ts-jest": {
-      "handlebars": "^4.7.9"
-    },
-    "jest": {
-      "picomatch": "^4.0.4",
-      "brace-expansion": "^1.1.13"
-    },
-    "@jest/globals": {
-      "picomatch": "^4.0.4",
-      "brace-expansion": "^1.1.13"
-    },
-    "@rollup/plugin-commonjs": {
-      "picomatch": "^4.0.4"
-    },
-    "@rollup/plugin-node-resolve": {
-      "picomatch": "^4.0.4"
-    },
-    "@rollup/plugin-typescript": {
-      "picomatch": "^4.0.4"
-    },
-    "ts-jest-resolver": {
-      "picomatch": "^4.0.4"
-    },
-    "@types/jest": {
-      "picomatch": "^4.0.4"
-    }
   }
 }
