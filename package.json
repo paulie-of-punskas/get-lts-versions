@@ -44,13 +44,11 @@
       "handlebars": "^4.7.9"
     },
     "jest": {
-      "minimatch": "^10.2.5",
       "picomatch": "^4.0.4",
       "brace-expansion": "^1.1.13"
     },
     "@jest/globals": {
       "picomatch": "^4.0.4",
-      "minimatch": "^10.2.5",
       "brace-expansion": "^1.1.13"
     },
     "@rollup/plugin-commonjs": {
