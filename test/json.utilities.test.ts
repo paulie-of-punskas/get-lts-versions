@@ -130,11 +130,10 @@ describe("Python HTTP Server Tests", () => {
 
   it("should serve files correctly", async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8000/example_return_go.json",
-      );
+      const response = await fetch("http://localhost:8000/example_return_go.json")
+      const responseData = await response.json();
       expect(response.status).toBe(200);
-      expect(isJSONok(JSON.stringify(response.data))).toBe(true);
+      expect(isJSONok(JSON.stringify(responseData))).toBe(true);
     } catch (error) {
       console.error(`File serving failed: ${error}`);
     }
