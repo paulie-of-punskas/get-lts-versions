@@ -1,59 +1,94 @@
 ![CI - Node 20, 22, 24](https://github.com/paulie-of-punskas/ts-get_lts_versions/actions/workflows/ci.yaml/badge.svg)
 
 # Info
-JS/TS script & GitHub Action used for fetching Long Term Support versions. Can be used within GitHub Action, should work within GitLab as well, with slight modification.
-
-## How it works - script
-By default, script sends a GET request to https://endoflife.date API and returns an array with corresponding data.
+JS/TS script & GitHub Action used for fetching Long Term Support versions. 
+Code sends a GET request to [endoflife.date API](https://endoflife.date/docs/api/v1/) and returns an array with corresponding data.
 If larger number of LTS is requested, then function returns max supported number of versions.
 
-## How it works - action
-Action runs a "dist/index.js", and returns an array of LTS strings - `lts_versions`.
-It can be then reused in a different step/job.
+## Features
+- Powered by [endoflife.date](https://endoflife.date) — reliable LTS data of over 20 programming languages
+- Flexible language naming — use common aliases (`go` or `golang`, `java-temurin` or `temurin`, etc.)
+- Seamless GitHub Actions integration — simple inputs and JSON output for workflow automation
+- Minimal dependencies — lightweight TypeScript/JavaScript implementation. Uses only [@actions/core](https://www.npmjs.com/package/@actions/core) and [@actions/github](https://www.npmjs.com/package/@actions/github) as external dependencies.
 
-Below is the example, for setting up Java LTS:
+## Supported languages
+| Language Name | Input Name | EndOfLife Name |
+|---|---|---|
+| COBOL | cobol, visual-cobol | visual-cobol |
+| Elixir | elixir | elixir |
+| Erlang | erlang | erlang |
+| Gleam | gleam | gleam |
+| Go | go, golang | go |
+| Groovy | groovy, apache-groovy | apache-groovy |
+| Haskell | ghc, haskell, glasgow-haskell-compiler | ghc |
+| IDL | idl | idl |
+| Java (Alibaba Dragonwell) | java-dragonwell, dragonwell, alibaba-dragonwell | alibaba-dragonwell |
+| Java (Amazon Corretto) | java-corretto, corretto, amazon-corretto | amazon-corretto |
+| Java (BellSoft Liberica) | java-liberica, liberica, bellsoft-liberica | bellsoft-liberica |
+| Java (Eclipse Temurin) | java-temurin, temurin, eclipse-temurin | eclipse-temurin |
+| Java (GraalVM CE) | java-graalvm, graalvm, graalvm-ce | graalvm-ce |
+| Java (IBM Semeru) | java-semeru, semeru, ibm-semeru-runtime | ibm-semeru-runtime |
+| Java (Mandrel) | java-mandrel, mandrel | mandrel |
+| Java (Microsoft) | java-microsoft, microsoft-build-of-openjdk | microsoft-build-of-openjdk |
+| Java (OpenJDK) | java-openjdk, openjdk | openjdk |
+| Java (Oracle GraalVM) | java-oracle-graalvm, oracle-graalvm | oracle-graalvm |
+| Java (Oracle JDK) | java-oracle-jdk, oracle-jdk | oracle-jdk |
+| Java (Red Hat) | java-redhat, redhat-build-of-openjdk | redhat-build-of-openjdk |
+| Java (SapMachine) | java-sapmachine, sapmachine | sapmachine |
+| Java (Azul Zulu) | java-zulu, zulu, azul-zulu | azul-zulu |
+| JRuby | jruby | jruby |
+| Julia | julia | julia |
+| Kotlin | kotlin | kotlin |
+| Lua | lua | lua |
+| Perl | perl | perl |
+| PHP | php | php |
+| PowerShell | powershell, pwsh, windows-powershell | powershell |
+| Python | python | python |
+| Ruby | ruby | ruby |
+| Rust | rust | rust |
+| Scala | scala | scala |
 
+## Quickstart
+### Inputs
+`language` - any name from [supported languages list](#supported-languages)  
+`versions_to_fetch` - how many long term support versions to fetch. Must be a positive integer. If none is set,
+max number of supported versions will be returned.
+
+### Outputs
+`lts_versions` - JSON array of LTS version strings. Use `fromJson()` to correctly parse strings in GHA workflow expressions: `["26.0.1+8","25.0.3+9"]`
+
+### Examples
 ```YAML
-name: CI
+name: CI | Java
 
 on:
   push:
-    branches:
-      - 'main'
-  workflow_dispatch:
 
 jobs:
   get-java-lts:
-    name: Get LTS for JAVA
+    name: Get LTS for Java
     runs-on: ubuntu-slim
     outputs:
-      lts_version: ${{ steps.outputJavaVersion.outputs.lts_java_version }}
+      lts_versions_fetched: ${{ steps.getJavaVersion.outputs.lts_versions }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get LTS for java - v012
-        uses: paulie-of-punskas/get-lts-versions@521947edbf993d2701ed4974b1a01aa58a95b64b #v0.1.2
+      - name: Get LTS for Java Temurin JDK
+        uses: paulie-of-punskas/get-lts-versions@2c1d8ce4bdddd6d6dffc557b7c5f373ed14fc626 #v0.1.3
         id: getJavaVersion
         with:
           language: "eclipse-temurin"
           versions_to_fetch: "3"
 
-      - name: Print returned values
-        id: outputJavaVersion
-        shell: bash
-        run: |
-          echo "lts_java_version=${{ toJSON(steps.getJavaVersion.outputs.lts_versions) }}" >> $GITHUB_OUTPUT
-
-  setup-lts-environment:
+  setup-lts-environment:  
     name: Setup environment
     runs-on: ubuntu-22.04
-    needs: get-java-lts
+    needs: get-java-lts        
     strategy:
       matrix:
-        lts_java_version: ${{ fromJson(needs.get-java-lts.outputs.lts_version) }}
-
+        lts_java_version: ${{ fromJson(needs.get-java-lts.outputs.lts_versions_fetched) }}
     steps:
       - name: Set up latest JDK for x64
         uses: actions/setup-java@v4
@@ -63,14 +98,5 @@ jobs:
           architecture: x64
 ```
 
-
-## Script related
-
-### Run tests
-`npm test` or `jest --collectCoverage`. `Jest` needs to be globally installed.
-
-### Build
-`npm run build`
-
-### To do:
-- [ ] compare eolFrom with current date
+## Support / Contributions
+Please open an issue within the repository.

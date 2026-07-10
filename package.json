@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
-    "@actions/github": "^7.0.0",
-    "axios": "^1.13.2"
+    "@actions/github": "^7.0.0"
   }
 }

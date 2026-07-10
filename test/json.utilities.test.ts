@@ -93,7 +93,6 @@ describe('getNlatestVersions():', () => {
 // });
 
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
-import axios from 'axios';
 // import { EOLresponse, EOLresponseResult } from "../src/classes";
 
 describe('Python HTTP Server Tests', () => {
@@ -129,23 +128,14 @@ describe('Python HTTP Server Tests', () => {
         }
     });
 
-    // it("should return 404, while serving files", async () => {
-    //     try {
-    //         const response = await axios.get("http://localhost:8000/example_return_xxx.json");
-    //         expect(response.status).toBe(404);
-    //         // expect(isJSONok(JSON.stringify(response.data))).toBe(true);
-    //     } catch (error) {
-    //         console.error(`File serving failed: ${error}`);
-    //     }
-    // });
-
     it('should serve files correctly', async () => {
         try {
-            const response = await axios.get(
+            const response = await fetch(
                 'http://localhost:8000/example_return_go.json'
             );
             expect(response.status).toBe(200);
-            expect(isJSONok(JSON.stringify(response.data))).toBe(true);
+            const data = await response.json();
+            expect(isJSONok(JSON.stringify(data))).toBe(true);
         } catch (error) {
             console.error(`File serving failed: ${error}`);
         }
