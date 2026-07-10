@@ -76,7 +76,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get LTS for Java Temurin JDK
-        uses: paulie-of-punskas/get-lts-versions@2c1d8ce4bdddd6d6dffc557b7c5f373ed14fc626 #v0.1.3
+        uses: paulie-of-punskas/get-lts-versions@34593d87e1f16c571a894d1e47f25229ce55b9e9 #v0.1.5
         id: getJavaVersion
         with:
           language: "eclipse-temurin"
