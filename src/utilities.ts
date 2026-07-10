@@ -96,7 +96,7 @@ export function unifyName(language: string): string {
 
     const parsedLanguage = LANGUAGE_ALIASES[language.toLowerCase()];
     if (!parsedLanguage) {
-        throw new Error(`Unexpected language name - ${language}`);
+        throw new Error(`Unexpected language name: ${language}`);
     }
     return parsedLanguage;
 }
