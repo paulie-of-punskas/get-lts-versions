@@ -1,5 +1,6 @@
 {
   "author": "paulie-aus-punskas a.k.a. paulie-of-punskas",
+  "description": "Code is used for fetching EOL for language, from https://endoflife.date",
   "version": "0.1.5",
   "repository": {
     "url": "https://github.com/paulie-of-punskas/get-lts-versions",
@@ -11,7 +12,9 @@
   },
   "keywords": [
     "actions",
-    "GitHub Actions"
+    "GitHub Actions",
+    "endoflife.date",
+    "EOL"
   ],
   "type": "module",
   "devDependencies": {

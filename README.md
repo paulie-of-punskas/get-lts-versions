@@ -73,5 +73,4 @@ jobs:
 `npm run build`
 
 ### To do:
-- [ ] unify language names
 - [ ] compare eolFrom with current date
