@@ -26,6 +26,19 @@ jobs:
                 },
               });
               const cacheData = await response.json();
-              console.log("Available caches: ", cacheData);
+              return cacheData;
             }
-            checkCaches();
+
+            const checkResult = await checkCaches();
+
+            // expect 'lts-versions-go' and 'lts-versions-python' to exist
+            const expectedLTScache = 2;
+            let ltsCache = 0;
+            checkResult.actions_caches.forEach((cache) => {
+              if (cache.key === 'lts-versions-go' || cache.key === 'lts-versions-python') {
+                ltsCache++
+              };
+            });
+            if (ltsCache !== expectedLTScache) {
+              throw new Error(`Could not find LTS cache for python and go. Found number of cache: ${ltsCache}.`);
+            };
