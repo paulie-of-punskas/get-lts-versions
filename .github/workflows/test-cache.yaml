@@ -39,7 +39,7 @@ jobs:
                   ltsCache++
                 }
             });
-            console.log(`Returned cache:\n${JSON.stringify(getCachesResult.actions_caches})`);
+            console.log(`Returned cache:\n${JSON.stringify(getCachesResult.actions_caches)}`);
             if (ltsCache === 0) {
                 throw new Error(`Could not find LTS cache for python and go. Found number of cache: ${ltsCache}`);
             }
