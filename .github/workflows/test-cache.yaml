@@ -1,4 +1,5 @@
 name: Test - check if caches exist
+
 on:
   push:
     paths:
@@ -18,9 +19,9 @@ jobs:
         with:
           script: |
             async function checkCaches() {
-              const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/actions/caches`, {
+              const response = await fetch(`https://api.github.com/repos/${{ github.repository }}/actions/caches`, {
                 headers: {
-                  Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                  Authorization: `Bearer ${{ github.token }}`,
                   "X-GitHub-Api-Version": "2022-11-28",
                 },
               });
