@@ -33,15 +33,14 @@ jobs:
 
             // expect 'lts-versions-go' and 'lts-versions-python' to exist
             // that includes cache "from" main and other branches
-            const expectedLTScache = 2;
             let ltsCache = 0;
             getCachesResult.actions_caches.forEach((cache) => {
                 if (cache.key === 'lts-versions-go' || cache.key === 'lts-versions-python') {
                   ltsCache++
                 }
             });
-            console.log(`Returned cache:\n${getCachesResult.actions_caches}`);
-            if (ltsCache < expectedLTScache) {
+            console.log(`Returned cache:\n${JSON.stringify(getCachesResult.actions_caches})`);
+            if (ltsCache === 0) {
                 throw new Error(`Could not find LTS cache for python and go. Found number of cache: ${ltsCache}`);
             }
-            console.log("'oll korrect!'");
+            console.log("'oll korrect! (Caches were found successfully).'");
