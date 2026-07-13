@@ -1,0 +1,29 @@
+name: Test - check if caches exist
+on:
+  push:
+    paths:
+      - '.github/workflows/test-cache.yaml'
+  workflow_dispatch:
+
+jobs:
+  fetch-caches:
+    name: Fetch caches
+    runs-on: ubuntu-latest
+    env:
+      node-version: 24
+
+    steps:
+      - name: Fetch caches
+        uses: actions/github-script@8
+        script: |
+          async function checkCaches() {
+            const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/actions/caches`, {
+              headers: {
+                Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                "X-GitHub-Api-Version": "2022-11-28",
+              },
+            });
+            const cacheData = await response.json();
+            console.log("Available caches: ", cacheData);
+          }
+          checkCaches();
