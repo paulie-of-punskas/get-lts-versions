@@ -1,0 +1,34 @@
+name: Code coverage - Node 24
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  run-code-coverage:
+    name: Code coverage - Node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    env:
+      node-version: 24
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: ${{ env.node-version }}
+          cache: 'npm'
+
+      - name: Run npm CI
+        shell: bash
+        run: npm ci
+
+      - name: Install jest and run code coverage
+        shell: bash
+        run: |
+          npm install jest --global
+          NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest --verbose --collectCoverage

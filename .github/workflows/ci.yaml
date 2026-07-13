@@ -5,6 +5,9 @@ name: CI - Node 20, 22, 24
 
 on:
   push:
+    paths:
+      - 'src/**'
+      - 'test/**'
 
 jobs:
   build-and-test:
@@ -17,10 +20,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 #v 6.0.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
