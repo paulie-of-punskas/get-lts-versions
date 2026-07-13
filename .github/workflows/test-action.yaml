@@ -2,6 +2,8 @@ name: Test - get LTS versions
 
 on:
   push:
+  schedule:
+    - cron: "0 8 * * 1"
 
 jobs:
   get-lts-versions:
