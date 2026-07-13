@@ -37,8 +37,8 @@ jobs:
             checkResult.actions_caches.forEach((cache) => {
               if (cache.key === 'lts-versions-go' || cache.key === 'lts-versions-python') {
                 ltsCache++
-              };
+              }
             });
             if (ltsCache !== expectedLTScache) {
               throw new Error(`Could not find LTS cache for python and go. Found number of cache: ${ltsCache}.`);
-            };
+            }
