@@ -10,7 +10,7 @@ If larger number of LTS is requested, then function returns max supported number
 - Flexible language naming — use common aliases (`go` or `golang`, `java-temurin` or `temurin`, etc.)
 - Seamless GitHub Actions integration — simple inputs and JSON output for workflow automation
 - Minimal dependencies — lightweight TypeScript/JavaScript implementation. Uses only [@actions/core](https://www.npmjs.com/package/@actions/core) and [@actions/github](https://www.npmjs.com/package/@actions/github) as external dependencies.
-- Caching - `get-lts-versions` caches results of endoflife.date and refreshes it every 24 hours.
+- Caching - `get-lts-versions` caches results of endoflife.date and updates them weekly.
 
 ## Supported programming languages
 | Language Name | Input Name | EndOfLife Name |
