@@ -1,7 +1,12 @@
 import { isJSONok, getNlatestVersions } from './json.utilities.js';
 import { sendRequest } from './request.js';
 import * as core from '@actions/core';
+import * as cache from '@actions/cache';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { unifyName } from './utilities.js';
+
+const CACHE_DIR = path.join(process.env.GITHUB_WORKSPACE || '.', '.cache');
 
 export async function run(language: string, numOfVersions: number) {
     /**
@@ -15,19 +20,41 @@ export async function run(language: string, numOfVersions: number) {
         throw new Error('Invalid input parameters');
     }
 
-	const parsedLanguage = unifyName(language);
+    const parsedLanguage = unifyName(language);
+    const cacheKey = `lts-versions-${parsedLanguage}`;
+    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}.json`);
+    const cachePaths = [cacheFile];
 
     try {
-        const returnedJSON: string = await sendRequest(parsedLanguage);
+        // Check for existing cache for a `language`
+        const restored = await cache.restoreCache(cachePaths, cacheKey);
+        if (restored) {
+            core.info(`Found cache for ${parsedLanguage}.`);
+            const cachedData = await fs.readFile(cacheFile, 'utf-8');
+            core.setOutput(
+                'lts_versions',
+                getNlatestVersions(cachedData, numOfVersions)
+            );
+        } else {
+            core.info(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
+            const returnedJSON: string = await sendRequest(parsedLanguage);
 
-        if (!isJSONok(returnedJSON)) {
-            throw new Error('Returned JSON has incorrect/new structure.');
+            if (!isJSONok(returnedJSON)) {
+                throw new Error('Returned JSON has incorrect/new structure.');
+            }
+
+            await fs.mkdir(CACHE_DIR, { recursive: true });
+            await fs.writeFile(cacheFile, returnedJSON);
+
+            core.setOutput(
+                'lts_versions',
+                getNlatestVersions(returnedJSON, numOfVersions)
+            );
+
+            // Save to GitHub Actions cache for future runs
+            await cache.saveCache(cachePaths, cacheKey);
+            core.info(`Cache saved for ${parsedLanguage}!`);
         }
-
-        core.setOutput(
-            'lts_versions',
-            getNlatestVersions(returnedJSON, numOfVersions)
-        );
     } catch (error) {
         console.error(`Error in run function: ${error}`);
         throw error;

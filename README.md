@@ -10,8 +10,9 @@ If larger number of LTS is requested, then function returns max supported number
 - Flexible language naming — use common aliases (`go` or `golang`, `java-temurin` or `temurin`, etc.)
 - Seamless GitHub Actions integration — simple inputs and JSON output for workflow automation
 - Minimal dependencies — lightweight TypeScript/JavaScript implementation. Uses only [@actions/core](https://www.npmjs.com/package/@actions/core) and [@actions/github](https://www.npmjs.com/package/@actions/github) as external dependencies.
+- Caching - `get-lts-versions` caches results of endoflife.date and updates them weekly.
 
-## Supported languages
+## Supported programming languages
 | Language Name | Input Name | EndOfLife Name |
 |---|---|---|
 | COBOL | cobol, visual-cobol | visual-cobol |
@@ -73,10 +74,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Get LTS for Java Temurin JDK
-        uses: paulie-of-punskas/get-lts-versions@34593d87e1f16c571a894d1e47f25229ce55b9e9 #v0.1.5
+        uses: paulie-of-punskas/get-lts-versions@34593d87e1f16c571a894d1e47f25229ce55b9e9 # v0.1.5
         id: getJavaVersion
         with:
           language: "eclipse-temurin"
@@ -91,7 +92,7 @@ jobs:
         lts_java_version: ${{ fromJson(needs.get-java-lts.outputs.lts_versions_fetched) }}
     steps:
       - name: Set up latest JDK for x64
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           java-version: ${{ matrix.lts_java_version }}
           distribution: "temurin"
