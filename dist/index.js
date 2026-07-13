@@ -137472,11 +137472,12 @@ async function run(language, numOfVersions) {
         // Check for existing cache for a `language`
         const restored = await restoreCache(cachePaths, cacheKey);
         if (restored) {
+            coreExports.info(`Found cache for ${parsedLanguage}.`);
             const cachedData = await fs$1.readFile(cacheFile, 'utf-8');
             coreExports.setOutput('lts_versions', getNlatestVersions(cachedData, numOfVersions));
-            coreExports.info(`Found cache for ${parsedLanguage}.`);
         }
         else {
+            coreExports.info(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
             const returnedJSON = await sendRequest(parsedLanguage);
             if (!isJSONok(returnedJSON)) {
                 throw new Error('Returned JSON has incorrect/new structure.');

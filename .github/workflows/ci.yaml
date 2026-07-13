@@ -5,6 +5,9 @@ name: CI - Node 20, 22, 24
 
 on:
   push:
+    paths:
+      - 'src/**'
+      - 'test/**'
 
 jobs:
   build-and-test:

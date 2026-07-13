@@ -29,13 +29,14 @@ export async function run(language: string, numOfVersions: number) {
         // Check for existing cache for a `language`
         const restored = await cache.restoreCache(cachePaths, cacheKey);
         if (restored) {
+            core.info(`Found cache for ${parsedLanguage}.`);
             const cachedData = await fs.readFile(cacheFile, 'utf-8');
             core.setOutput(
                 'lts_versions',
                 getNlatestVersions(cachedData, numOfVersions)
             );
-            core.info(`Found cache for ${parsedLanguage}.`);
         } else {
+            core.info(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
             const returnedJSON: string = await sendRequest(parsedLanguage);
 
             if (!isJSONok(returnedJSON)) {
