@@ -1,4 +1,6 @@
-![CI - Node 20, 22, 24](https://github.com/paulie-of-punskas/ts-get_lts_versions/actions/workflows/ci.yaml/badge.svg)
+![CI - Node 20, 22, 24](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg)
+
+![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg)
 
 # Info
 JS/TS script & GitHub Action used for fetching Long Term Support versions. 
