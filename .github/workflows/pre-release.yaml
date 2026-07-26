@@ -22,7 +22,6 @@ jobs:
           script: |
             // extract version from package.json
             const packageJson = require('./package.json');
-            # const packageJson = JSON.parse(JSON.stringify(packageJsonFile));
 
             const versionOnGitHub = await (async () => {
                 try {
@@ -45,7 +44,7 @@ jobs:
                 }
             })();
 
-            function isSemVerUpdated(packageVersion: string, versionOnGitHub: string): boolean {
+            function isSemVerUpdated(packageVersion: string, versionOnGitHub: string) {
                 // remove 'v' from the start of the string
                 const packageVersionsanitized = packageVersion.replace("v", "").split(".");
                 const versionOnGitHubSanitized = versionOnGitHub.replace("v", "").split(".");
@@ -62,10 +61,10 @@ jobs:
                     const number2 = Number(versionOnGitHubSanitized[j]);
 
                     if (number1 > number2) {
-                        return false;
+                        return true;
                     }
                     if (number1 < number2) {
-                        return true;
+                        return false;
                     }
                 }
                 // in case all are equal
