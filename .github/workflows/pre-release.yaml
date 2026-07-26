@@ -72,7 +72,7 @@ jobs:
             }
 
             const isVersionUpdated = isSemVerUpdated(packageJson.version, versionOnGitHub);
-            if (!isUpdated) {
+            if (!isVersionUpdated) {
                 core.setFailed(`Package version (${packageJson.version}) needs to be higher than latest release (${versionOnGitHub}) on GitHub`);
             }
 
