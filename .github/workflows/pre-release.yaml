@@ -4,7 +4,10 @@ description: Compare package.json version with latest one on GitHub. Works only 
 on:
   workflow_dispatch:
   pull_request:
-    types: ["opened"]
+    branches: [ "main" ]
+    types: [ "opened" ]
+  push:
+    branches: [ "main" ]
 
 jobs:
   check:
