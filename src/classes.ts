@@ -22,9 +22,11 @@ export class EOLresponse {
 }
 
 export class EOLresponseResult {
+    name: string;
     releases: Array<LanguageReleases>;
 
-    constructor(releases: Array<LanguageReleases>) {
+    constructor(name: string, releases: Array<LanguageReleases>) {
+        this.name = name;
         this.releases = releases;
 
         if (releases === undefined) {
@@ -78,7 +80,7 @@ export class LanguageLatestRelease {
     }
 }
 
-// Object that will be returned to user
+// Object that will be returned to a user
 export class LanguageLTS {
     language: string;
     ltsVersions: Array<number>;

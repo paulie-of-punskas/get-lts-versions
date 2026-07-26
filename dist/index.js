@@ -70,13 +70,370 @@ class EOLresponse {
     }
 }
 class EOLresponseResult {
+    name;
     releases;
-    constructor(releases) {
+    constructor(name, releases) {
+        this.name = name;
         this.releases = releases;
         if (releases === undefined) {
             throw new Error('EOLresponseResult: releases parameter is required.');
         }
     }
+}
+
+var languages$1 = [
+	{
+		languageFullName: "COBOL",
+		inputNames: [
+			"cobol",
+			"visual-cobol"
+		],
+		eolName: "visual-cobol"
+	},
+	{
+		languageFullName: "Elixir",
+		inputNames: [
+			"elixir"
+		],
+		eolName: "elixir"
+	},
+	{
+		languageFullName: "Erlang",
+		inputNames: [
+			"erlang"
+		],
+		eolName: "erlang"
+	},
+	{
+		languageFullName: "Gleam",
+		inputNames: [
+			"gleam"
+		],
+		eolName: "gleam"
+	},
+	{
+		languageFullName: "Go",
+		inputNames: [
+			"go",
+			"golang"
+		],
+		eolName: "go"
+	},
+	{
+		languageFullName: "Groovy",
+		inputNames: [
+			"groovy",
+			"apache-groovy"
+		],
+		eolName: "apache-groovy"
+	},
+	{
+		languageFullName: "Haskell",
+		inputNames: [
+			"ghc",
+			"haskell",
+			"glasgow-haskell-compiler"
+		],
+		eolName: "ghc"
+	},
+	{
+		languageFullName: "IDL",
+		inputNames: [
+			"idl"
+		],
+		eolName: "idl"
+	},
+	{
+		languageFullName: "Java (Alibaba Dragonwell)",
+		inputNames: [
+			"java-dragonwell",
+			"dragonwell",
+			"alibaba-dragonwell"
+		],
+		eolName: "alibaba-dragonwell"
+	},
+	{
+		languageFullName: "Java (Amazon Corretto)",
+		inputNames: [
+			"java-corretto",
+			"corretto",
+			"amazon-corretto"
+		],
+		eolName: "amazon-corretto"
+	},
+	{
+		languageFullName: "Java (BellSoft Liberica)",
+		inputNames: [
+			"java-liberica",
+			"liberica",
+			"bellsoft-liberica"
+		],
+		eolName: "bellsoft-liberica"
+	},
+	{
+		languageFullName: "Java (Eclipse Temurin)",
+		inputNames: [
+			"java-temurin",
+			"temurin",
+			"eclipse-temurin"
+		],
+		eolName: "eclipse-temurin"
+	},
+	{
+		languageFullName: "Java (GraalVM CE)",
+		inputNames: [
+			"java-graalvm",
+			"graalvm",
+			"graalvm-ce"
+		],
+		eolName: "graalvm-ce"
+	},
+	{
+		languageFullName: "Java (IBM Semeru)",
+		inputNames: [
+			"java-semeru",
+			"semeru",
+			"ibm-semeru-runtime"
+		],
+		eolName: "ibm-semeru-runtime"
+	},
+	{
+		languageFullName: "Java (Mandrel)",
+		inputNames: [
+			"java-mandrel",
+			"mandrel"
+		],
+		eolName: "mandrel"
+	},
+	{
+		languageFullName: "Java (Microsoft)",
+		inputNames: [
+			"java-microsoft",
+			"microsoft-build-of-openjdk"
+		],
+		eolName: "microsoft-build-of-openjdk"
+	},
+	{
+		languageFullName: "Java (OpenJDK)",
+		inputNames: [
+			"java-openjdk",
+			"openjdk"
+		],
+		eolName: "openjdk"
+	},
+	{
+		languageFullName: "Java (Oracle GraalVM)",
+		inputNames: [
+			"java-oracle-graalvm",
+			"oracle-graalvm"
+		],
+		eolName: "oracle-graalvm"
+	},
+	{
+		languageFullName: "Java (Oracle JDK)",
+		inputNames: [
+			"java-oracle-jdk",
+			"oracle-jdk"
+		],
+		eolName: "oracle-jdk"
+	},
+	{
+		languageFullName: "Java (Red Hat)",
+		inputNames: [
+			"java-redhat",
+			"redhat-build-of-openjdk"
+		],
+		eolName: "redhat-build-of-openjdk"
+	},
+	{
+		languageFullName: "Java (SapMachine)",
+		inputNames: [
+			"java-sapmachine",
+			"sapmachine"
+		],
+		eolName: "sapmachine"
+	},
+	{
+		languageFullName: "Java (Azul Zulu)",
+		inputNames: [
+			"java-zulu",
+			"zulu",
+			"azul-zulu"
+		],
+		eolName: "azul-zulu"
+	},
+	{
+		languageFullName: "JRuby",
+		inputNames: [
+			"jruby"
+		],
+		eolName: "jruby"
+	},
+	{
+		languageFullName: "Julia",
+		inputNames: [
+			"julia"
+		],
+		eolName: "julia"
+	},
+	{
+		languageFullName: "Kotlin",
+		inputNames: [
+			"kotlin"
+		],
+		eolName: "kotlin"
+	},
+	{
+		languageFullName: "Lua",
+		inputNames: [
+			"lua"
+		],
+		eolName: "lua"
+	},
+	{
+		languageFullName: "Perl",
+		inputNames: [
+			"perl"
+		],
+		eolName: "perl"
+	},
+	{
+		languageFullName: "PHP",
+		inputNames: [
+			"php"
+		],
+		eolName: "php"
+	},
+	{
+		languageFullName: "PowerShell",
+		inputNames: [
+			"powershell",
+			"pwsh",
+			"windows-powershell"
+		],
+		eolName: "powershell"
+	},
+	{
+		languageFullName: "Python",
+		inputNames: [
+			"python"
+		],
+		eolName: "python"
+	},
+	{
+		languageFullName: "Ruby",
+		inputNames: [
+			"ruby"
+		],
+		eolName: "ruby"
+	},
+	{
+		languageFullName: "Rust",
+		inputNames: [
+			"rust"
+		],
+		eolName: "rust"
+	},
+	{
+		languageFullName: "Scala",
+		inputNames: [
+			"scala"
+		],
+		eolName: "scala"
+	}
+];
+var aliases$1 = {
+	cobol: "visual-cobol",
+	"visual-cobol": "visual-cobol",
+	elixir: "elixir",
+	erlang: "erlang",
+	gleam: "gleam",
+	go: "go",
+	golang: "go",
+	groovy: "apache-groovy",
+	"apache-groovy": "apache-groovy",
+	ghc: "ghc",
+	haskell: "ghc",
+	"glasgow-haskell-compiler": "ghc",
+	idl: "idl",
+	"java-dragonwell": "alibaba-dragonwell",
+	dragonwell: "alibaba-dragonwell",
+	"alibaba-dragonwell": "alibaba-dragonwell",
+	"java-corretto": "amazon-corretto",
+	corretto: "amazon-corretto",
+	"amazon-corretto": "amazon-corretto",
+	"java-liberica": "bellsoft-liberica",
+	liberica: "bellsoft-liberica",
+	"bellsoft-liberica": "bellsoft-liberica",
+	"java-temurin": "eclipse-temurin",
+	temurin: "eclipse-temurin",
+	"eclipse-temurin": "eclipse-temurin",
+	"java-graalvm": "graalvm-ce",
+	graalvm: "graalvm-ce",
+	"graalvm-ce": "graalvm-ce",
+	"java-semeru": "ibm-semeru-runtime",
+	semeru: "ibm-semeru-runtime",
+	"ibm-semeru-runtime": "ibm-semeru-runtime",
+	"java-mandrel": "mandrel",
+	mandrel: "mandrel",
+	"java-microsoft": "microsoft-build-of-openjdk",
+	"microsoft-build-of-openjdk": "microsoft-build-of-openjdk",
+	"java-openjdk": "openjdk",
+	openjdk: "openjdk",
+	"java-oracle-graalvm": "oracle-graalvm",
+	"oracle-graalvm": "oracle-graalvm",
+	"java-oracle-jdk": "oracle-jdk",
+	"oracle-jdk": "oracle-jdk",
+	"java-redhat": "redhat-build-of-openjdk",
+	"redhat-build-of-openjdk": "redhat-build-of-openjdk",
+	"java-sapmachine": "sapmachine",
+	sapmachine: "sapmachine",
+	"java-zulu": "azul-zulu",
+	zulu: "azul-zulu",
+	"azul-zulu": "azul-zulu",
+	jruby: "jruby",
+	julia: "julia",
+	kotlin: "kotlin",
+	lua: "lua",
+	perl: "perl",
+	php: "php",
+	powershell: "powershell",
+	pwsh: "powershell",
+	"windows-powershell": "powershell",
+	python: "python",
+	ruby: "ruby",
+	rust: "rust",
+	scala: "scala"
+};
+var LANGUAGE_ALIASES = {
+	languages: languages$1,
+	aliases: aliases$1
+};
+
+const aliases = LANGUAGE_ALIASES.aliases;
+const languages = LANGUAGE_ALIASES.languages;
+function unifyName(language) {
+    /**
+     * @param {string} language - name of the language.
+     * @returns {string} language according to endoflife API documentation
+    */
+    const parsedLanguage = aliases[language.toLowerCase().trim()];
+    if (!parsedLanguage) {
+        throw new Error(`Unexpected language name: ${language}`);
+    }
+    return parsedLanguage;
+}
+function getFullLanguageName(language) {
+    /**
+     * @param {string} language - name of the language.
+     * @returns {string} full language name, e.g. Java (OpenJDK)
+    */
+    const normalizedLanguage = language.toLowerCase().trim();
+    const found = languages.find((element) => element.inputNames.includes(normalizedLanguage));
+    if (!found) {
+        throw new Error(`Language ${language} was not found`);
+    }
+    return found.languageFullName;
 }
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -31462,7 +31819,7 @@ function isJSONok(jsonInput) {
         return false;
     }
     try {
-        new EOLresponseResult(jsonFile.result.releases);
+        new EOLresponseResult(jsonFile.result.name, jsonFile.result.releases);
     }
     catch (error) {
         if (error instanceof Error) {
@@ -31482,7 +31839,7 @@ function getNlatestVersions(jsonInput, numOfVersions) {
     let maxAvailableVersions;
     const jsonFile = JSON.parse(jsonInput);
     const responseJson = new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
-    const responseResultJson = new EOLresponseResult(responseJson.result.releases);
+    const responseResultJson = new EOLresponseResult(responseJson.result.name, responseJson.result.releases);
     // If numOfVersions is greater than available, then loop through available
     if (numOfVersions > responseResultJson.releases.length) {
         maxAvailableVersions = responseResultJson.releases.length;
@@ -31498,7 +31855,7 @@ function getNlatestVersions(jsonInput, numOfVersions) {
         }
     }
     if (numOfVersions != ltsVersions.length) {
-        coreExports.notice(`Requested (${numOfVersions}) number of versions is not available. Returning max available: ${ltsVersions.length}.`);
+        coreExports.notice(`Requested (${numOfVersions}) number of versions is not available for ${getFullLanguageName(responseResultJson.name)}. Returning max available: ${ltsVersions.length}.`);
     }
     return JSON.stringify(ltsVersions);
 }
@@ -86318,88 +86675,6 @@ function saveCacheV2(paths_1, key_1, options_1) {
         }
         return cacheId;
     });
-}
-
-const LANGUAGE_ALIASES = {
-    // COBOL
-    "cobol": "visual-cobol",
-    "visual-cobol": "visual-cobol",
-    // Go / Golang
-    "go": "go",
-    "golang": "go",
-    // Groovy
-    "groovy": "apache-groovy",
-    "apache-groovy": "apache-groovy",
-    // Haskell
-    "ghc": "ghc",
-    "haskell": "ghc",
-    "glasgow-haskell-compiler": "ghc",
-    // Java
-    "java-dragonwell": "alibaba-dragonwell",
-    "dragonwell": "alibaba-dragonwell",
-    "alibaba-dragonwell": "alibaba-dragonwell",
-    "java-corretto": "amazon-corretto",
-    "corretto": "amazon-corretto",
-    "amazon-corretto": "amazon-corretto",
-    "java-liberica": "bellsoft-liberica",
-    "liberica": "bellsoft-liberica",
-    "bellsoft-liberica": "bellsoft-liberica",
-    "java-temurin": "eclipse-temurin",
-    "temurin": "eclipse-temurin",
-    "eclipse-temurin": "eclipse-temurin",
-    "java-graalvm": "graalvm-ce",
-    "graalvm": "graalvm-ce",
-    "graalvm-ce": "graalvm-ce",
-    "java-semeru": "ibm-semeru-runtime",
-    "semeru": "ibm-semeru-runtime",
-    "ibm-semeru-runtime": "ibm-semeru-runtime",
-    "java-mandrel": "mandrel",
-    "mandrel": "mandrel",
-    "java-microsoft": "microsoft-build-of-openjdk",
-    "microsoft-build-of-openjdk": "microsoft-build-of-openjdk",
-    "java-openjdk": "openjdk",
-    "openjdk": "openjdk",
-    "java-oracle-graalvm": "oracle-graalvm",
-    "oracle-graalvm": "oracle-graalvm",
-    "java-oracle-jdk": "oracle-jdk",
-    "oracle-jdk": "oracle-jdk",
-    "java-redhat": "redhat-build-of-openjdk",
-    "redhat-build-of-openjdk": "redhat-build-of-openjdk",
-    "java-sapmachine": "sapmachine",
-    "sapmachine": "sapmachine",
-    "java-zulu": "azul-zulu",
-    "zulu": "azul-zulu",
-    "azul-zulu": "azul-zulu",
-    // Powershell
-    "powershell": "powershell",
-    "pwsh": "powershell",
-    "windows-powershell": "windows-powershell",
-    // The rest of the languages
-    "elixir": "elixir",
-    "erlang": "erlang",
-    "gleam": "gleam",
-    "idl": "idl",
-    "jruby": "jruby",
-    "julia": "julia",
-    "kotlin": "kotlin",
-    "lua": "lua",
-    "perl": "perl",
-    "php": "php",
-    "python": "python",
-    "ruby": "ruby",
-    "rust": "rust",
-    "scala": "scala",
-};
-function unifyName(language) {
-    /**
-     * @param {string} language - name of the language.
-     * @returns {string} language according to endoflife API documentation
-    */
-    const parsedLanguage = LANGUAGE_ALIASES[language.toLowerCase()];
-    if (!parsedLanguage) {
-        throw new Error(`Unexpected language name: ${language}`);
-    }
-    return parsedLanguage;
 }
 
 const CACHE_DIR = path.join(process.env.GITHUB_WORKSPACE || '.', '.cache');

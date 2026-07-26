@@ -1,0 +1,232 @@
+{
+  "languages": [
+    {
+      "languageFullName": "COBOL",
+      "inputNames": ["cobol", "visual-cobol"],
+      "eolName": "visual-cobol"
+    },
+    {
+      "languageFullName": "Elixir",
+      "inputNames": ["elixir"],
+      "eolName": "elixir"
+    },
+    {
+      "languageFullName": "Erlang",
+      "inputNames": ["erlang"],
+      "eolName": "erlang"
+    },
+    {
+      "languageFullName": "Gleam",
+      "inputNames": ["gleam"],
+      "eolName": "gleam"
+    },
+    {
+      "languageFullName": "Go",
+      "inputNames": ["go", "golang"],
+      "eolName": "go"
+    },
+    {
+      "languageFullName": "Groovy",
+      "inputNames": ["groovy", "apache-groovy"],
+      "eolName": "apache-groovy"
+    },
+    {
+      "languageFullName": "Haskell",
+      "inputNames": ["ghc", "haskell", "glasgow-haskell-compiler"],
+      "eolName": "ghc"
+    },
+    {
+      "languageFullName": "IDL",
+      "inputNames": ["idl"],
+      "eolName": "idl"
+    },
+    {
+      "languageFullName": "Java (Alibaba Dragonwell)",
+      "inputNames": ["java-dragonwell", "dragonwell", "alibaba-dragonwell"],
+      "eolName": "alibaba-dragonwell"
+    },
+    {
+      "languageFullName": "Java (Amazon Corretto)",
+      "inputNames": ["java-corretto", "corretto", "amazon-corretto"],
+      "eolName": "amazon-corretto"
+    },
+    {
+      "languageFullName": "Java (BellSoft Liberica)",
+      "inputNames": ["java-liberica", "liberica", "bellsoft-liberica"],
+      "eolName": "bellsoft-liberica"
+    },
+    {
+      "languageFullName": "Java (Eclipse Temurin)",
+      "inputNames": ["java-temurin", "temurin", "eclipse-temurin"],
+      "eolName": "eclipse-temurin"
+    },
+    {
+      "languageFullName": "Java (GraalVM CE)",
+      "inputNames": ["java-graalvm", "graalvm", "graalvm-ce"],
+      "eolName": "graalvm-ce"
+    },
+    {
+      "languageFullName": "Java (IBM Semeru)",
+      "inputNames": ["java-semeru", "semeru", "ibm-semeru-runtime"],
+      "eolName": "ibm-semeru-runtime"
+    },
+    {
+      "languageFullName": "Java (Mandrel)",
+      "inputNames": ["java-mandrel", "mandrel"],
+      "eolName": "mandrel"
+    },
+    {
+      "languageFullName": "Java (Microsoft)",
+      "inputNames": ["java-microsoft", "microsoft-build-of-openjdk"],
+      "eolName": "microsoft-build-of-openjdk"
+    },
+    {
+      "languageFullName": "Java (OpenJDK)",
+      "inputNames": ["java-openjdk", "openjdk"],
+      "eolName": "openjdk"
+    },
+    {
+      "languageFullName": "Java (Oracle GraalVM)",
+      "inputNames": ["java-oracle-graalvm", "oracle-graalvm"],
+      "eolName": "oracle-graalvm"
+    },
+    {
+      "languageFullName": "Java (Oracle JDK)",
+      "inputNames": ["java-oracle-jdk", "oracle-jdk"],
+      "eolName": "oracle-jdk"
+    },
+    {
+      "languageFullName": "Java (Red Hat)",
+      "inputNames": ["java-redhat", "redhat-build-of-openjdk"],
+      "eolName": "redhat-build-of-openjdk"
+    },
+    {
+      "languageFullName": "Java (SapMachine)",
+      "inputNames": ["java-sapmachine", "sapmachine"],
+      "eolName": "sapmachine"
+    },
+    {
+      "languageFullName": "Java (Azul Zulu)",
+      "inputNames": ["java-zulu", "zulu", "azul-zulu"],
+      "eolName": "azul-zulu"
+    },
+    {
+      "languageFullName": "JRuby",
+      "inputNames": ["jruby"],
+      "eolName": "jruby"
+    },
+    {
+      "languageFullName": "Julia",
+      "inputNames": ["julia"],
+      "eolName": "julia"
+    },
+    {
+      "languageFullName": "Kotlin",
+      "inputNames": ["kotlin"],
+      "eolName": "kotlin"
+    },
+    {
+      "languageFullName": "Lua",
+      "inputNames": ["lua"],
+      "eolName": "lua"
+    },
+    {
+      "languageFullName": "Perl",
+      "inputNames": ["perl"],
+      "eolName": "perl"
+    },
+    {
+      "languageFullName": "PHP",
+      "inputNames": ["php"],
+      "eolName": "php"
+    },
+    {
+      "languageFullName": "PowerShell",
+      "inputNames": ["powershell", "pwsh", "windows-powershell"],
+      "eolName": "powershell"
+    },
+    {
+      "languageFullName": "Python",
+      "inputNames": ["python"],
+      "eolName": "python"
+    },
+    {
+      "languageFullName": "Ruby",
+      "inputNames": ["ruby"],
+      "eolName": "ruby"
+    },
+    {
+      "languageFullName": "Rust",
+      "inputNames": ["rust"],
+      "eolName": "rust"
+    },
+    {
+      "languageFullName": "Scala",
+      "inputNames": ["scala"],
+      "eolName": "scala"
+    }
+  ],
+  "aliases": {
+    "cobol": "visual-cobol",
+    "visual-cobol": "visual-cobol",
+    "elixir": "elixir",
+    "erlang": "erlang",
+    "gleam": "gleam",
+    "go": "go",
+    "golang": "go",
+    "groovy": "apache-groovy",
+    "apache-groovy": "apache-groovy",
+    "ghc": "ghc",
+    "haskell": "ghc",
+    "glasgow-haskell-compiler": "ghc",
+    "idl": "idl",
+    "java-dragonwell": "alibaba-dragonwell",
+    "dragonwell": "alibaba-dragonwell",
+    "alibaba-dragonwell": "alibaba-dragonwell",
+    "java-corretto": "amazon-corretto",
+    "corretto": "amazon-corretto",
+    "amazon-corretto": "amazon-corretto",
+    "java-liberica": "bellsoft-liberica",
+    "liberica": "bellsoft-liberica",
+    "bellsoft-liberica": "bellsoft-liberica",
+    "java-temurin": "eclipse-temurin",
+    "temurin": "eclipse-temurin",
+    "eclipse-temurin": "eclipse-temurin",
+    "java-graalvm": "graalvm-ce",
+    "graalvm": "graalvm-ce",
+    "graalvm-ce": "graalvm-ce",
+    "java-semeru": "ibm-semeru-runtime",
+    "semeru": "ibm-semeru-runtime",
+    "ibm-semeru-runtime": "ibm-semeru-runtime",
+    "java-mandrel": "mandrel",
+    "mandrel": "mandrel",
+    "java-microsoft": "microsoft-build-of-openjdk",
+    "microsoft-build-of-openjdk": "microsoft-build-of-openjdk",
+    "java-openjdk": "openjdk",
+    "openjdk": "openjdk",
+    "java-oracle-graalvm": "oracle-graalvm",
+    "oracle-graalvm": "oracle-graalvm",
+    "java-oracle-jdk": "oracle-jdk",
+    "oracle-jdk": "oracle-jdk",
+    "java-redhat": "redhat-build-of-openjdk",
+    "redhat-build-of-openjdk": "redhat-build-of-openjdk",
+    "java-sapmachine": "sapmachine",
+    "sapmachine": "sapmachine",
+    "java-zulu": "azul-zulu",
+    "zulu": "azul-zulu",
+    "azul-zulu": "azul-zulu",
+    "jruby": "jruby",
+    "julia": "julia",
+    "kotlin": "kotlin",
+    "lua": "lua",
+    "perl": "perl",
+    "php": "php",
+    "powershell": "powershell",
+    "pwsh": "powershell",
+    "windows-powershell": "powershell",
+    "python": "python",
+    "ruby": "ruby",
+    "rust": "rust",
+    "scala": "scala"
+  }
+}
