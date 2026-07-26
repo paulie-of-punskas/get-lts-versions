@@ -1,5 +1,5 @@
-name: Pre-release checks
-description: Works only if SemVer convention is followed
+name: CD - pre-release checks
+description: Compare package.json version with latest one on GitHub. Works only if SemVer convention is followed.
 
 on:
   workflow_dispatch:
@@ -14,7 +14,8 @@ jobs:
       node-version: 24
 
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Compare current version with latest one available on GitHub
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
@@ -75,4 +76,3 @@ jobs:
             if (!isVersionUpdated) {
                 core.setFailed(`Package version (${packageJson.version}) needs to be higher than latest release (${versionOnGitHub}) on GitHub`);
             }
-
