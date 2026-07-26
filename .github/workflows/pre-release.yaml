@@ -21,8 +21,8 @@ jobs:
         with:
           script: |
             // extract version from package.json
-            import packageJsonFile from './package.json';
-            const packageJson = JSON.parse(JSON.stringify(packageJsonFile));
+            const packageJson = require('./package.json');
+            # const packageJson = JSON.parse(JSON.stringify(packageJsonFile));
 
             const versionOnGitHub = await (async () => {
                 try {

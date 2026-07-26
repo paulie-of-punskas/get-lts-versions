@@ -2,6 +2,9 @@ name: Test - get LTS versions
 
 on:
   push:
+    paths:
+      - 'src/**'
+      - 'test/**'
   schedule:
     - cron: "0 8 * * 1"
 
