@@ -1,4 +1,5 @@
 import { EOLresponse, EOLresponseResult } from './classes.js';
+import { getFullLanguageName } from './utilities.js';
 import * as core from '@actions/core';
 
 export function isJSONok(jsonInput: string): boolean {
@@ -30,7 +31,7 @@ export function isJSONok(jsonInput: string): boolean {
     }
 
     try {
-        new EOLresponseResult(jsonFile.result.releases);
+        new EOLresponseResult(jsonFile.result.name, jsonFile.result.releases);
     } catch (error) {
         if (error instanceof Error) {
             console.error(
@@ -45,7 +46,7 @@ export function isJSONok(jsonInput: string): boolean {
 
 export function getNlatestVersions(
     jsonInput: string,
-    numOfVersions: number
+    numOfVersions: number,
 ): string {
     /**
      * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
@@ -56,6 +57,7 @@ export function getNlatestVersions(
     let maxAvailableVersions: number;
 
     const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
+
     const responseJson: EOLresponse = new EOLresponse(
         jsonFile.schemaVersion,
         jsonFile.generatedAt,
@@ -64,6 +66,7 @@ export function getNlatestVersions(
     );
 
     const responseResultJson: EOLresponseResult = new EOLresponseResult(
+        responseJson.result.name,
         responseJson.result.releases
     );
 
@@ -88,7 +91,7 @@ export function getNlatestVersions(
 
     if (numOfVersions != ltsVersions.length) {
         core.notice(
-            `Requested (${numOfVersions}) number of versions is not available. Returning max available: ${ltsVersions.length}.`
+            `Requested (${numOfVersions}) number of versions is not available for ${getFullLanguageName(responseResultJson.name)}. Returning max available: ${ltsVersions.length}.`
         );
     }
 
