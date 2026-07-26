@@ -71,4 +71,8 @@ jobs:
                 return false;
             }
 
-            console.log(isSemVerUpdated(packageJson.version, versionOnGitHub));
+            const isVersionUpdated = isSemVerUpdated(packageJson.version, versionOnGitHub);
+            if (!isUpdated) {
+                core.setFailed(`Package version (${packageJson.version}) needs to be higher than latest release (${versionOnGitHub}) on GitHub`);
+            }
+
