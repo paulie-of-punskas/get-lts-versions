@@ -1,4 +1,4 @@
-import { unifyName } from '../src/utilities';
+import { unifyName, getFullLanguageName } from '../src/utilities';
 
 describe('unifyName()', () => {
     test('golang should return go', () => {
@@ -15,5 +15,15 @@ describe('unifyName()', () => {
 
     test('xyz should throw error', () => {
         expect(() => unifyName('xyz')).toThrow('Unexpected language name: xyz');
+    });
+});
+
+describe('getFullLanguageName()', () => {
+    test('liberica should return Java (BellSoft Liberica)', () => {
+        expect(getFullLanguageName('liberica')).toBe('Java (BellSoft Liberica)');
+    });
+
+    test('xYz should throw error', () => {
+        expect(() => getFullLanguageName('xYz')).toThrow('Language xYz was not found');
     });
 });
