@@ -37,7 +37,7 @@ describe('isJSONok():', () => {
 });
 
 describe('getNlatestVersions():', () => {
-    it('should return array sized of 3, for Python and N = 3', () => {
+    it('should return array size of 3, for Python and N = 3', () => {
         const result: string = getNlatestVersions(
             JSON.stringify(testDataPython),
             3
@@ -47,7 +47,7 @@ describe('getNlatestVersions():', () => {
         expect(resultAsArray.length).toBe(3);
     });
 
-    it('should return array sized of 2, for Golang and N = 3', () => {
+    it('should return array size of 2, for Golang and N = 3', () => {
         const result: string = getNlatestVersions(
             JSON.stringify(testDataGo),
             3
