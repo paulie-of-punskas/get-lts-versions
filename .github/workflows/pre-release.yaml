@@ -44,7 +44,7 @@ jobs:
                 }
             })();
 
-            function isSemVerUpdated(packageVersion: string, versionOnGitHub: string) {
+            function isSemVerUpdated(packageVersion, versionOnGitHub) {
                 // remove 'v' from the start of the string
                 const packageVersionsanitized = packageVersion.replace("v", "").split(".");
                 const versionOnGitHubSanitized = versionOnGitHub.replace("v", "").split(".");
