@@ -31899,52 +31899,6 @@ function getNltsVersionsAndCheckEOdates(jsonInput, numOfVersions = 3, checkEOL =
     }
     return JSON.stringify(ltsVersions);
 }
-// export function getNlatestVersions(
-//     jsonInput: string,
-//     numOfVersions: number,
-// ): string {
-//     /**
-//      * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
-//      * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
-//      * then return max supported number of versions.
-//      */
-//     let ltsVersions: Array<string> = [];
-//     let maxAvailableVersions: number;
-//     const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
-//     const responseJson: EOLresponse = new EOLresponse(
-//         jsonFile.schemaVersion,
-//         jsonFile.generatedAt,
-//         jsonFile.lastModified,
-//         jsonFile.result
-//     );
-//     const responseResultJson: EOLresponseResult = new EOLresponseResult(
-//         responseJson.result.name,
-//         responseJson.result.releases
-//     );
-//     // If numOfVersions is greater than available, then loop through available
-//     if (numOfVersions > responseResultJson.releases.length) {
-//         maxAvailableVersions = responseResultJson.releases.length;
-//     } else {
-//         maxAvailableVersions = numOfVersions;
-//     }
-//     for (let j = 0; j < maxAvailableVersions; j++) {
-//         if (
-//             responseResultJson.releases[j]?.latest.name !== null &&
-//             responseResultJson.releases[j]?.latest.name !== undefined &&
-//             responseResultJson.releases[j]?.isEol == false
-//         ) {
-//             ltsVersions.push(
-//                 String(responseResultJson.releases[j]?.latest.name).valueOf()
-//             );
-//         }
-//     }
-//     if (numOfVersions != ltsVersions.length) {
-//         core.notice(
-//             `Requested (${numOfVersions}) number of versions is not available for ${getFullLanguageName(responseResultJson.name)}. Returning max available: ${ltsVersions.length}.`
-//         );
-//     }
-//     return JSON.stringify(ltsVersions);
-// }
 
 async function sendRequest(language, endpointURL = 'https://endoflife.date/api/v1/products/') {
     /**
