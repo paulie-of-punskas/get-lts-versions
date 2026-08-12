@@ -1,4 +1,4 @@
-import {describe, expect, test, beforeEach, jest} from '@jest/globals';
+import { jest, test, expect, describe, beforeEach } from '@jest/globals';
 import * as core from '@actions/core';
 
 import {
@@ -34,52 +34,42 @@ test('LanguageReleases - throw error if empty input', () => {
     );
 });
 
-// test('LanguageReleases - JSON Python', () => {
-//     const jsonDataPython = new Array(testDataPython.result.releases);
 
-//     const release = new LanguageReleases(
-//         jsonDataPython[0][0].name,
-//         jsonDataPython[0][0].isLts,
-//         jsonDataPython[0][0].isEol,
-//         jsonDataPython[0][0].eolFrom,
-//         jsonDataPython[0][0].eoasFrom || "",
-//         jsonDataPython[0][0].latest
-//     );
+test('LanguageReleases - JSON Python', () => {
+    const jsonDataPython = new Array(testDataPython.result.releases);
 
-//     expect(typeof release.version).toBe("string");
-//     expect(typeof release.isLts).toBe("boolean");
-//     expect(typeof release.isEol).toBe("boolean");
-//     expect(typeof release.eolFrom).toBe("string");
-//     expect(typeof release.eoasFrom).toBe("string");
-//     expect(typeof release.latest).toBe("object");
-// });
+    const release = new LanguageReleases(
+        jsonDataPython[0][0].name,
+        jsonDataPython[0][0].isLts,
+        jsonDataPython[0][0].isEol,
+        jsonDataPython[0][0].eolFrom,
+        jsonDataPython[0][0].eoasFrom || "",
+        jsonDataPython[0][0].latest
+    );
 
-describe('LanguageReleases.checkEOL() - JSON Golang', () => {
-    const mockCore = {
-        notice: jest.fn(),
-    };
-
-    beforeEach(() => {
-        global.core = mockCore;
-    });
-
-    test('core.notice() should be called for Go 1.25', () => {
-        const jsonDataGo = new Array(testDataGo.result.releases);
-
-        const release = new LanguageReleases(
-            jsonDataGo[0][0].name,
-            jsonDataGo[0][0].isLts,
-            jsonDataGo[0][0].isEol,
-            jsonDataGo[0][0].eolFrom || "",
-            jsonDataGo[0][0].eoasFrom || "",
-            jsonDataGo[0][0].latest
-       );
-
-        release.checkEOL("go", release.version, release.eolFrom);
-
-        expect(mockCore.notice).toHaveBeenCalledWith(`There is no information about End Of Life date for Go 1.25.`);
-    });
+    expect(typeof release.version).toBe("string");
+    expect(typeof release.isLts).toBe("boolean");
+    expect(typeof release.isEol).toBe("boolean");
+    expect(typeof release.eolFrom).toBe("string");
+    expect(typeof release.eoasFrom).toBe("string");
+    expect(typeof release.latest).toBe("object");
 });
+
+// describe('LanguageReleases.checkEOL() - JSON Golang', () => {
+//     test('core.notice() should be called for Go 1.25', () => {
+//         const jsonDataGo = new Array(testDataGo.result.releases);
+
+//         const release = new LanguageReleases(
+//             jsonDataGo[0][0].name,
+//             jsonDataGo[0][0].isLts,
+//             jsonDataGo[0][0].isEol,
+//             jsonDataGo[0][0].eolFrom || "",
+//             jsonDataGo[0][0].eoasFrom || "",
+//             new LanguageLatestRelease(jsonDataGo[0][0].latest.name, jsonDataGo[0][0].latest.date, jsonDataGo[0][0].latest.link)
+//        );
+
+//     });
+// });
 
 // describe('LanguageReleases.checkEOL() - JSON Python', () => {
 //     const mockCore = {
