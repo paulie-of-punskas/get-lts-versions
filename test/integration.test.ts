@@ -1,5 +1,7 @@
-import { isJSONok, getNlatestVersions } from '../src/json.utilities';
+import { isJSONok, getNltsVersionsAndCheckEOdates } from '../src/json.utilities';
 import { sendRequest } from '../src/request';
+import { jest, test, expect } from '@jest/globals';
+
 
 test('Python, N=3', async () => {
     async function run(
@@ -17,7 +19,7 @@ test('Python, N=3', async () => {
                 throw new Error('Returned JSON has incorrect/new structure.');
             }
 
-            return getNlatestVersions(returnedJSON, numOfVersions);
+            return getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions);
         } catch (error) {
             console.error(`Error in run function: ${error}`);
             throw error;
