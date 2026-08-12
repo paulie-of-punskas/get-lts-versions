@@ -1,4 +1,5 @@
 import { getFullLanguageName } from "./utilities.js";
+import * as core from '@actions/core';
 
 export class EOLresponse {
     schemaVersion: string;
@@ -67,17 +68,17 @@ export class LanguageReleases {
         }
     }
 
-    checkEOL(languageName: string, version: string, inputEOLdate: string): void {
-        if (inputEOLdate === null || inputEOLdate == "") {
+    checkEOL(languageName: string, version: string, inputEOLdate: string): void|string {
+        if (inputEOLdate === "null" || inputEOLdate === null || inputEOLdate === "" || !inputEOLdate) {
             core.notice(`There is no information about End Of Life date for ${getFullLanguageName(languageName)} ${version}.`);
+            return "";
         };
 
         const eolDate = new Date(inputEOLdate.concat("T00:00:00"));
-
         const diffDays = Math.ceil((eolDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
 
         if (diffDays < 0) {
-            core.warning(`${getFullLanguageName(languageName)} ${version} has expired on ${eolDate.toLocaleDateString('en-CA')}. It no longer has active or security support.`);
+            core.warning(`${getFullLanguageName(languageName)} ${version} has expired on ${eolDate.toLocaleDateString('en-CA')}. It no longer offers active or security support.`);
         } else if (diffDays <= 180) {
             core.notice(`${getFullLanguageName(languageName)} ${version} End Of Life is approaching. It still has ${diffDays} day(s) of security support.`);
         };

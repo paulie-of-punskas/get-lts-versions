@@ -1,6 +1,5 @@
 import { EOLresponse, EOLresponseResult, LanguageLatestRelease, LanguageReleases } from './classes.js';
-import { getFullLanguageName, unifyName } from './utilities.js';
-import * as core from '@actions/core';
+import { getFullLanguageName } from './utilities.js';
 
 export function isJSONok(jsonInput: string): boolean {
     /**
@@ -60,15 +59,18 @@ export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions 
     for (let j = 0; j < maxAvailableVersions; j++) {
         let releaseData = new LanguageReleases(
             jsonData.result.releases[j].latest.name,
-            jsonData.result.releases[j].latest.isLts,
-            jsonData.result.releases[j].latest.isEol,
-            jsonData.result.releases[j].latest.eolFrom,
-            jsonData.result.releases[j].latest.eoasFrom,
-            new LanguageLatestRelease(jsonData.result.releases[j].latest.name, jsonData.result.releases[j].latest.date, jsonData.result.releases[j].latest.link)
-        );
+            jsonData.result.releases[j].isLts,
+            jsonData.result.releases[j].isEol,
+            jsonData.result.releases[j].eolFrom || "",
+            jsonData.result.releases[j].eoasFrom || "",
+            new LanguageLatestRelease(
+                jsonData.result.releases[j].latest.name,
+                jsonData.result.releases[j].latest.date,
+                jsonData.result.releases[j].latest.link
+            ))
 
-        if (releaseData) {
-            ltsVersions.push(String(jsonData.result.releases[j]!.latest.name).valueOf())
+        if (releaseData.isEol == false && releaseData.latest.name !== null && releaseData.latest.name !== undefined) {
+            ltsVersions.push(releaseData.version)
         };
 
         if (checkEOL) {
@@ -76,61 +78,59 @@ export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions 
         };
     }
 
-    // const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
-    // console.log(jsonFile);
     return JSON.stringify(ltsVersions);
 }
 
-export function getNlatestVersions(
-    jsonInput: string,
-    numOfVersions: number,
-): string {
-    /**
-     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
-     * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
-     * then return max supported number of versions.
-     */
-    let ltsVersions: Array<string> = [];
-    let maxAvailableVersions: number;
+// export function getNlatestVersions(
+//     jsonInput: string,
+//     numOfVersions: number,
+// ): string {
+//     /**
+//      * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
+//      * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
+//      * then return max supported number of versions.
+//      */
+//     let ltsVersions: Array<string> = [];
+//     let maxAvailableVersions: number;
 
-    const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
+//     const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
 
-    const responseJson: EOLresponse = new EOLresponse(
-        jsonFile.schemaVersion,
-        jsonFile.generatedAt,
-        jsonFile.lastModified,
-        jsonFile.result
-    );
+//     const responseJson: EOLresponse = new EOLresponse(
+//         jsonFile.schemaVersion,
+//         jsonFile.generatedAt,
+//         jsonFile.lastModified,
+//         jsonFile.result
+//     );
 
-    const responseResultJson: EOLresponseResult = new EOLresponseResult(
-        responseJson.result.name,
-        responseJson.result.releases
-    );
+//     const responseResultJson: EOLresponseResult = new EOLresponseResult(
+//         responseJson.result.name,
+//         responseJson.result.releases
+//     );
 
-    // If numOfVersions is greater than available, then loop through available
-    if (numOfVersions > responseResultJson.releases.length) {
-        maxAvailableVersions = responseResultJson.releases.length;
-    } else {
-        maxAvailableVersions = numOfVersions;
-    }
+//     // If numOfVersions is greater than available, then loop through available
+//     if (numOfVersions > responseResultJson.releases.length) {
+//         maxAvailableVersions = responseResultJson.releases.length;
+//     } else {
+//         maxAvailableVersions = numOfVersions;
+//     }
 
-    for (let j = 0; j < maxAvailableVersions; j++) {
-        if (
-            responseResultJson.releases[j]?.latest.name !== null &&
-            responseResultJson.releases[j]?.latest.name !== undefined &&
-            responseResultJson.releases[j]?.isEol == false
-        ) {
-            ltsVersions.push(
-                String(responseResultJson.releases[j]?.latest.name).valueOf()
-            );
-        }
-    }
+//     for (let j = 0; j < maxAvailableVersions; j++) {
+//         if (
+//             responseResultJson.releases[j]?.latest.name !== null &&
+//             responseResultJson.releases[j]?.latest.name !== undefined &&
+//             responseResultJson.releases[j]?.isEol == false
+//         ) {
+//             ltsVersions.push(
+//                 String(responseResultJson.releases[j]?.latest.name).valueOf()
+//             );
+//         }
+//     }
 
-    if (numOfVersions != ltsVersions.length) {
-        core.notice(
-            `Requested (${numOfVersions}) number of versions is not available for ${getFullLanguageName(responseResultJson.name)}. Returning max available: ${ltsVersions.length}.`
-        );
-    }
+//     if (numOfVersions != ltsVersions.length) {
+//         core.notice(
+//             `Requested (${numOfVersions}) number of versions is not available for ${getFullLanguageName(responseResultJson.name)}. Returning max available: ${ltsVersions.length}.`
+//         );
+//     }
 
-    return JSON.stringify(ltsVersions);
-}
+//     return JSON.stringify(ltsVersions);
+// }
