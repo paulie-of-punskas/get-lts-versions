@@ -39,7 +39,7 @@ export class EOLresponseResult {
 }
 
 // Will be used as array of LanguageReleases. Some attributes might not be available,
-// e.g. eoasFrom for every language.
+// e.g. eoasFrom, for every language.
 export class LanguageReleases {
     version: string;
     isLts: boolean;
