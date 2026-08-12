@@ -1,5 +1,5 @@
-import { EOLresponse, EOLresponseResult } from './classes.js';
-import { getFullLanguageName } from './utilities.js';
+import { EOLresponse, EOLresponseResult, LanguageLatestRelease, LanguageReleases } from './classes.js';
+import { getFullLanguageName, unifyName } from './utilities.js';
 import * as core from '@actions/core';
 
 export function isJSONok(jsonInput: string): boolean {
@@ -42,6 +42,43 @@ export function isJSONok(jsonInput: string): boolean {
     }
 
     return true;
+}
+
+export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions = 3, checkEOL = true): string {
+    let maxAvailableVersions: number;
+    let ltsVersions: Array<string> = [];
+
+    const jsonData = JSON.parse(jsonInput);
+
+    if (numOfVersions > jsonData.result.releases.length) {
+        maxAvailableVersions = jsonData.result.releases.length;
+    } else {
+        maxAvailableVersions = numOfVersions;
+    }
+
+    // retrieve and push LTS versions to an array
+    for (let j = 0; j < maxAvailableVersions; j++) {
+        let releaseData = new LanguageReleases(
+            jsonData.result.releases[j].latest.name,
+            jsonData.result.releases[j].latest.isLts,
+            jsonData.result.releases[j].latest.isEol,
+            jsonData.result.releases[j].latest.eolFrom,
+            jsonData.result.releases[j].latest.eoasFrom,
+            new LanguageLatestRelease(jsonData.result.releases[j].latest.name, jsonData.result.releases[j].latest.date, jsonData.result.releases[j].latest.link)
+        );
+
+        if (releaseData) {
+            ltsVersions.push(String(jsonData.result.releases[j]!.latest.name).valueOf())
+        };
+
+        if (checkEOL) {
+            releaseData.checkEOL(getFullLanguageName(jsonData.result.name), releaseData.version, releaseData.eolFrom)
+        };
+    }
+
+    // const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
+    // console.log(jsonFile);
+    return JSON.stringify(ltsVersions);
 }
 
 export function getNlatestVersions(

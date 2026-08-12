@@ -1,3 +1,5 @@
+import { getFullLanguageName } from "./utilities.js";
+
 export class EOLresponse {
     schemaVersion: string;
     generatedAt: string;
@@ -29,10 +31,8 @@ export class EOLresponseResult {
         this.name = name;
         this.releases = releases;
 
-        if (releases === undefined) {
-            throw new Error(
-                'EOLresponseResult: releases parameter is required.'
-            );
+        if (!name || releases === undefined) {
+            throw new Error('EOLresponseResult: all parameters are required.');
         }
     }
 }
@@ -40,31 +40,47 @@ export class EOLresponseResult {
 // Will be used as array of LanguageReleases. Some attributes might not be available,
 // e.g. eoasFrom for every language.
 export class LanguageReleases {
+    version: string;
     isLts: boolean;
-    ltsFrom: string;
     isEol: boolean;
     eolFrom: string;
     eoasFrom: string;
     latest: LanguageLatestRelease;
 
     constructor(
+        version: string,
         isLts: boolean,
-        ltsFrom: string,
         isEol: boolean,
         eolFrom: string,
         eoasFrom: string,
         latest: LanguageLatestRelease
     ) {
+        this.version = version;
         this.isLts = isLts;
-        this.ltsFrom = ltsFrom;
         this.isEol = isEol;
         this.eolFrom = eolFrom;
         this.eoasFrom = eoasFrom;
         this.latest = latest;
 
-        if (!isLts || !ltsFrom || isEol || !eolFrom || !eoasFrom || !latest) {
+        if (!version || typeof isLts !== 'boolean' || typeof isEol !== 'boolean' || !latest) { // eolFrom, eoasFrom can be missing, e.g. Golang
             throw new Error('LanguageReleases: all parameters are required.');
         }
+    }
+
+    checkEOL(languageName: string, version: string, inputEOLdate: string): void {
+        if (inputEOLdate === null || inputEOLdate == "") {
+            core.notice(`There is no information about End Of Life date for ${getFullLanguageName(languageName)} ${version}.`);
+        };
+
+        const eolDate = new Date(inputEOLdate.concat("T00:00:00"));
+
+        const diffDays = Math.ceil((eolDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+
+        if (diffDays < 0) {
+            core.warning(`${getFullLanguageName(languageName)} ${version} has expired on ${eolDate.toLocaleDateString('en-CA')}. It no longer has active or security support.`);
+        } else if (diffDays <= 180) {
+            core.notice(`${getFullLanguageName(languageName)} ${version} End Of Life is approaching. It still has ${diffDays} day(s) of security support.`);
+        };
     }
 }
 
@@ -77,6 +93,10 @@ export class LanguageLatestRelease {
         this.name = name;
         this.date = date;
         this.link = link;
+
+        if (!name || !date || !link) {
+            throw new Error(`LanguageLatestRelease: all parameters are required.`);
+        }
     }
 }
 
