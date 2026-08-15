@@ -58,6 +58,7 @@ export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions 
     // retrieve and push LTS versions to an array
     for (let j = 0; j < maxAvailableVersions; j++) {
         let releaseData = new LanguageReleases(
+            jsonData.result.releases[j].name,
             jsonData.result.releases[j].latest.name,
             jsonData.result.releases[j].isLts,
             jsonData.result.releases[j].isEol,
@@ -69,12 +70,14 @@ export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions 
                 jsonData.result.releases[j].latest.link
             ))
 
-        if (releaseData.isEol == false && releaseData.latest.name !== null && releaseData.latest.name !== undefined) {
-            ltsVersions.push(releaseData.version)
+        if (releaseData.isEol == false && releaseData.majorMinorVersion !== null && releaseData.majorMinorVersion !== undefined
+            && releaseData.majorMinorPatchVersion !== null && releaseData.majorMinorPatchVersion !== undefined
+        ) {
+            ltsVersions.push(releaseData.majorMinorPatchVersion)
         };
 
         if (checkEOL) {
-            releaseData.checkEOL(getFullLanguageName(jsonData.result.name), releaseData.version, releaseData.eolFrom)
+            releaseData.checkEOL(getFullLanguageName(jsonData.result.name), releaseData.majorMinorVersion, releaseData.eolFrom)
         };
     }
 
