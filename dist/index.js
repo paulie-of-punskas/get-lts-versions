@@ -409,6 +409,168 @@ function getFullLanguageName(language) {
     return found.languageFullName;
 }
 
+class EOLresponse {
+    schemaVersion;
+    generatedAt;
+    lastModified;
+    result;
+    constructor(schemaVersion, generatedAt, lastModified, result) {
+        this.schemaVersion = schemaVersion;
+        this.generatedAt = generatedAt;
+        this.lastModified = lastModified;
+        this.result = result;
+        if (result === undefined) {
+            throw new Error('EOLresponse: result parameter is required.');
+        }
+    }
+}
+class EOLresponseResult {
+    name;
+    releases;
+    constructor(name, releases) {
+        this.name = name;
+        this.releases = releases;
+        if (!name || releases === undefined) {
+            throw new Error('EOLresponseResult: all parameters are required.');
+        }
+    }
+}
+// Will be used as array of LanguageReleases. Some attributes might not be available,
+// e.g. eoasFrom, for every language.
+class LanguageReleases {
+    version;
+    isLts;
+    isEol;
+    eolFrom;
+    eoasFrom;
+    latest;
+    constructor(version, isLts, isEol, eolFrom, eoasFrom, latest) {
+        this.version = version;
+        this.isLts = isLts;
+        this.isEol = isEol;
+        this.eolFrom = eolFrom;
+        this.eoasFrom = eoasFrom;
+        this.latest = latest;
+        if (!version || typeof isLts !== 'boolean' || typeof isEol !== 'boolean' || !latest) { // eolFrom, eoasFrom can be missing, e.g. Golang
+            throw new Error('LanguageReleases: all parameters are required.');
+        }
+    }
+    checkEOL(languageName, version, inputEOLdate) {
+        if (inputEOLdate === "null" || inputEOLdate === null || inputEOLdate === "" || !inputEOLdate) {
+            console.log(`::notice::There is no information about End Of Life date for ${getFullLanguageName(languageName)} ${version}.`);
+            return "";
+        }
+        const eolDate = new Date(inputEOLdate.concat("T00:00:00"));
+        const diffDays = Math.ceil((eolDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        if (diffDays < 0) {
+            console.log(`::warning::${getFullLanguageName(languageName)} ${version} has expired on ${eolDate.toLocaleDateString('en-CA')}. It no longer offers active or security support.`);
+        }
+        else if (diffDays <= 180) {
+            console.log(`::notice::${getFullLanguageName(languageName)} ${version} End Of Life is approaching. It still has ${diffDays} day(s) of security support.`);
+        }
+    }
+}
+class LanguageLatestRelease {
+    name;
+    date;
+    link;
+    constructor(name, date, link) {
+        this.name = name;
+        this.date = date;
+        this.link = link;
+        if (!name || !date || !link) {
+            throw new Error(`LanguageLatestRelease: all parameters are required.`);
+        }
+    }
+}
+
+function isJSONok(jsonInput) {
+    /**
+     * Function checks if returned JSON has expected attributes and structure.
+     *
+     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
+     */
+    if (typeof jsonInput !== 'string' || jsonInput === null)
+        return false;
+    const jsonFile = JSON.parse(jsonInput);
+    if (!jsonFile.hasOwnProperty('result'))
+        return false;
+    try {
+        new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Caught an error while instantiating EOLresponse: ${error.message}`);
+        }
+        return false;
+    }
+    try {
+        new EOLresponseResult(jsonFile.result.name, jsonFile.result.releases);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Caught an error while instantiating EOLresponseResult: ${error.message}`);
+        }
+        return false;
+    }
+    return true;
+}
+function getNltsVersionsAndCheckEOdates(jsonInput, numOfVersions = 3, checkEOL = true) {
+    let maxAvailableVersions;
+    let ltsVersions = [];
+    const jsonData = JSON.parse(jsonInput);
+    if (numOfVersions > jsonData.result.releases.length) {
+        maxAvailableVersions = jsonData.result.releases.length;
+    }
+    else {
+        maxAvailableVersions = numOfVersions;
+    }
+    // retrieve and push LTS versions to an array
+    for (let j = 0; j < maxAvailableVersions; j++) {
+        let releaseData = new LanguageReleases(jsonData.result.releases[j].latest.name, jsonData.result.releases[j].isLts, jsonData.result.releases[j].isEol, jsonData.result.releases[j].eolFrom || "", jsonData.result.releases[j].eoasFrom || "", new LanguageLatestRelease(jsonData.result.releases[j].latest.name, jsonData.result.releases[j].latest.date, jsonData.result.releases[j].latest.link));
+        if (releaseData.isEol == false && releaseData.latest.name !== null && releaseData.latest.name !== undefined) {
+            ltsVersions.push(releaseData.version);
+        }
+        if (checkEOL) {
+            releaseData.checkEOL(getFullLanguageName(jsonData.result.name), releaseData.version, releaseData.eolFrom);
+        }
+    }
+    return JSON.stringify(ltsVersions);
+}
+
+async function sendRequest(language, endpointURL = 'https://endoflife.date/api/v1/products/') {
+    /**
+     * @param {string} language - name of the language.
+     * @param {string} endpointURL - optional, URL with endpoint. By default it's https://endoflife.date/api/v1/products/
+     * @returns {Promise<string>} Promise, that resolves as string.
+     */
+    const url = `${endpointURL}/${language.toLowerCase()}`;
+    const header = new Headers();
+    header.append('Content-Type', 'application/json');
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: header
+        });
+        if (!response.ok && response.status != 404) {
+            console.error(`Response status: ${response.status}`);
+            return '';
+        }
+        else if (response.status == 404) {
+            console.error(`${language} was not found on ${endpointURL}.`);
+            return '';
+        }
+        const result = await response.text();
+        return result;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Caught an error: ${error.message}`);
+        }
+        return '';
+    }
+}
+
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function getDefaultExportFromCjs (x) {
@@ -31770,168 +31932,6 @@ function requireCore () {
 }
 
 var coreExports = requireCore();
-
-class EOLresponse {
-    schemaVersion;
-    generatedAt;
-    lastModified;
-    result;
-    constructor(schemaVersion, generatedAt, lastModified, result) {
-        this.schemaVersion = schemaVersion;
-        this.generatedAt = generatedAt;
-        this.lastModified = lastModified;
-        this.result = result;
-        if (result === undefined) {
-            throw new Error('EOLresponse: result parameter is required.');
-        }
-    }
-}
-class EOLresponseResult {
-    name;
-    releases;
-    constructor(name, releases) {
-        this.name = name;
-        this.releases = releases;
-        if (!name || releases === undefined) {
-            throw new Error('EOLresponseResult: all parameters are required.');
-        }
-    }
-}
-// Will be used as array of LanguageReleases. Some attributes might not be available,
-// e.g. eoasFrom, for every language.
-class LanguageReleases {
-    version;
-    isLts;
-    isEol;
-    eolFrom;
-    eoasFrom;
-    latest;
-    constructor(version, isLts, isEol, eolFrom, eoasFrom, latest) {
-        this.version = version;
-        this.isLts = isLts;
-        this.isEol = isEol;
-        this.eolFrom = eolFrom;
-        this.eoasFrom = eoasFrom;
-        this.latest = latest;
-        if (!version || typeof isLts !== 'boolean' || typeof isEol !== 'boolean' || !latest) { // eolFrom, eoasFrom can be missing, e.g. Golang
-            throw new Error('LanguageReleases: all parameters are required.');
-        }
-    }
-    checkEOL(languageName, version, inputEOLdate) {
-        if (inputEOLdate === "null" || inputEOLdate === null || inputEOLdate === "" || !inputEOLdate) {
-            coreExports.notice(`There is no information about End Of Life date for ${getFullLanguageName(languageName)} ${version}.`);
-            return "";
-        }
-        const eolDate = new Date(inputEOLdate.concat("T00:00:00"));
-        const diffDays = Math.ceil((eolDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-        if (diffDays < 0) {
-            coreExports.warning(`${getFullLanguageName(languageName)} ${version} has expired on ${eolDate.toLocaleDateString('en-CA')}. It no longer offers active or security support.`);
-        }
-        else if (diffDays <= 180) {
-            coreExports.notice(`${getFullLanguageName(languageName)} ${version} End Of Life is approaching. It still has ${diffDays} day(s) of security support.`);
-        }
-    }
-}
-class LanguageLatestRelease {
-    name;
-    date;
-    link;
-    constructor(name, date, link) {
-        this.name = name;
-        this.date = date;
-        this.link = link;
-        if (!name || !date || !link) {
-            throw new Error(`LanguageLatestRelease: all parameters are required.`);
-        }
-    }
-}
-
-function isJSONok(jsonInput) {
-    /**
-     * Function checks if returned JSON has expected attributes and structure.
-     *
-     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
-     */
-    if (typeof jsonInput !== 'string' || jsonInput === null)
-        return false;
-    const jsonFile = JSON.parse(jsonInput);
-    if (!jsonFile.hasOwnProperty('result'))
-        return false;
-    try {
-        new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error(`Caught an error while instantiating EOLresponse: ${error.message}`);
-        }
-        return false;
-    }
-    try {
-        new EOLresponseResult(jsonFile.result.name, jsonFile.result.releases);
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error(`Caught an error while instantiating EOLresponseResult: ${error.message}`);
-        }
-        return false;
-    }
-    return true;
-}
-function getNltsVersionsAndCheckEOdates(jsonInput, numOfVersions = 3, checkEOL = true) {
-    let maxAvailableVersions;
-    let ltsVersions = [];
-    const jsonData = JSON.parse(jsonInput);
-    if (numOfVersions > jsonData.result.releases.length) {
-        maxAvailableVersions = jsonData.result.releases.length;
-    }
-    else {
-        maxAvailableVersions = numOfVersions;
-    }
-    // retrieve and push LTS versions to an array
-    for (let j = 0; j < maxAvailableVersions; j++) {
-        let releaseData = new LanguageReleases(jsonData.result.releases[j].latest.name, jsonData.result.releases[j].isLts, jsonData.result.releases[j].isEol, jsonData.result.releases[j].eolFrom || "", jsonData.result.releases[j].eoasFrom || "", new LanguageLatestRelease(jsonData.result.releases[j].latest.name, jsonData.result.releases[j].latest.date, jsonData.result.releases[j].latest.link));
-        if (releaseData.isEol == false && releaseData.latest.name !== null && releaseData.latest.name !== undefined) {
-            ltsVersions.push(releaseData.version);
-        }
-        if (checkEOL) {
-            releaseData.checkEOL(getFullLanguageName(jsonData.result.name), releaseData.version, releaseData.eolFrom);
-        }
-    }
-    return JSON.stringify(ltsVersions);
-}
-
-async function sendRequest(language, endpointURL = 'https://endoflife.date/api/v1/products/') {
-    /**
-     * @param {string} language - name of the language.
-     * @param {string} endpointURL - optional, URL with endpoint. By default it's https://endoflife.date/api/v1/products/
-     * @returns {Promise<string>} Promise, that resolves as string.
-     */
-    const url = `${endpointURL}/${language.toLowerCase()}`;
-    const header = new Headers();
-    header.append('Content-Type', 'application/json');
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: header
-        });
-        if (!response.ok && response.status != 404) {
-            console.error(`Response status: ${response.status}`);
-            return '';
-        }
-        else if (response.status == 404) {
-            console.error(`${language} was not found on ${endpointURL}.`);
-            return '';
-        }
-        const result = await response.text();
-        return result;
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error(`Caught an error: ${error.message}`);
-        }
-        return '';
-    }
-}
 
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -86730,18 +86730,18 @@ async function run(language, numOfVersions) {
     }
     const parsedLanguage = unifyName(language);
     const cacheKey = `lts-versions-${parsedLanguage}`;
-    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}.json`);
+    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}`, `${numOfVersions}`, `.json`);
     const cachePaths = [cacheFile];
     try {
-        // Check for existing cache for a `language`
+        // Check for existing cache for a `language`-`numOfVersions`
         const restored = await restoreCache(cachePaths, cacheKey);
         if (restored) {
-            coreExports.info(`Found cache for ${parsedLanguage}.`);
+            console.log(`Found cache for ${parsedLanguage}.`);
             const cachedData = await fs$1.readFile(cacheFile, 'utf-8');
             coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(cachedData, numOfVersions));
         }
         else {
-            coreExports.info(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
+            console.log(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
             const returnedJSON = await sendRequest(parsedLanguage);
             if (!isJSONok(returnedJSON)) {
                 throw new Error('Returned JSON has incorrect/new structure.');
@@ -86751,11 +86751,11 @@ async function run(language, numOfVersions) {
             coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions));
             // Save to GitHub Actions cache for future runs
             await saveCache(cachePaths, cacheKey);
-            coreExports.info(`Cache saved for ${parsedLanguage}!`);
+            console.log(`Cache saved for ${parsedLanguage}!`);
         }
     }
     catch (error) {
-        console.error(`Error in run function: ${error}`);
+        console.log(`::error::Error in run function: ${error}`);
         throw error;
     }
 }
