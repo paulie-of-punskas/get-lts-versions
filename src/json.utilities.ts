@@ -1,5 +1,4 @@
 import { EOLresponse, EOLresponseResult, LanguageLatestRelease, LanguageReleases } from './classes.js';
-import { getFullLanguageName } from './utilities.js';
 
 export function isJSONok(jsonInput: string): boolean {
     /**
@@ -77,7 +76,7 @@ export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions 
         };
 
         if (checkEOL) {
-            releaseData.checkEOL(getFullLanguageName(jsonData.result.name), releaseData.majorMinorVersion, releaseData.eolFrom)
+            releaseData.checkEOL(jsonData.result.name, releaseData.majorMinorVersion, releaseData.eolFrom)
         };
     }
 

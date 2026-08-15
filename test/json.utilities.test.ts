@@ -1,7 +1,9 @@
 import { isJSONok, getNltsVersionsAndCheckEOdates } from '../src/json.utilities';
+import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 
 import testDataGo from '../test/data/example_return_go.json' with { type: 'json' };
 import testDataPython from '../test/data/example_return_python.json' with { type: 'json' };
+import testDataJava from '../test/data/example_return_java.json' with { type: 'json' };
 
 describe('isJSONok():', () => {
     const testJSONdata = testDataGo;
@@ -28,7 +30,7 @@ describe('isJSONok():', () => {
     });
 });
 
-describe('getNlatestVersions():', () => {
+describe('getNltsVersionsAndCheckEOdates():', () => {
     it('should return array size of 3, for Python and N = 3', () => {
         const result: string = getNltsVersionsAndCheckEOdates(
             JSON.stringify(testDataPython),
@@ -47,6 +49,16 @@ describe('getNlatestVersions():', () => {
 
         const resultAsArray = result.split(',');
         expect(resultAsArray.length).toBe(2);
+    });
+
+    it('should return array size of 1, for amazon-corretto and N = 3', () => {
+        const result: string = getNltsVersionsAndCheckEOdates(
+            JSON.stringify(testDataJava),
+            3
+        );
+
+        const resultAsArray = result.split(',');
+        expect(resultAsArray.length).toBe(1);
     });
 });
 
