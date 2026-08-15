@@ -100,21 +100,6 @@ test('LanguageReleases - JSON Python', () => {
     expect(typeof release.latest).toBe("object");
 });
 
-// describe('LanguageReleases.checkEOL() - JSON Golang', () => {
-//     test('core.notice() should be called for Go 1.25', () => {
-//         const jsonDataGo = new Array(testDataGo.result.releases);
-
-//         const release = new LanguageReleases(
-//             jsonDataGo[0][0].name,
-//             jsonDataGo[0][0].isLts,
-//             jsonDataGo[0][0].isEol,
-//             jsonDataGo[0][0].eolFrom || "",
-//             jsonDataGo[0][0].eoasFrom || "",
-//             new LanguageLatestRelease(jsonDataGo[0][0].latest.name, jsonDataGo[0][0].latest.date, jsonDataGo[0][0].latest.link)
-//        );
-//     });
-// });
-
 test('LanguageLTS - can be created', () => {
     const testObject: LanguageLTS = new LanguageLTS('test', [0, 1, 2]);
     const testArray: Array<number> = [0, 1, 2];
