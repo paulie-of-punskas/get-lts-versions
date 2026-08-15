@@ -27,6 +27,7 @@ If larger number of LTS is requested, then function returns max supported number
 | IDL | idl | idl |
 | Java (Alibaba Dragonwell) | java-dragonwell, dragonwell, alibaba-dragonwell | alibaba-dragonwell |
 | Java (Amazon Corretto) | java-corretto, corretto, amazon-corretto | amazon-corretto |
+| Java (Azul Zulu) | java-zulu, zulu, azul-zulu | azul-zulu |
 | Java (BellSoft Liberica) | java-liberica, liberica, bellsoft-liberica | bellsoft-liberica |
 | Java (Eclipse Temurin) | java-temurin, temurin, eclipse-temurin | eclipse-temurin |
 | Java (GraalVM CE) | java-graalvm, graalvm, graalvm-ce | graalvm-ce |
@@ -38,7 +39,6 @@ If larger number of LTS is requested, then function returns max supported number
 | Java (Oracle JDK) | java-oracle-jdk, oracle-jdk | oracle-jdk |
 | Java (Red Hat) | java-redhat, redhat-build-of-openjdk | redhat-build-of-openjdk |
 | Java (SapMachine) | java-sapmachine, sapmachine | sapmachine |
-| Java (Azul Zulu) | java-zulu, zulu, azul-zulu | azul-zulu |
 | JRuby | jruby | jruby |
 | Julia | julia | julia |
 | Kotlin | kotlin | kotlin |
@@ -58,7 +58,7 @@ If larger number of LTS is requested, then function returns max supported number
 max number of supported versions will be returned.
 
 ### Outputs
-`lts_versions` - JSON array of LTS version strings. Use `fromJson()` to correctly parse strings in GHA workflow expressions: `["26.0.1+8","25.0.3+9"]`
+`lts_versions` - JSON array of LTS version strings. Long Term Support version strings are returned in "MAJOR.MINOR.PATCH+build" semantic versioning. If "build" is not available, then ordinary SemVer is returned. Use `fromJson()` to correctly parse strings in GHA workflow expressions: `["26.0.1+8","25.0.3+9"]`. GitHub Actions "setup-<language>" actions will automatically recognize the input.
 
 ### Examples
 ```YAML
@@ -66,6 +66,9 @@ name: CI | Java
 
 on:
   push:
+
+env:
+  language-name: "temurin"
 
 jobs:
   get-java-lts:
@@ -82,7 +85,7 @@ jobs:
         uses: paulie-of-punskas/get-lts-versions@344b42b30f353bc85aa651c75a380980935165bf # v1.0.0
         id: getJavaVersion
         with:
-          language: "eclipse-temurin"
+          language: ${{ env.language-name }}
           versions_to_fetch: "3"
 
   setup-lts-environment:  
@@ -97,7 +100,7 @@ jobs:
         uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           java-version: ${{ matrix.lts_java_version }}
-          distribution: "temurin"
+          distribution: ${{ env.language-name }}
           architecture: x64
 ```
 
