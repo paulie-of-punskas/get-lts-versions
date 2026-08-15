@@ -86730,7 +86730,7 @@ async function run(language, numOfVersions) {
     }
     const parsedLanguage = unifyName(language);
     const cacheKey = `lts-versions-${parsedLanguage}`;
-    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}-${numOfVersions}`, `.json`);
+    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}-${numOfVersions}.json`);
     const cachePaths = [cacheFile];
     try {
         // Check for existing cache for a `language`-`numOfVersions`
