@@ -85,16 +85,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get LTS for Java Temurin JDK
-        uses: paulie-of-punskas/get-lts-versions@a9c9bfd20966a16d3bfde2d4f0ce07130b25f821 #v1.0.3 - pre release
+        uses: paulie-of-punskas/get-lts-versions@c63a51cd259a35cd4f0a2f87215198d4ee3b833c #v1.0.3
         id: getJavaVersion
         with:
           language: ${{ env.language-name }}
           versions_to_fetch: "3"
 
-  setup-java-environment:  
+  setup-java-environment:
     name: Setup environment
     runs-on: ubuntu-22.04
-    needs: get-java-lts        
+    needs: get-java-lts
     strategy:
       matrix:
         lts_java_version: ${{ fromJson(needs.get-java-lts.outputs.lts_versions_fetched) }}
