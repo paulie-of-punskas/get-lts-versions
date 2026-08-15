@@ -1,5 +1,5 @@
 import { sendRequest } from '../src/request';
-import { jest } from '@jest/globals';
+import { jest, describe, test, expect, beforeEach } from '@jest/globals';
 
 describe('sendRequest()', () => {
     test('function should return empty string, if language is not available', async () => {

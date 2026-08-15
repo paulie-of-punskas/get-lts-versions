@@ -12,7 +12,7 @@ const languages: Language[] = LANGUAGE_ALIASES.languages;
 export function unifyName(language: string): string {
     /**
      * @param {string} language - name of the language.
-     * @returns {string} language according to endoflife API documentation
+     * @returns {string} language according to endoflife API documentation, e.g. openjdk
     */
 
     const parsedLanguage = aliases[language.toLowerCase().trim()];

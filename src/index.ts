@@ -1,4 +1,4 @@
-import { isJSONok, getNlatestVersions } from './json.utilities.js';
+import { isJSONok, getNltsVersionsAndCheckEOdates } from './json.utilities.js';
 import { sendRequest } from './request.js';
 import * as core from '@actions/core';
 import * as cache from '@actions/cache';
@@ -33,7 +33,7 @@ export async function run(language: string, numOfVersions: number) {
             const cachedData = await fs.readFile(cacheFile, 'utf-8');
             core.setOutput(
                 'lts_versions',
-                getNlatestVersions(cachedData, numOfVersions)
+                getNltsVersionsAndCheckEOdates(cachedData, numOfVersions)
             );
         } else {
             core.info(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
@@ -48,7 +48,7 @@ export async function run(language: string, numOfVersions: number) {
 
             core.setOutput(
                 'lts_versions',
-                getNlatestVersions(returnedJSON, numOfVersions)
+                getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions)
             );
 
             // Save to GitHub Actions cache for future runs

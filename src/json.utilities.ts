@@ -1,6 +1,5 @@
-import { EOLresponse, EOLresponseResult } from './classes.js';
+import { EOLresponse, EOLresponseResult, LanguageLatestRelease, LanguageReleases } from './classes.js';
 import { getFullLanguageName } from './utilities.js';
-import * as core from '@actions/core';
 
 export function isJSONok(jsonInput: string): boolean {
     /**
@@ -44,55 +43,39 @@ export function isJSONok(jsonInput: string): boolean {
     return true;
 }
 
-export function getNlatestVersions(
-    jsonInput: string,
-    numOfVersions: number,
-): string {
-    /**
-     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
-     * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
-     * then return max supported number of versions.
-     */
-    let ltsVersions: Array<string> = [];
+export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions = 3, checkEOL = true): string {
     let maxAvailableVersions: number;
+    let ltsVersions: Array<string> = [];
 
-    const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
+    const jsonData = JSON.parse(jsonInput);
 
-    const responseJson: EOLresponse = new EOLresponse(
-        jsonFile.schemaVersion,
-        jsonFile.generatedAt,
-        jsonFile.lastModified,
-        jsonFile.result
-    );
-
-    const responseResultJson: EOLresponseResult = new EOLresponseResult(
-        responseJson.result.name,
-        responseJson.result.releases
-    );
-
-    // If numOfVersions is greater than available, then loop through available
-    if (numOfVersions > responseResultJson.releases.length) {
-        maxAvailableVersions = responseResultJson.releases.length;
+    if (numOfVersions > jsonData.result.releases.length) {
+        maxAvailableVersions = jsonData.result.releases.length;
     } else {
         maxAvailableVersions = numOfVersions;
     }
 
+    // retrieve and push LTS versions to an array
     for (let j = 0; j < maxAvailableVersions; j++) {
-        if (
-            responseResultJson.releases[j]?.latest.name !== null &&
-            responseResultJson.releases[j]?.latest.name !== undefined &&
-            responseResultJson.releases[j]?.isEol == false
-        ) {
-            ltsVersions.push(
-                String(responseResultJson.releases[j]?.latest.name).valueOf()
-            );
-        }
-    }
+        let releaseData = new LanguageReleases(
+            jsonData.result.releases[j].latest.name,
+            jsonData.result.releases[j].isLts,
+            jsonData.result.releases[j].isEol,
+            jsonData.result.releases[j].eolFrom || "",
+            jsonData.result.releases[j].eoasFrom || "",
+            new LanguageLatestRelease(
+                jsonData.result.releases[j].latest.name,
+                jsonData.result.releases[j].latest.date,
+                jsonData.result.releases[j].latest.link
+            ))
 
-    if (numOfVersions != ltsVersions.length) {
-        core.notice(
-            `Requested (${numOfVersions}) number of versions is not available for ${getFullLanguageName(responseResultJson.name)}. Returning max available: ${ltsVersions.length}.`
-        );
+        if (releaseData.isEol == false && releaseData.latest.name !== null && releaseData.latest.name !== undefined) {
+            ltsVersions.push(releaseData.version)
+        };
+
+        if (checkEOL) {
+            releaseData.checkEOL(getFullLanguageName(jsonData.result.name), releaseData.version, releaseData.eolFrom)
+        };
     }
 
     return JSON.stringify(ltsVersions);
