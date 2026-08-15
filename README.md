@@ -62,10 +62,13 @@ max number of supported versions will be returned.
 
 ### Examples
 ```YAML
-name: CI | Java
+name: CI
 
 on:
   push:
+    branches:
+      - 'main'
+  workflow_dispatch:
 
 env:
   language-name: "temurin"
@@ -79,16 +82,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@v4
 
       - name: Get LTS for Java Temurin JDK
-        uses: paulie-of-punskas/get-lts-versions@344b42b30f353bc85aa651c75a380980935165bf # v1.0.0
+        uses: paulie-of-punskas/get-lts-versions@a9c9bfd20966a16d3bfde2d4f0ce07130b25f821 #v1.0.3 - pre release
         id: getJavaVersion
         with:
           language: ${{ env.language-name }}
           versions_to_fetch: "3"
 
-  setup-lts-environment:  
+  setup-java-environment:  
     name: Setup environment
     runs-on: ubuntu-22.04
     needs: get-java-lts        
@@ -97,7 +100,7 @@ jobs:
         lts_java_version: ${{ fromJson(needs.get-java-lts.outputs.lts_versions_fetched) }}
     steps:
       - name: Set up latest JDK for x64
-        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.lts_java_version }}
           distribution: ${{ env.language-name }}
