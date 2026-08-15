@@ -25,6 +25,7 @@ describe('LanguageReleases.checkEOL() - JSON Python', () => {
 
         const release = new LanguageReleases(
             jsonDataPython[0][4].name,
+            jsonDataPython[0][4].latest.name,
             jsonDataPython[0][4].isLts,
             jsonDataPython[0][4].isEol,
             jsonDataPython[0][4].eolFrom,
@@ -33,7 +34,7 @@ describe('LanguageReleases.checkEOL() - JSON Python', () => {
         );
 
         const spy = jest.spyOn(console, 'log');
-        release.checkEOL("Python", release.version, release.eolFrom);
+        release.checkEOL("Python", release.majorMinorVersion, release.eolFrom);
         expect(spy).toHaveBeenCalledWith(`::notice::Python 3.10 End Of Life is approaching. It still has 1 day(s) of security support.`);
     })
 
@@ -41,6 +42,7 @@ describe('LanguageReleases.checkEOL() - JSON Python', () => {
         const jsonDataPython = new Array(testDataPython.result.releases);
         const release = new LanguageReleases(
             jsonDataPython[0][5].name,
+            jsonDataPython[0][5].latest.name,
             jsonDataPython[0][5].isLts,
             jsonDataPython[0][5].isEol,
             jsonDataPython[0][5].eolFrom,
@@ -49,8 +51,8 @@ describe('LanguageReleases.checkEOL() - JSON Python', () => {
         );
 
         const spy = jest.spyOn(console, 'log');
-        release.checkEOL("Python", release.version, release.eolFrom);
-        expect(spy).toHaveBeenCalledWith(`::warning::Python 3.9 has expired on 2025-10-31. It no longer offers active or security support.`);
+        release.checkEOL("Python", release.majorMinorVersion, release.eolFrom);
+        expect(spy).toHaveBeenCalledWith(`::warning::Python 3.9 support has expired on 2025-10-31. It no longer offers active or security support.`);
     })
 });
 
@@ -81,6 +83,7 @@ test('LanguageReleases - JSON Python', () => {
 
     const release = new LanguageReleases(
         jsonDataPython[0][0].name,
+        jsonDataPython[0][0].latest.name,
         jsonDataPython[0][0].isLts,
         jsonDataPython[0][0].isEol,
         jsonDataPython[0][0].eolFrom,
@@ -88,7 +91,8 @@ test('LanguageReleases - JSON Python', () => {
         jsonDataPython[0][0].latest
     );
 
-    expect(typeof release.version).toBe("string");
+    expect(typeof release.majorMinorVersion).toBe("string");
+    expect(typeof release.majorMinorPatchVersion).toBe("string");
     expect(typeof release.isLts).toBe("boolean");
     expect(typeof release.isEol).toBe("boolean");
     expect(typeof release.eolFrom).toBe("string");
@@ -143,7 +147,7 @@ test('LanguageLatestRelease - JSON Go', () => {
                 jsonDataGo[0][j].latest.link
             )
         );
-        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.majorMinorPatchVersion.length).toBeGreaterThan(0);
         expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
         expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     }
@@ -164,7 +168,7 @@ test('LanguageLatestRelease - JSON Java', () => {
                 jsonDataJava[0][j].latest.link
             )
         );
-        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.majorMinorPatchVersion.length).toBeGreaterThan(0);
         expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
         expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     }
@@ -185,7 +189,7 @@ test('LanguageLatestRelease - JSON Python', () => {
                 jsonDataPython[0][j].latest.link
             )
         );
-        expect(testLanguageReleasesArray[j]?.name.length).toBeGreaterThan(0);
+        expect(testLanguageReleasesArray[j]?.majorMinorPatchVersion.length).toBeGreaterThan(0);
         expect(testLanguageReleasesArray[j]?.date.length).toBeGreaterThan(0);
         expect(testLanguageReleasesArray[j]?.link.length).toBeGreaterThan(0);
     }
