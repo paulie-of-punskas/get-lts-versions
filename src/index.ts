@@ -22,7 +22,7 @@ export async function run(language: string, numOfVersions: number) {
 
     const parsedLanguage = unifyName(language);
     const cacheKey = `lts-versions-${parsedLanguage}`;
-    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}-${numOfVersions}`, `.json`);
+    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}-${numOfVersions}.json`);
     const cachePaths = [cacheFile];
 
     try {
