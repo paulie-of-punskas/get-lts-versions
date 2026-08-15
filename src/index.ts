@@ -53,7 +53,7 @@ export async function run(language: string, numOfVersions: number) {
 
             // Save to GitHub Actions cache for future runs
             await cache.saveCache(cachePaths, cacheKey);
-            console.log(`Cache saved for ${parsedLanguage} and ${numOfVersions}!`);
+            console.log(`Cache saved for ${parsedLanguage} and requested ${numOfVersions} versions!`);
         }
     } catch (error) {
         console.log(`::error::Error in run function: ${error}`);
