@@ -86751,7 +86751,7 @@ async function run(language, numOfVersions) {
             coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions));
             // Save to GitHub Actions cache for future runs
             await saveCache(cachePaths, cacheKey);
-            console.log(`Cache saved for ${parsedLanguage} and ${numOfVersions}!`);
+            console.log(`Cache saved for ${parsedLanguage} and requested ${numOfVersions} versions!`);
         }
     }
     catch (error) {
