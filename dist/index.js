@@ -54,33 +54,6 @@ import require$$1$5 from 'tty';
 import fs$2 from 'node:fs';
 import * as fs$1 from 'fs/promises';
 
-class EOLresponse {
-    schemaVersion;
-    generatedAt;
-    lastModified;
-    result;
-    constructor(schemaVersion, generatedAt, lastModified, result) {
-        this.schemaVersion = schemaVersion;
-        this.generatedAt = generatedAt;
-        this.lastModified = lastModified;
-        this.result = result;
-        if (result === undefined) {
-            throw new Error('EOLresponse: result parameter is required.');
-        }
-    }
-}
-class EOLresponseResult {
-    name;
-    releases;
-    constructor(name, releases) {
-        this.name = name;
-        this.releases = releases;
-        if (releases === undefined) {
-            throw new Error('EOLresponseResult: releases parameter is required.');
-        }
-    }
-}
-
 var languages$1 = [
 	{
 		languageFullName: "COBOL",
@@ -415,7 +388,7 @@ const languages = LANGUAGE_ALIASES.languages;
 function unifyName(language) {
     /**
      * @param {string} language - name of the language.
-     * @returns {string} language according to endoflife API documentation
+     * @returns {string} language according to endoflife API documentation, e.g. openjdk
     */
     const parsedLanguage = aliases[language.toLowerCase().trim()];
     if (!parsedLanguage) {
@@ -31798,6 +31771,81 @@ function requireCore () {
 
 var coreExports = requireCore();
 
+class EOLresponse {
+    schemaVersion;
+    generatedAt;
+    lastModified;
+    result;
+    constructor(schemaVersion, generatedAt, lastModified, result) {
+        this.schemaVersion = schemaVersion;
+        this.generatedAt = generatedAt;
+        this.lastModified = lastModified;
+        this.result = result;
+        if (result === undefined) {
+            throw new Error('EOLresponse: result parameter is required.');
+        }
+    }
+}
+class EOLresponseResult {
+    name;
+    releases;
+    constructor(name, releases) {
+        this.name = name;
+        this.releases = releases;
+        if (!name || releases === undefined) {
+            throw new Error('EOLresponseResult: all parameters are required.');
+        }
+    }
+}
+// Will be used as array of LanguageReleases. Some attributes might not be available,
+// e.g. eoasFrom, for every language.
+class LanguageReleases {
+    version;
+    isLts;
+    isEol;
+    eolFrom;
+    eoasFrom;
+    latest;
+    constructor(version, isLts, isEol, eolFrom, eoasFrom, latest) {
+        this.version = version;
+        this.isLts = isLts;
+        this.isEol = isEol;
+        this.eolFrom = eolFrom;
+        this.eoasFrom = eoasFrom;
+        this.latest = latest;
+        if (!version || typeof isLts !== 'boolean' || typeof isEol !== 'boolean' || !latest) { // eolFrom, eoasFrom can be missing, e.g. Golang
+            throw new Error('LanguageReleases: all parameters are required.');
+        }
+    }
+    checkEOL(languageName, version, inputEOLdate) {
+        if (inputEOLdate === "null" || inputEOLdate === null || inputEOLdate === "" || !inputEOLdate) {
+            coreExports.notice(`There is no information about End Of Life date for ${getFullLanguageName(languageName)} ${version}.`);
+            return "";
+        }
+        const eolDate = new Date(inputEOLdate.concat("T00:00:00"));
+        const diffDays = Math.ceil((eolDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        if (diffDays < 0) {
+            coreExports.warning(`${getFullLanguageName(languageName)} ${version} has expired on ${eolDate.toLocaleDateString('en-CA')}. It no longer offers active or security support.`);
+        }
+        else if (diffDays <= 180) {
+            coreExports.notice(`${getFullLanguageName(languageName)} ${version} End Of Life is approaching. It still has ${diffDays} day(s) of security support.`);
+        }
+    }
+}
+class LanguageLatestRelease {
+    name;
+    date;
+    link;
+    constructor(name, date, link) {
+        this.name = name;
+        this.date = date;
+        this.link = link;
+        if (!name || !date || !link) {
+            throw new Error(`LanguageLatestRelease: all parameters are required.`);
+        }
+    }
+}
+
 function isJSONok(jsonInput) {
     /**
      * Function checks if returned JSON has expected attributes and structure.
@@ -31829,33 +31877,25 @@ function isJSONok(jsonInput) {
     }
     return true;
 }
-function getNlatestVersions(jsonInput, numOfVersions) {
-    /**
-     * @param {Object} jsonInput - JSON file containing data returned by https://endoflife.date API.
-     * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
-     * then return max supported number of versions.
-     */
-    let ltsVersions = [];
+function getNltsVersionsAndCheckEOdates(jsonInput, numOfVersions = 3, checkEOL = true) {
     let maxAvailableVersions;
-    const jsonFile = JSON.parse(jsonInput);
-    const responseJson = new EOLresponse(jsonFile.schemaVersion, jsonFile.generatedAt, jsonFile.lastModified, jsonFile.result);
-    const responseResultJson = new EOLresponseResult(responseJson.result.name, responseJson.result.releases);
-    // If numOfVersions is greater than available, then loop through available
-    if (numOfVersions > responseResultJson.releases.length) {
-        maxAvailableVersions = responseResultJson.releases.length;
+    let ltsVersions = [];
+    const jsonData = JSON.parse(jsonInput);
+    if (numOfVersions > jsonData.result.releases.length) {
+        maxAvailableVersions = jsonData.result.releases.length;
     }
     else {
         maxAvailableVersions = numOfVersions;
     }
+    // retrieve and push LTS versions to an array
     for (let j = 0; j < maxAvailableVersions; j++) {
-        if (responseResultJson.releases[j]?.latest.name !== null &&
-            responseResultJson.releases[j]?.latest.name !== undefined &&
-            responseResultJson.releases[j]?.isEol == false) {
-            ltsVersions.push(String(responseResultJson.releases[j]?.latest.name).valueOf());
+        let releaseData = new LanguageReleases(jsonData.result.releases[j].latest.name, jsonData.result.releases[j].isLts, jsonData.result.releases[j].isEol, jsonData.result.releases[j].eolFrom || "", jsonData.result.releases[j].eoasFrom || "", new LanguageLatestRelease(jsonData.result.releases[j].latest.name, jsonData.result.releases[j].latest.date, jsonData.result.releases[j].latest.link));
+        if (releaseData.isEol == false && releaseData.latest.name !== null && releaseData.latest.name !== undefined) {
+            ltsVersions.push(releaseData.version);
         }
-    }
-    if (numOfVersions != ltsVersions.length) {
-        coreExports.notice(`Requested (${numOfVersions}) number of versions is not available for ${getFullLanguageName(responseResultJson.name)}. Returning max available: ${ltsVersions.length}.`);
+        if (checkEOL) {
+            releaseData.checkEOL(getFullLanguageName(jsonData.result.name), releaseData.version, releaseData.eolFrom);
+        }
     }
     return JSON.stringify(ltsVersions);
 }
@@ -68078,186 +68118,186 @@ const BlockBlobGetBlockListExceptionHeaders = {
 };
 
 var Mappers = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    AccessPolicy: AccessPolicy,
-    AppendBlobAppendBlockExceptionHeaders: AppendBlobAppendBlockExceptionHeaders,
-    AppendBlobAppendBlockFromUrlExceptionHeaders: AppendBlobAppendBlockFromUrlExceptionHeaders,
-    AppendBlobAppendBlockFromUrlHeaders: AppendBlobAppendBlockFromUrlHeaders,
-    AppendBlobAppendBlockHeaders: AppendBlobAppendBlockHeaders,
-    AppendBlobCreateExceptionHeaders: AppendBlobCreateExceptionHeaders,
-    AppendBlobCreateHeaders: AppendBlobCreateHeaders,
-    AppendBlobSealExceptionHeaders: AppendBlobSealExceptionHeaders,
-    AppendBlobSealHeaders: AppendBlobSealHeaders,
-    ArrowConfiguration: ArrowConfiguration,
-    ArrowField: ArrowField,
-    BlobAbortCopyFromURLExceptionHeaders: BlobAbortCopyFromURLExceptionHeaders,
-    BlobAbortCopyFromURLHeaders: BlobAbortCopyFromURLHeaders,
-    BlobAcquireLeaseExceptionHeaders: BlobAcquireLeaseExceptionHeaders,
-    BlobAcquireLeaseHeaders: BlobAcquireLeaseHeaders,
-    BlobBreakLeaseExceptionHeaders: BlobBreakLeaseExceptionHeaders,
-    BlobBreakLeaseHeaders: BlobBreakLeaseHeaders,
-    BlobChangeLeaseExceptionHeaders: BlobChangeLeaseExceptionHeaders,
-    BlobChangeLeaseHeaders: BlobChangeLeaseHeaders,
-    BlobCopyFromURLExceptionHeaders: BlobCopyFromURLExceptionHeaders,
-    BlobCopyFromURLHeaders: BlobCopyFromURLHeaders,
-    BlobCreateSnapshotExceptionHeaders: BlobCreateSnapshotExceptionHeaders,
-    BlobCreateSnapshotHeaders: BlobCreateSnapshotHeaders,
-    BlobDeleteExceptionHeaders: BlobDeleteExceptionHeaders,
-    BlobDeleteHeaders: BlobDeleteHeaders,
-    BlobDeleteImmutabilityPolicyExceptionHeaders: BlobDeleteImmutabilityPolicyExceptionHeaders,
-    BlobDeleteImmutabilityPolicyHeaders: BlobDeleteImmutabilityPolicyHeaders,
-    BlobDownloadExceptionHeaders: BlobDownloadExceptionHeaders,
-    BlobDownloadHeaders: BlobDownloadHeaders,
-    BlobFlatListSegment: BlobFlatListSegment,
-    BlobGetAccountInfoExceptionHeaders: BlobGetAccountInfoExceptionHeaders,
-    BlobGetAccountInfoHeaders: BlobGetAccountInfoHeaders,
-    BlobGetPropertiesExceptionHeaders: BlobGetPropertiesExceptionHeaders,
-    BlobGetPropertiesHeaders: BlobGetPropertiesHeaders,
-    BlobGetTagsExceptionHeaders: BlobGetTagsExceptionHeaders,
-    BlobGetTagsHeaders: BlobGetTagsHeaders,
-    BlobHierarchyListSegment: BlobHierarchyListSegment,
-    BlobItemInternal: BlobItemInternal,
-    BlobName: BlobName,
-    BlobPrefix: BlobPrefix,
-    BlobPropertiesInternal: BlobPropertiesInternal,
-    BlobQueryExceptionHeaders: BlobQueryExceptionHeaders,
-    BlobQueryHeaders: BlobQueryHeaders,
-    BlobReleaseLeaseExceptionHeaders: BlobReleaseLeaseExceptionHeaders,
-    BlobReleaseLeaseHeaders: BlobReleaseLeaseHeaders,
-    BlobRenewLeaseExceptionHeaders: BlobRenewLeaseExceptionHeaders,
-    BlobRenewLeaseHeaders: BlobRenewLeaseHeaders,
-    BlobServiceProperties: BlobServiceProperties,
-    BlobServiceStatistics: BlobServiceStatistics,
-    BlobSetExpiryExceptionHeaders: BlobSetExpiryExceptionHeaders,
-    BlobSetExpiryHeaders: BlobSetExpiryHeaders,
-    BlobSetHttpHeadersExceptionHeaders: BlobSetHttpHeadersExceptionHeaders,
-    BlobSetHttpHeadersHeaders: BlobSetHttpHeadersHeaders,
-    BlobSetImmutabilityPolicyExceptionHeaders: BlobSetImmutabilityPolicyExceptionHeaders,
-    BlobSetImmutabilityPolicyHeaders: BlobSetImmutabilityPolicyHeaders,
-    BlobSetLegalHoldExceptionHeaders: BlobSetLegalHoldExceptionHeaders,
-    BlobSetLegalHoldHeaders: BlobSetLegalHoldHeaders,
-    BlobSetMetadataExceptionHeaders: BlobSetMetadataExceptionHeaders,
-    BlobSetMetadataHeaders: BlobSetMetadataHeaders,
-    BlobSetTagsExceptionHeaders: BlobSetTagsExceptionHeaders,
-    BlobSetTagsHeaders: BlobSetTagsHeaders,
-    BlobSetTierExceptionHeaders: BlobSetTierExceptionHeaders,
-    BlobSetTierHeaders: BlobSetTierHeaders,
-    BlobStartCopyFromURLExceptionHeaders: BlobStartCopyFromURLExceptionHeaders,
-    BlobStartCopyFromURLHeaders: BlobStartCopyFromURLHeaders,
-    BlobTag: BlobTag,
-    BlobTags: BlobTags,
-    BlobUndeleteExceptionHeaders: BlobUndeleteExceptionHeaders,
-    BlobUndeleteHeaders: BlobUndeleteHeaders,
-    Block: Block,
-    BlockBlobCommitBlockListExceptionHeaders: BlockBlobCommitBlockListExceptionHeaders,
-    BlockBlobCommitBlockListHeaders: BlockBlobCommitBlockListHeaders,
-    BlockBlobGetBlockListExceptionHeaders: BlockBlobGetBlockListExceptionHeaders,
-    BlockBlobGetBlockListHeaders: BlockBlobGetBlockListHeaders,
-    BlockBlobPutBlobFromUrlExceptionHeaders: BlockBlobPutBlobFromUrlExceptionHeaders,
-    BlockBlobPutBlobFromUrlHeaders: BlockBlobPutBlobFromUrlHeaders,
-    BlockBlobStageBlockExceptionHeaders: BlockBlobStageBlockExceptionHeaders,
-    BlockBlobStageBlockFromURLExceptionHeaders: BlockBlobStageBlockFromURLExceptionHeaders,
-    BlockBlobStageBlockFromURLHeaders: BlockBlobStageBlockFromURLHeaders,
-    BlockBlobStageBlockHeaders: BlockBlobStageBlockHeaders,
-    BlockBlobUploadExceptionHeaders: BlockBlobUploadExceptionHeaders,
-    BlockBlobUploadHeaders: BlockBlobUploadHeaders,
-    BlockList: BlockList,
-    BlockLookupList: BlockLookupList,
-    ClearRange: ClearRange,
-    ContainerAcquireLeaseExceptionHeaders: ContainerAcquireLeaseExceptionHeaders,
-    ContainerAcquireLeaseHeaders: ContainerAcquireLeaseHeaders,
-    ContainerBreakLeaseExceptionHeaders: ContainerBreakLeaseExceptionHeaders,
-    ContainerBreakLeaseHeaders: ContainerBreakLeaseHeaders,
-    ContainerChangeLeaseExceptionHeaders: ContainerChangeLeaseExceptionHeaders,
-    ContainerChangeLeaseHeaders: ContainerChangeLeaseHeaders,
-    ContainerCreateExceptionHeaders: ContainerCreateExceptionHeaders,
-    ContainerCreateHeaders: ContainerCreateHeaders,
-    ContainerDeleteExceptionHeaders: ContainerDeleteExceptionHeaders,
-    ContainerDeleteHeaders: ContainerDeleteHeaders,
-    ContainerFilterBlobsExceptionHeaders: ContainerFilterBlobsExceptionHeaders,
-    ContainerFilterBlobsHeaders: ContainerFilterBlobsHeaders,
-    ContainerGetAccessPolicyExceptionHeaders: ContainerGetAccessPolicyExceptionHeaders,
-    ContainerGetAccessPolicyHeaders: ContainerGetAccessPolicyHeaders,
-    ContainerGetAccountInfoExceptionHeaders: ContainerGetAccountInfoExceptionHeaders,
-    ContainerGetAccountInfoHeaders: ContainerGetAccountInfoHeaders,
-    ContainerGetPropertiesExceptionHeaders: ContainerGetPropertiesExceptionHeaders,
-    ContainerGetPropertiesHeaders: ContainerGetPropertiesHeaders,
-    ContainerItem: ContainerItem,
-    ContainerListBlobFlatSegmentExceptionHeaders: ContainerListBlobFlatSegmentExceptionHeaders,
-    ContainerListBlobFlatSegmentHeaders: ContainerListBlobFlatSegmentHeaders,
-    ContainerListBlobHierarchySegmentExceptionHeaders: ContainerListBlobHierarchySegmentExceptionHeaders,
-    ContainerListBlobHierarchySegmentHeaders: ContainerListBlobHierarchySegmentHeaders,
-    ContainerProperties: ContainerProperties,
-    ContainerReleaseLeaseExceptionHeaders: ContainerReleaseLeaseExceptionHeaders,
-    ContainerReleaseLeaseHeaders: ContainerReleaseLeaseHeaders,
-    ContainerRenameExceptionHeaders: ContainerRenameExceptionHeaders,
-    ContainerRenameHeaders: ContainerRenameHeaders,
-    ContainerRenewLeaseExceptionHeaders: ContainerRenewLeaseExceptionHeaders,
-    ContainerRenewLeaseHeaders: ContainerRenewLeaseHeaders,
-    ContainerRestoreExceptionHeaders: ContainerRestoreExceptionHeaders,
-    ContainerRestoreHeaders: ContainerRestoreHeaders,
-    ContainerSetAccessPolicyExceptionHeaders: ContainerSetAccessPolicyExceptionHeaders,
-    ContainerSetAccessPolicyHeaders: ContainerSetAccessPolicyHeaders,
-    ContainerSetMetadataExceptionHeaders: ContainerSetMetadataExceptionHeaders,
-    ContainerSetMetadataHeaders: ContainerSetMetadataHeaders,
-    ContainerSubmitBatchExceptionHeaders: ContainerSubmitBatchExceptionHeaders,
-    ContainerSubmitBatchHeaders: ContainerSubmitBatchHeaders,
-    CorsRule: CorsRule,
-    DelimitedTextConfiguration: DelimitedTextConfiguration,
-    FilterBlobItem: FilterBlobItem,
-    FilterBlobSegment: FilterBlobSegment,
-    GeoReplication: GeoReplication,
-    JsonTextConfiguration: JsonTextConfiguration,
-    KeyInfo: KeyInfo,
-    ListBlobsFlatSegmentResponse: ListBlobsFlatSegmentResponse,
-    ListBlobsHierarchySegmentResponse: ListBlobsHierarchySegmentResponse,
-    ListContainersSegmentResponse: ListContainersSegmentResponse,
-    Logging: Logging,
-    Metrics: Metrics,
-    PageBlobClearPagesExceptionHeaders: PageBlobClearPagesExceptionHeaders,
-    PageBlobClearPagesHeaders: PageBlobClearPagesHeaders,
-    PageBlobCopyIncrementalExceptionHeaders: PageBlobCopyIncrementalExceptionHeaders,
-    PageBlobCopyIncrementalHeaders: PageBlobCopyIncrementalHeaders,
-    PageBlobCreateExceptionHeaders: PageBlobCreateExceptionHeaders,
-    PageBlobCreateHeaders: PageBlobCreateHeaders,
-    PageBlobGetPageRangesDiffExceptionHeaders: PageBlobGetPageRangesDiffExceptionHeaders,
-    PageBlobGetPageRangesDiffHeaders: PageBlobGetPageRangesDiffHeaders,
-    PageBlobGetPageRangesExceptionHeaders: PageBlobGetPageRangesExceptionHeaders,
-    PageBlobGetPageRangesHeaders: PageBlobGetPageRangesHeaders,
-    PageBlobResizeExceptionHeaders: PageBlobResizeExceptionHeaders,
-    PageBlobResizeHeaders: PageBlobResizeHeaders,
-    PageBlobUpdateSequenceNumberExceptionHeaders: PageBlobUpdateSequenceNumberExceptionHeaders,
-    PageBlobUpdateSequenceNumberHeaders: PageBlobUpdateSequenceNumberHeaders,
-    PageBlobUploadPagesExceptionHeaders: PageBlobUploadPagesExceptionHeaders,
-    PageBlobUploadPagesFromURLExceptionHeaders: PageBlobUploadPagesFromURLExceptionHeaders,
-    PageBlobUploadPagesFromURLHeaders: PageBlobUploadPagesFromURLHeaders,
-    PageBlobUploadPagesHeaders: PageBlobUploadPagesHeaders,
-    PageList: PageList,
-    PageRange: PageRange,
-    QueryFormat: QueryFormat,
-    QueryRequest: QueryRequest,
-    QuerySerialization: QuerySerialization,
-    RetentionPolicy: RetentionPolicy,
-    ServiceFilterBlobsExceptionHeaders: ServiceFilterBlobsExceptionHeaders,
-    ServiceFilterBlobsHeaders: ServiceFilterBlobsHeaders,
-    ServiceGetAccountInfoExceptionHeaders: ServiceGetAccountInfoExceptionHeaders,
-    ServiceGetAccountInfoHeaders: ServiceGetAccountInfoHeaders,
-    ServiceGetPropertiesExceptionHeaders: ServiceGetPropertiesExceptionHeaders,
-    ServiceGetPropertiesHeaders: ServiceGetPropertiesHeaders,
-    ServiceGetStatisticsExceptionHeaders: ServiceGetStatisticsExceptionHeaders,
-    ServiceGetStatisticsHeaders: ServiceGetStatisticsHeaders,
-    ServiceGetUserDelegationKeyExceptionHeaders: ServiceGetUserDelegationKeyExceptionHeaders,
-    ServiceGetUserDelegationKeyHeaders: ServiceGetUserDelegationKeyHeaders,
-    ServiceListContainersSegmentExceptionHeaders: ServiceListContainersSegmentExceptionHeaders,
-    ServiceListContainersSegmentHeaders: ServiceListContainersSegmentHeaders,
-    ServiceSetPropertiesExceptionHeaders: ServiceSetPropertiesExceptionHeaders,
-    ServiceSetPropertiesHeaders: ServiceSetPropertiesHeaders,
-    ServiceSubmitBatchExceptionHeaders: ServiceSubmitBatchExceptionHeaders,
-    ServiceSubmitBatchHeaders: ServiceSubmitBatchHeaders,
-    SignedIdentifier: SignedIdentifier,
-    StaticWebsite: StaticWebsite,
-    StorageError: StorageError,
-    UserDelegationKey: UserDelegationKey
+  __proto__: null,
+  AccessPolicy: AccessPolicy,
+  AppendBlobAppendBlockExceptionHeaders: AppendBlobAppendBlockExceptionHeaders,
+  AppendBlobAppendBlockFromUrlExceptionHeaders: AppendBlobAppendBlockFromUrlExceptionHeaders,
+  AppendBlobAppendBlockFromUrlHeaders: AppendBlobAppendBlockFromUrlHeaders,
+  AppendBlobAppendBlockHeaders: AppendBlobAppendBlockHeaders,
+  AppendBlobCreateExceptionHeaders: AppendBlobCreateExceptionHeaders,
+  AppendBlobCreateHeaders: AppendBlobCreateHeaders,
+  AppendBlobSealExceptionHeaders: AppendBlobSealExceptionHeaders,
+  AppendBlobSealHeaders: AppendBlobSealHeaders,
+  ArrowConfiguration: ArrowConfiguration,
+  ArrowField: ArrowField,
+  BlobAbortCopyFromURLExceptionHeaders: BlobAbortCopyFromURLExceptionHeaders,
+  BlobAbortCopyFromURLHeaders: BlobAbortCopyFromURLHeaders,
+  BlobAcquireLeaseExceptionHeaders: BlobAcquireLeaseExceptionHeaders,
+  BlobAcquireLeaseHeaders: BlobAcquireLeaseHeaders,
+  BlobBreakLeaseExceptionHeaders: BlobBreakLeaseExceptionHeaders,
+  BlobBreakLeaseHeaders: BlobBreakLeaseHeaders,
+  BlobChangeLeaseExceptionHeaders: BlobChangeLeaseExceptionHeaders,
+  BlobChangeLeaseHeaders: BlobChangeLeaseHeaders,
+  BlobCopyFromURLExceptionHeaders: BlobCopyFromURLExceptionHeaders,
+  BlobCopyFromURLHeaders: BlobCopyFromURLHeaders,
+  BlobCreateSnapshotExceptionHeaders: BlobCreateSnapshotExceptionHeaders,
+  BlobCreateSnapshotHeaders: BlobCreateSnapshotHeaders,
+  BlobDeleteExceptionHeaders: BlobDeleteExceptionHeaders,
+  BlobDeleteHeaders: BlobDeleteHeaders,
+  BlobDeleteImmutabilityPolicyExceptionHeaders: BlobDeleteImmutabilityPolicyExceptionHeaders,
+  BlobDeleteImmutabilityPolicyHeaders: BlobDeleteImmutabilityPolicyHeaders,
+  BlobDownloadExceptionHeaders: BlobDownloadExceptionHeaders,
+  BlobDownloadHeaders: BlobDownloadHeaders,
+  BlobFlatListSegment: BlobFlatListSegment,
+  BlobGetAccountInfoExceptionHeaders: BlobGetAccountInfoExceptionHeaders,
+  BlobGetAccountInfoHeaders: BlobGetAccountInfoHeaders,
+  BlobGetPropertiesExceptionHeaders: BlobGetPropertiesExceptionHeaders,
+  BlobGetPropertiesHeaders: BlobGetPropertiesHeaders,
+  BlobGetTagsExceptionHeaders: BlobGetTagsExceptionHeaders,
+  BlobGetTagsHeaders: BlobGetTagsHeaders,
+  BlobHierarchyListSegment: BlobHierarchyListSegment,
+  BlobItemInternal: BlobItemInternal,
+  BlobName: BlobName,
+  BlobPrefix: BlobPrefix,
+  BlobPropertiesInternal: BlobPropertiesInternal,
+  BlobQueryExceptionHeaders: BlobQueryExceptionHeaders,
+  BlobQueryHeaders: BlobQueryHeaders,
+  BlobReleaseLeaseExceptionHeaders: BlobReleaseLeaseExceptionHeaders,
+  BlobReleaseLeaseHeaders: BlobReleaseLeaseHeaders,
+  BlobRenewLeaseExceptionHeaders: BlobRenewLeaseExceptionHeaders,
+  BlobRenewLeaseHeaders: BlobRenewLeaseHeaders,
+  BlobServiceProperties: BlobServiceProperties,
+  BlobServiceStatistics: BlobServiceStatistics,
+  BlobSetExpiryExceptionHeaders: BlobSetExpiryExceptionHeaders,
+  BlobSetExpiryHeaders: BlobSetExpiryHeaders,
+  BlobSetHttpHeadersExceptionHeaders: BlobSetHttpHeadersExceptionHeaders,
+  BlobSetHttpHeadersHeaders: BlobSetHttpHeadersHeaders,
+  BlobSetImmutabilityPolicyExceptionHeaders: BlobSetImmutabilityPolicyExceptionHeaders,
+  BlobSetImmutabilityPolicyHeaders: BlobSetImmutabilityPolicyHeaders,
+  BlobSetLegalHoldExceptionHeaders: BlobSetLegalHoldExceptionHeaders,
+  BlobSetLegalHoldHeaders: BlobSetLegalHoldHeaders,
+  BlobSetMetadataExceptionHeaders: BlobSetMetadataExceptionHeaders,
+  BlobSetMetadataHeaders: BlobSetMetadataHeaders,
+  BlobSetTagsExceptionHeaders: BlobSetTagsExceptionHeaders,
+  BlobSetTagsHeaders: BlobSetTagsHeaders,
+  BlobSetTierExceptionHeaders: BlobSetTierExceptionHeaders,
+  BlobSetTierHeaders: BlobSetTierHeaders,
+  BlobStartCopyFromURLExceptionHeaders: BlobStartCopyFromURLExceptionHeaders,
+  BlobStartCopyFromURLHeaders: BlobStartCopyFromURLHeaders,
+  BlobTag: BlobTag,
+  BlobTags: BlobTags,
+  BlobUndeleteExceptionHeaders: BlobUndeleteExceptionHeaders,
+  BlobUndeleteHeaders: BlobUndeleteHeaders,
+  Block: Block,
+  BlockBlobCommitBlockListExceptionHeaders: BlockBlobCommitBlockListExceptionHeaders,
+  BlockBlobCommitBlockListHeaders: BlockBlobCommitBlockListHeaders,
+  BlockBlobGetBlockListExceptionHeaders: BlockBlobGetBlockListExceptionHeaders,
+  BlockBlobGetBlockListHeaders: BlockBlobGetBlockListHeaders,
+  BlockBlobPutBlobFromUrlExceptionHeaders: BlockBlobPutBlobFromUrlExceptionHeaders,
+  BlockBlobPutBlobFromUrlHeaders: BlockBlobPutBlobFromUrlHeaders,
+  BlockBlobStageBlockExceptionHeaders: BlockBlobStageBlockExceptionHeaders,
+  BlockBlobStageBlockFromURLExceptionHeaders: BlockBlobStageBlockFromURLExceptionHeaders,
+  BlockBlobStageBlockFromURLHeaders: BlockBlobStageBlockFromURLHeaders,
+  BlockBlobStageBlockHeaders: BlockBlobStageBlockHeaders,
+  BlockBlobUploadExceptionHeaders: BlockBlobUploadExceptionHeaders,
+  BlockBlobUploadHeaders: BlockBlobUploadHeaders,
+  BlockList: BlockList,
+  BlockLookupList: BlockLookupList,
+  ClearRange: ClearRange,
+  ContainerAcquireLeaseExceptionHeaders: ContainerAcquireLeaseExceptionHeaders,
+  ContainerAcquireLeaseHeaders: ContainerAcquireLeaseHeaders,
+  ContainerBreakLeaseExceptionHeaders: ContainerBreakLeaseExceptionHeaders,
+  ContainerBreakLeaseHeaders: ContainerBreakLeaseHeaders,
+  ContainerChangeLeaseExceptionHeaders: ContainerChangeLeaseExceptionHeaders,
+  ContainerChangeLeaseHeaders: ContainerChangeLeaseHeaders,
+  ContainerCreateExceptionHeaders: ContainerCreateExceptionHeaders,
+  ContainerCreateHeaders: ContainerCreateHeaders,
+  ContainerDeleteExceptionHeaders: ContainerDeleteExceptionHeaders,
+  ContainerDeleteHeaders: ContainerDeleteHeaders,
+  ContainerFilterBlobsExceptionHeaders: ContainerFilterBlobsExceptionHeaders,
+  ContainerFilterBlobsHeaders: ContainerFilterBlobsHeaders,
+  ContainerGetAccessPolicyExceptionHeaders: ContainerGetAccessPolicyExceptionHeaders,
+  ContainerGetAccessPolicyHeaders: ContainerGetAccessPolicyHeaders,
+  ContainerGetAccountInfoExceptionHeaders: ContainerGetAccountInfoExceptionHeaders,
+  ContainerGetAccountInfoHeaders: ContainerGetAccountInfoHeaders,
+  ContainerGetPropertiesExceptionHeaders: ContainerGetPropertiesExceptionHeaders,
+  ContainerGetPropertiesHeaders: ContainerGetPropertiesHeaders,
+  ContainerItem: ContainerItem,
+  ContainerListBlobFlatSegmentExceptionHeaders: ContainerListBlobFlatSegmentExceptionHeaders,
+  ContainerListBlobFlatSegmentHeaders: ContainerListBlobFlatSegmentHeaders,
+  ContainerListBlobHierarchySegmentExceptionHeaders: ContainerListBlobHierarchySegmentExceptionHeaders,
+  ContainerListBlobHierarchySegmentHeaders: ContainerListBlobHierarchySegmentHeaders,
+  ContainerProperties: ContainerProperties,
+  ContainerReleaseLeaseExceptionHeaders: ContainerReleaseLeaseExceptionHeaders,
+  ContainerReleaseLeaseHeaders: ContainerReleaseLeaseHeaders,
+  ContainerRenameExceptionHeaders: ContainerRenameExceptionHeaders,
+  ContainerRenameHeaders: ContainerRenameHeaders,
+  ContainerRenewLeaseExceptionHeaders: ContainerRenewLeaseExceptionHeaders,
+  ContainerRenewLeaseHeaders: ContainerRenewLeaseHeaders,
+  ContainerRestoreExceptionHeaders: ContainerRestoreExceptionHeaders,
+  ContainerRestoreHeaders: ContainerRestoreHeaders,
+  ContainerSetAccessPolicyExceptionHeaders: ContainerSetAccessPolicyExceptionHeaders,
+  ContainerSetAccessPolicyHeaders: ContainerSetAccessPolicyHeaders,
+  ContainerSetMetadataExceptionHeaders: ContainerSetMetadataExceptionHeaders,
+  ContainerSetMetadataHeaders: ContainerSetMetadataHeaders,
+  ContainerSubmitBatchExceptionHeaders: ContainerSubmitBatchExceptionHeaders,
+  ContainerSubmitBatchHeaders: ContainerSubmitBatchHeaders,
+  CorsRule: CorsRule,
+  DelimitedTextConfiguration: DelimitedTextConfiguration,
+  FilterBlobItem: FilterBlobItem,
+  FilterBlobSegment: FilterBlobSegment,
+  GeoReplication: GeoReplication,
+  JsonTextConfiguration: JsonTextConfiguration,
+  KeyInfo: KeyInfo,
+  ListBlobsFlatSegmentResponse: ListBlobsFlatSegmentResponse,
+  ListBlobsHierarchySegmentResponse: ListBlobsHierarchySegmentResponse,
+  ListContainersSegmentResponse: ListContainersSegmentResponse,
+  Logging: Logging,
+  Metrics: Metrics,
+  PageBlobClearPagesExceptionHeaders: PageBlobClearPagesExceptionHeaders,
+  PageBlobClearPagesHeaders: PageBlobClearPagesHeaders,
+  PageBlobCopyIncrementalExceptionHeaders: PageBlobCopyIncrementalExceptionHeaders,
+  PageBlobCopyIncrementalHeaders: PageBlobCopyIncrementalHeaders,
+  PageBlobCreateExceptionHeaders: PageBlobCreateExceptionHeaders,
+  PageBlobCreateHeaders: PageBlobCreateHeaders,
+  PageBlobGetPageRangesDiffExceptionHeaders: PageBlobGetPageRangesDiffExceptionHeaders,
+  PageBlobGetPageRangesDiffHeaders: PageBlobGetPageRangesDiffHeaders,
+  PageBlobGetPageRangesExceptionHeaders: PageBlobGetPageRangesExceptionHeaders,
+  PageBlobGetPageRangesHeaders: PageBlobGetPageRangesHeaders,
+  PageBlobResizeExceptionHeaders: PageBlobResizeExceptionHeaders,
+  PageBlobResizeHeaders: PageBlobResizeHeaders,
+  PageBlobUpdateSequenceNumberExceptionHeaders: PageBlobUpdateSequenceNumberExceptionHeaders,
+  PageBlobUpdateSequenceNumberHeaders: PageBlobUpdateSequenceNumberHeaders,
+  PageBlobUploadPagesExceptionHeaders: PageBlobUploadPagesExceptionHeaders,
+  PageBlobUploadPagesFromURLExceptionHeaders: PageBlobUploadPagesFromURLExceptionHeaders,
+  PageBlobUploadPagesFromURLHeaders: PageBlobUploadPagesFromURLHeaders,
+  PageBlobUploadPagesHeaders: PageBlobUploadPagesHeaders,
+  PageList: PageList,
+  PageRange: PageRange,
+  QueryFormat: QueryFormat,
+  QueryRequest: QueryRequest,
+  QuerySerialization: QuerySerialization,
+  RetentionPolicy: RetentionPolicy,
+  ServiceFilterBlobsExceptionHeaders: ServiceFilterBlobsExceptionHeaders,
+  ServiceFilterBlobsHeaders: ServiceFilterBlobsHeaders,
+  ServiceGetAccountInfoExceptionHeaders: ServiceGetAccountInfoExceptionHeaders,
+  ServiceGetAccountInfoHeaders: ServiceGetAccountInfoHeaders,
+  ServiceGetPropertiesExceptionHeaders: ServiceGetPropertiesExceptionHeaders,
+  ServiceGetPropertiesHeaders: ServiceGetPropertiesHeaders,
+  ServiceGetStatisticsExceptionHeaders: ServiceGetStatisticsExceptionHeaders,
+  ServiceGetStatisticsHeaders: ServiceGetStatisticsHeaders,
+  ServiceGetUserDelegationKeyExceptionHeaders: ServiceGetUserDelegationKeyExceptionHeaders,
+  ServiceGetUserDelegationKeyHeaders: ServiceGetUserDelegationKeyHeaders,
+  ServiceListContainersSegmentExceptionHeaders: ServiceListContainersSegmentExceptionHeaders,
+  ServiceListContainersSegmentHeaders: ServiceListContainersSegmentHeaders,
+  ServiceSetPropertiesExceptionHeaders: ServiceSetPropertiesExceptionHeaders,
+  ServiceSetPropertiesHeaders: ServiceSetPropertiesHeaders,
+  ServiceSubmitBatchExceptionHeaders: ServiceSubmitBatchExceptionHeaders,
+  ServiceSubmitBatchHeaders: ServiceSubmitBatchHeaders,
+  SignedIdentifier: SignedIdentifier,
+  StaticWebsite: StaticWebsite,
+  StorageError: StorageError,
+  UserDelegationKey: UserDelegationKey
 });
 
 /*
@@ -86698,7 +86738,7 @@ async function run(language, numOfVersions) {
         if (restored) {
             coreExports.info(`Found cache for ${parsedLanguage}.`);
             const cachedData = await fs$1.readFile(cacheFile, 'utf-8');
-            coreExports.setOutput('lts_versions', getNlatestVersions(cachedData, numOfVersions));
+            coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(cachedData, numOfVersions));
         }
         else {
             coreExports.info(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
@@ -86708,7 +86748,7 @@ async function run(language, numOfVersions) {
             }
             await fs$1.mkdir(CACHE_DIR, { recursive: true });
             await fs$1.writeFile(cacheFile, returnedJSON);
-            coreExports.setOutput('lts_versions', getNlatestVersions(returnedJSON, numOfVersions));
+            coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions));
             // Save to GitHub Actions cache for future runs
             await saveCache(cachePaths, cacheKey);
             coreExports.info(`Cache saved for ${parsedLanguage}!`);

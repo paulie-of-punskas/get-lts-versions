@@ -26,4 +26,8 @@ describe('getFullLanguageName()', () => {
     test('xYz should throw error', () => {
         expect(() => getFullLanguageName('xYz')).toThrow('Language xYz was not found');
     });
+
+    test('go should return Golang', () => {
+        expect(getFullLanguageName('go')).toBe('Go');
+    });
 });

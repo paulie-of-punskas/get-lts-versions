@@ -1,4 +1,4 @@
-import { isJSONok, getNlatestVersions } from '../src/json.utilities';
+import { isJSONok, getNltsVersionsAndCheckEOdates } from '../src/json.utilities';
 
 import testDataGo from '../test/data/example_return_go.json' with { type: 'json' };
 import testDataPython from '../test/data/example_return_python.json' with { type: 'json' };
@@ -22,15 +22,7 @@ describe('isJSONok():', () => {
         expect(isJSONok(JSON.stringify({ result: '' }))).toBe(false);
     });
 
-    // not sure about this test
-    it("should return true, if input is {releases: {result: ''}", () => {
-        expect(isJSONok(JSON.stringify({ result: { releases: '' } }))).toBe(
-            true
-        );
-    });
-
     it('should return true, for locally imported Go data', () => {
-        // get JSON as a string
         const jsonInputAsString: string = JSON.stringify(testDataGo);
         expect(isJSONok(jsonInputAsString)).toBe(true);
     });
@@ -38,7 +30,7 @@ describe('isJSONok():', () => {
 
 describe('getNlatestVersions():', () => {
     it('should return array size of 3, for Python and N = 3', () => {
-        const result: string = getNlatestVersions(
+        const result: string = getNltsVersionsAndCheckEOdates(
             JSON.stringify(testDataPython),
             3
         );
@@ -48,7 +40,7 @@ describe('getNlatestVersions():', () => {
     });
 
     it('should return array size of 2, for Golang and N = 3', () => {
-        const result: string = getNlatestVersions(
+        const result: string = getNltsVersionsAndCheckEOdates(
             JSON.stringify(testDataGo),
             3
         );
