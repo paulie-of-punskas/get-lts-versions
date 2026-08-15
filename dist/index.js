@@ -86730,7 +86730,7 @@ async function run(language, numOfVersions) {
     }
     const parsedLanguage = unifyName(language);
     const cacheKey = `lts-versions-${parsedLanguage}`;
-    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}`, `${numOfVersions}`, `.json`);
+    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}-${numOfVersions}`, `.json`);
     const cachePaths = [cacheFile];
     try {
         // Check for existing cache for a `language`-`numOfVersions`
@@ -86741,7 +86741,7 @@ async function run(language, numOfVersions) {
             coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(cachedData, numOfVersions));
         }
         else {
-            console.log(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
+            console.log(`Couldn't find cache for ${parsedLanguage} and ${numOfVersions} versions. Creating one...`);
             const returnedJSON = await sendRequest(parsedLanguage);
             if (!isJSONok(returnedJSON)) {
                 throw new Error('Returned JSON has incorrect/new structure.');
@@ -86751,7 +86751,7 @@ async function run(language, numOfVersions) {
             coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions));
             // Save to GitHub Actions cache for future runs
             await saveCache(cachePaths, cacheKey);
-            console.log(`Cache saved for ${parsedLanguage}!`);
+            console.log(`Cache saved for ${parsedLanguage} and ${numOfVersions}!`);
         }
     }
     catch (error) {

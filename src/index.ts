@@ -22,7 +22,7 @@ export async function run(language: string, numOfVersions: number) {
 
     const parsedLanguage = unifyName(language);
     const cacheKey = `lts-versions-${parsedLanguage}`;
-    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}`, `${numOfVersions}`, `.json`);
+    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}-${numOfVersions}`, `.json`);
     const cachePaths = [cacheFile];
 
     try {
@@ -36,7 +36,7 @@ export async function run(language: string, numOfVersions: number) {
                 getNltsVersionsAndCheckEOdates(cachedData, numOfVersions)
             );
         } else {
-            console.log(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
+            console.log(`Couldn't find cache for ${parsedLanguage} and ${numOfVersions} versions. Creating one...`);
             const returnedJSON: string = await sendRequest(parsedLanguage);
 
             if (!isJSONok(returnedJSON)) {
@@ -53,7 +53,7 @@ export async function run(language: string, numOfVersions: number) {
 
             // Save to GitHub Actions cache for future runs
             await cache.saveCache(cachePaths, cacheKey);
-            console.log(`Cache saved for ${parsedLanguage}!`);
+            console.log(`Cache saved for ${parsedLanguage} and ${numOfVersions}!`);
         }
     } catch (error) {
         console.log(`::error::Error in run function: ${error}`);
