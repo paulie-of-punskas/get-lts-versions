@@ -22,21 +22,21 @@ export async function run(language: string, numOfVersions: number) {
 
     const parsedLanguage = unifyName(language);
     const cacheKey = `lts-versions-${parsedLanguage}`;
-    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}.json`);
+    const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}`, `${numOfVersions}`, `.json`);
     const cachePaths = [cacheFile];
 
     try {
-        // Check for existing cache for a `language`
+        // Check for existing cache for a `language`-`numOfVersions`
         const restored = await cache.restoreCache(cachePaths, cacheKey);
         if (restored) {
-            core.info(`Found cache for ${parsedLanguage}.`);
+            console.log(`Found cache for ${parsedLanguage}.`);
             const cachedData = await fs.readFile(cacheFile, 'utf-8');
             core.setOutput(
                 'lts_versions',
                 getNltsVersionsAndCheckEOdates(cachedData, numOfVersions)
             );
         } else {
-            core.info(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
+            console.log(`Couldn't find cache for ${parsedLanguage}. Creating one...`);
             const returnedJSON: string = await sendRequest(parsedLanguage);
 
             if (!isJSONok(returnedJSON)) {
@@ -53,10 +53,10 @@ export async function run(language: string, numOfVersions: number) {
 
             // Save to GitHub Actions cache for future runs
             await cache.saveCache(cachePaths, cacheKey);
-            core.info(`Cache saved for ${parsedLanguage}!`);
+            console.log(`Cache saved for ${parsedLanguage}!`);
         }
     } catch (error) {
-        console.error(`Error in run function: ${error}`);
+        console.log(`::error::Error in run function: ${error}`);
         throw error;
     }
 }
