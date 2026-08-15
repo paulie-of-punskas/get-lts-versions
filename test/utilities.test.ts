@@ -1,4 +1,5 @@
 import { unifyName, getFullLanguageName } from '../src/utilities';
+import { describe, test, expect } from '@jest/globals';
 
 describe('unifyName()', () => {
     test('golang should return go', () => {
