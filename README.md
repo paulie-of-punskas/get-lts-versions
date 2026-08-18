@@ -53,7 +53,7 @@ If larger number of LTS is requested, then function returns max supported number
 
 ## Quickstart
 ### Inputs
-`language` - any name from [supported languages list](#supported-languages)  
+`language` - any name from [supported languages list](#supported-programming-languages)  
 `versions_to_fetch` - how many long term support versions to fetch. Must be a positive integer. If none is set,
 max number of supported versions will be returned.
 
