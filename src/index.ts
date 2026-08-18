@@ -1,5 +1,6 @@
 import { isJSONok, getNltsVersionsAndCheckEOdates } from './json.utilities.js';
 import { sendRequest } from './request.js';
+import { getFileAgeInDays } from './cache.utilities.js';
 import * as core from '@actions/core';
 import * as cache from '@actions/cache';
 import * as fs from 'fs/promises';
@@ -7,6 +8,7 @@ import * as path from 'path';
 import { unifyName } from './utilities.js';
 
 const CACHE_DIR = path.join(process.env.GITHUB_WORKSPACE || '.', '.cache');
+const CACHE_MAX_AGE_DAYS = 7;
 
 export async function run(language: string, numOfVersions: number) {
     /**
@@ -21,22 +23,42 @@ export async function run(language: string, numOfVersions: number) {
     }
 
     const parsedLanguage = unifyName(language);
-    const cacheKey = `lts-versions-${parsedLanguage}`;
+    const cacheKey = `lts-versions-${parsedLanguage}-${numOfVersions}`;
     const cacheFile = path.join(CACHE_DIR, `${parsedLanguage}-${numOfVersions}.json`);
     const cachePaths = [cacheFile];
 
     try {
-        // Check for existing cache for a `language`-`numOfVersions`
+        // Check for existing cache for a lts-versions-`language`-`numOfVersions`
         const restored = await cache.restoreCache(cachePaths, cacheKey);
         if (restored) {
-            console.log(`Found cache for ${parsedLanguage}.`);
-            const cachedData = await fs.readFile(cacheFile, 'utf-8');
-            core.setOutput(
-                'lts_versions',
-                getNltsVersionsAndCheckEOdates(cachedData, numOfVersions)
-            );
+            const fileAge = await getFileAgeInDays(cacheFile);
+            if (fileAge <= CACHE_MAX_AGE_DAYS) {
+                console.log(`Found cache for ${parsedLanguage} and its ${numOfVersions} LTS versions.`);
+                const cachedData = await fs.readFile(cacheFile, 'utf-8');
+                core.setOutput(
+                    'lts_versions',
+                    getNltsVersionsAndCheckEOdates(cachedData, numOfVersions)
+                );
+            } else {
+                // Cache should be renewed every week, thus if cache is older than 6 days, then it's renewed
+                console.log(`Cache for ${parsedLanguage} and ${numOfVersions} LTS versions, is older than ${CACHE_MAX_AGE_DAYS} days (${fileAge}). Renewing it...`);
+                const returnedJSON: string = await sendRequest(parsedLanguage);
+
+                if (!isJSONok(returnedJSON)) {
+                    throw new Error('Returned JSON has incorrect/new structure.');
+                }
+
+                await fs.writeFile(cacheFile, returnedJSON);
+                core.setOutput(
+                    'lts_versions',
+                    getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions)
+                );
+
+                await cache.saveCache(cachePaths, cacheKey);
+                console.log(`Cache renewed for ${parsedLanguage} and requested ${numOfVersions} versions!`);
+            }
         } else {
-            console.log(`Couldn't find cache for ${parsedLanguage} and ${numOfVersions} versions. Creating one...`);
+            console.log(`Couldn't find cache for ${parsedLanguage} and ${numOfVersions} LTS versions. Creating one...`);
             const returnedJSON: string = await sendRequest(parsedLanguage);
 
             if (!isJSONok(returnedJSON)) {
