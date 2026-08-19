@@ -1,6 +1,5 @@
-import { isJSONok, getNltsVersionsAndCheckEOdates } from './json.utilities.js';
-import { sendRequest } from './request.js';
-import { getFileAgeInDays } from './cache.utilities.js';
+import { getNltsVersionsAndCheckEOdates } from './json.utilities.js';
+import { getFileAgeInDays, writeRenewCache } from './cache.utilities.js';
 import * as core from '@actions/core';
 import * as cache from '@actions/cache';
 import * as fs from 'fs/promises';
@@ -40,42 +39,12 @@ export async function run(language: string, numOfVersions: number) {
                     getNltsVersionsAndCheckEOdates(cachedData, numOfVersions)
                 );
             } else {
-                // Cache should be renewed every week, thus if cache is older than 6 days, then it's renewed
-                console.log(`Cache for ${parsedLanguage} and ${numOfVersions} LTS versions, is older than ${CACHE_MAX_AGE_DAYS} days (${fileAge}). Renewing it...`);
-                const returnedJSON: string = await sendRequest(parsedLanguage);
-
-                if (!isJSONok(returnedJSON)) {
-                    throw new Error('Returned JSON has incorrect/new structure.');
-                }
-
-                await fs.writeFile(cacheFile, returnedJSON);
-                core.setOutput(
-                    'lts_versions',
-                    getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions)
-                );
-
-                await cache.saveCache(cachePaths, cacheKey);
-                console.log(`Cache renewed for ${parsedLanguage} and requested ${numOfVersions} versions!`);
+                // Cache should be renewed every week, thus if cache is older than 7 days, then it's renewed
+                await writeRenewCache("renew", { parsedLanguage, numOfVersions, fileAge, CACHE_DIR, CACHE_MAX_AGE_DAYS, cacheFile, cachePaths, cacheKey });
             }
         } else {
-            console.log(`Couldn't find cache for ${parsedLanguage} and ${numOfVersions} LTS versions. Creating one...`);
-            const returnedJSON: string = await sendRequest(parsedLanguage);
-
-            if (!isJSONok(returnedJSON)) {
-                throw new Error('Returned JSON has incorrect/new structure.');
-            }
-
-            await fs.mkdir(CACHE_DIR, { recursive: true });
-            await fs.writeFile(cacheFile, returnedJSON);
-
-            core.setOutput(
-                'lts_versions',
-                getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions)
-            );
-
-            // Save to GitHub Actions cache for future runs
-            await cache.saveCache(cachePaths, cacheKey);
-            console.log(`Cache saved for ${parsedLanguage} and requested ${numOfVersions} versions!`);
+            const fileAge = 0;
+            await writeRenewCache("create", { parsedLanguage, numOfVersions, fileAge, CACHE_DIR, CACHE_MAX_AGE_DAYS, cacheFile, cachePaths, cacheKey });
         }
     } catch (error) {
         console.log(`::error::Error in run function: ${error}`);
