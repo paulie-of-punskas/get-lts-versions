@@ -1,4 +1,3 @@
-import { stat as stat$2 } from 'node:fs/promises';
 import * as os from 'os';
 import os__default from 'os';
 import * as crypto$1 from 'crypto';
@@ -53,6 +52,7 @@ import https$1 from 'node:https';
 import { createHmac } from 'node:crypto';
 import require$$1$5 from 'tty';
 import fs$2 from 'node:fs';
+import { stat as stat$2, mkdir as mkdir$2, writeFile as writeFile$2 } from 'node:fs/promises';
 import * as fs$1 from 'fs/promises';
 
 var languages$1 = [
@@ -540,50 +540,6 @@ function getNltsVersionsAndCheckEOdates(jsonInput, numOfVersions = 3, checkEOL =
         }
     }
     return JSON.stringify(ltsVersions);
-}
-
-async function sendRequest(language, endpointURL = 'https://endoflife.date/api/v1/products/') {
-    /**
-     * @param {string} language - name of the language.
-     * @param {string} endpointURL - optional, URL with endpoint. By default it's https://endoflife.date/api/v1/products/
-     * @returns {Promise<string>} Promise, that resolves as string.
-     */
-    const url = `${endpointURL}/${language.toLowerCase()}`;
-    const header = new Headers();
-    header.append('Content-Type', 'application/json');
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: header
-        });
-        if (!response.ok && response.status != 404) {
-            console.error(`Response status: ${response.status}`);
-            return '';
-        }
-        else if (response.status == 404) {
-            console.error(`${language} was not found on ${endpointURL}.`);
-            return '';
-        }
-        const result = await response.text();
-        return result;
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error(`Caught an error: ${error.message}`);
-        }
-        return '';
-    }
-}
-
-async function getFileAgeInDays(fullFilePath) {
-    try {
-        const fileStats = await stat$2(fullFilePath);
-        const ageInMS = Date.now() - fileStats.ctimeMs;
-        return Math.floor(ageInMS / (1000 * 60 * 60 * 24));
-    }
-    catch (error) {
-        throw new Error(`${fullFilePath} was not found.`);
-    }
 }
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -87010,6 +86966,78 @@ function saveCacheV2(paths_1, key_1, options_1) {
     });
 }
 
+async function sendRequest(language, endpointURL = 'https://endoflife.date/api/v1/products/') {
+    /**
+     * @param {string} language - name of the language.
+     * @param {string} endpointURL - optional, URL with endpoint. By default it's https://endoflife.date/api/v1/products/
+     * @returns {Promise<string>} Promise, that resolves as string.
+     */
+    const url = `${endpointURL}/${language.toLowerCase()}`;
+    const header = new Headers();
+    header.append('Content-Type', 'application/json');
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: header
+        });
+        if (!response.ok && response.status != 404) {
+            console.error(`Response status: ${response.status}`);
+            return '';
+        }
+        else if (response.status == 404) {
+            console.error(`${language} was not found on ${endpointURL}.`);
+            return '';
+        }
+        const result = await response.text();
+        return result;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error(`Caught an error: ${error.message}`);
+        }
+        return '';
+    }
+}
+
+async function getFileAgeInDays(fullFilePath) {
+    try {
+        const fileStats = await stat$2(fullFilePath);
+        const ageInMS = Date.now() - fileStats.ctimeMs;
+        return Math.floor(ageInMS / (1000 * 60 * 60 * 24));
+    }
+    catch (error) {
+        throw new Error(`${fullFilePath} was not found.`);
+    }
+}
+async function writeRenewCache(action, cacheParams) {
+    const { parsedLanguage, numOfVersions, fileAge, CACHE_DIR, CACHE_MAX_AGE_DAYS, cacheFile, cachePaths, cacheKey } = cacheParams;
+    if (action !== "renew" && action !== "create") {
+        throw new Error(`"renew" or "create" are acceptible values for action`);
+    }
+    const messagesToPrint = {
+        renew: {
+            needsUpdate: `Cache for ${parsedLanguage} and ${numOfVersions} LTS versions, is older than ${CACHE_MAX_AGE_DAYS} days (${fileAge}). Renewing it...`,
+            updateSuccess: `Cache renewed for ${parsedLanguage} and requested ${numOfVersions} versions!`
+        },
+        create: {
+            needsUpdate: `Couldn't find cache for ${parsedLanguage} and ${numOfVersions} LTS versions. Creating one...`,
+            updateSuccess: `Cache saved for ${parsedLanguage} and requested ${numOfVersions} versions!`
+        }
+    };
+    console.log(messagesToPrint[action].needsUpdate);
+    const returnedJSON = await sendRequest(parsedLanguage);
+    if (!isJSONok(returnedJSON)) {
+        throw new Error('Returned JSON has incorrect/new structure.');
+    }
+    if (action === "create") {
+        await mkdir$2(CACHE_DIR, { recursive: true });
+    }
+    await writeFile$2(cacheFile, returnedJSON);
+    coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions));
+    await saveCache(cachePaths, cacheKey);
+    console.log(messagesToPrint[action].updateSuccess);
+}
+
 const CACHE_DIR = path.join(process.env.GITHUB_WORKSPACE || '.', '.cache');
 const CACHE_MAX_AGE_DAYS = 7;
 async function run(language, numOfVersions) {
@@ -87037,30 +87065,13 @@ async function run(language, numOfVersions) {
                 coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(cachedData, numOfVersions));
             }
             else {
-                // Cache should be renewed every week, thus if cache is older than 6 days, then it's renewed
-                console.log(`Cache for ${parsedLanguage} and ${numOfVersions} LTS versions, is older than ${CACHE_MAX_AGE_DAYS} days (${fileAge}). Renewing it...`);
-                const returnedJSON = await sendRequest(parsedLanguage);
-                if (!isJSONok(returnedJSON)) {
-                    throw new Error('Returned JSON has incorrect/new structure.');
-                }
-                await fs$1.writeFile(cacheFile, returnedJSON);
-                coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions));
-                await saveCache(cachePaths, cacheKey);
-                console.log(`Cache renewed for ${parsedLanguage} and requested ${numOfVersions} versions!`);
+                // Cache should be renewed every week, thus if cache is older than 7 days, then it's renewed
+                await writeRenewCache("renew", { parsedLanguage, numOfVersions, fileAge, CACHE_DIR, CACHE_MAX_AGE_DAYS, cacheFile, cachePaths, cacheKey });
             }
         }
         else {
-            console.log(`Couldn't find cache for ${parsedLanguage} and ${numOfVersions} LTS versions. Creating one...`);
-            const returnedJSON = await sendRequest(parsedLanguage);
-            if (!isJSONok(returnedJSON)) {
-                throw new Error('Returned JSON has incorrect/new structure.');
-            }
-            await fs$1.mkdir(CACHE_DIR, { recursive: true });
-            await fs$1.writeFile(cacheFile, returnedJSON);
-            coreExports.setOutput('lts_versions', getNltsVersionsAndCheckEOdates(returnedJSON, numOfVersions));
-            // Save to GitHub Actions cache for future runs
-            await saveCache(cachePaths, cacheKey);
-            console.log(`Cache saved for ${parsedLanguage} and requested ${numOfVersions} versions!`);
+            const fileAge = 0;
+            await writeRenewCache("create", { parsedLanguage, numOfVersions, fileAge, CACHE_DIR, CACHE_MAX_AGE_DAYS, cacheFile, cachePaths, cacheKey });
         }
     }
     catch (error) {
