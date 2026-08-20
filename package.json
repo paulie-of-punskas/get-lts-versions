@@ -1,7 +1,7 @@
 {
   "author": "paulie-aus-punskas a.k.a. paulie-of-punskas",
   "description": "Code is used for fetching EOL for language, from https://endoflife.date",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "repository": {
     "url": "https://github.com/paulie-of-punskas/get-lts-versions",
     "url2": "https://codeberg.org/paulie-aus-punskas/get-lts-versions"
@@ -25,6 +25,7 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
     "@types/jest": "^30.0.0",
+    "@types/node": "^26.2.0",
     "jest": "^30.2.0",
     "prettier": "^3.8.1",
     "rollup": "^4.57.1",
