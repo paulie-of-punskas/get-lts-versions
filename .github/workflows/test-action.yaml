@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/**'
       - 'test/**'
+      - '.github/workflows/test-action.yaml'
   schedule:
     - cron: "0 8 * * 1"
 
