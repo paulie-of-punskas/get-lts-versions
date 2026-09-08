@@ -7,7 +7,7 @@ inputs:
     default: "go"
   versions_to_fetch:
     description: How many long term support versions to fetch and return
-    required: true
+    required: false
     default: "3"
 
 runs:
