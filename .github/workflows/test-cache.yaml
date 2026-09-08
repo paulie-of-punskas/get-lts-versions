@@ -31,16 +31,16 @@ jobs:
 
             const getCachesResult = await getCaches();
 
-            // expect 'lts-versions-go' and 'lts-versions-python' to exist
+            // expect 'lts-versions-go-3' and 'lts-versions-python-3' to exist
             // that includes cache "from" main and other branches
             let ltsCache = 0;
             getCachesResult.actions_caches.forEach((cache) => {
-                if (cache.key === 'lts-versions-go' || cache.key === 'lts-versions-python') {
+                if (cache.key === 'lts-versions-go-3' || cache.key === 'lts-versions-python-3') {
                   ltsCache++
                 }
             });
             console.log(`Returned cache:\n${JSON.stringify(getCachesResult.actions_caches)}`);
             if (ltsCache === 0) {
-                throw new Error(`Could not find LTS cache for python and go. Found number of cache: ${ltsCache}`);
+                throw new Error(`Could not find LTS cache for 3 LTS versions for python and go. Found number of cache: ${ltsCache}`);
             }
             console.log("'oll korrect! (Caches were found successfully).'");
