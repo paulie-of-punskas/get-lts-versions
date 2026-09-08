@@ -7,8 +7,12 @@ inputs:
     default: "go"
   versions_to_fetch:
     description: How many long term support versions to fetch and return
-    required: true
+    required: false
     default: "3"
+  verbose:
+    description: Should additional function information be printed for user
+    required: false
+    default: "false"
 
 runs:
   using: "node24"

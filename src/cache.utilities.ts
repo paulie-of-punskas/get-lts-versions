@@ -17,10 +17,13 @@ interface CachingParameters {
     cacheKey: string;
 }
 
-export async function getFileAgeInDays(fullFilePath: string): Promise<number> {
+export async function getFileAgeInDays(fullFilePath: string, verbose: boolean): Promise<number> {
     try {
         const fileStats = await stat(fullFilePath);
-        const ageInMS = Date.now() - fileStats.ctimeMs;
+        if (verbose) {
+            console.log(`Cache file datetime values:\n- modify time: ${fileStats.mtime.toISOString()}\n- status change time: ${fileStats.ctime.toISOString()}\n- creation time: ${fileStats.birthtime.toISOString()}\n`);
+        }
+        const ageInMS = Date.now() - fileStats.mtimeMs;
         return Math.floor(ageInMS / (1000 * 60 * 60 * 24));
     } catch (error) {
         throw new Error(`${fullFilePath} was not found.`);
