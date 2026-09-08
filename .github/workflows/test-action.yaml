@@ -41,12 +41,13 @@ jobs:
         shell: bash
         run: echo "${{ steps.go.outputs.lts_versions }}"
 
-      - name: Check for Python LTS versions
+      - name: Check for Python LTS versions and verbose parameter
         id: python
         uses: ./
         with:
           language: "python"
           versions_to_fetch: "3"
+          verbose: true
 
       - name: Print returned value for Python
         shell: bash
