@@ -86999,10 +86999,13 @@ async function sendRequest(language, endpointURL = 'https://endoflife.date/api/v
     }
 }
 
-async function getFileAgeInDays(fullFilePath) {
+async function getFileAgeInDays(fullFilePath, verbose) {
     try {
         const fileStats = await stat$2(fullFilePath);
-        const ageInMS = Date.now() - fileStats.ctimeMs;
+        if (verbose) {
+            console.log(`Cache file datetime values:\n- modify time: ${fileStats.mtime.toISOString()}\n- status change time: ${fileStats.ctime.toISOString()}\n- creation time: ${fileStats.birthtime.toISOString()}\n`);
+        }
+        const ageInMS = Date.now() - fileStats.mtimeMs;
         return Math.floor(ageInMS / (1000 * 60 * 60 * 24));
     }
     catch (error) {
@@ -87040,7 +87043,7 @@ async function writeRenewCache(action, cacheParams) {
 
 const CACHE_DIR = path.join(process.env.GITHUB_WORKSPACE || '.', '.cache');
 const CACHE_MAX_AGE_DAYS = 7;
-async function run(language, numOfVersions) {
+async function run(language, numOfVersions, verbose) {
     /**
      * @param {string} language - name of the language.
      * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
@@ -87058,7 +87061,7 @@ async function run(language, numOfVersions) {
         // Check for existing cache for a lts-versions-`language`-`numOfVersions`
         const restored = await restoreCache(cachePaths, cacheKey);
         if (restored) {
-            const fileAge = await getFileAgeInDays(cacheFile);
+            const fileAge = await getFileAgeInDays(cacheFile, verbose);
             if (fileAge <= CACHE_MAX_AGE_DAYS) {
                 console.log(`Found cache for ${parsedLanguage} and its ${numOfVersions} LTS versions.`);
                 const cachedData = await fs$1.readFile(cacheFile, 'utf-8');
@@ -87079,7 +87082,7 @@ async function run(language, numOfVersions) {
         throw error;
     }
 }
-run(coreExports.getInput('language'), Number(coreExports.getInput('versions_to_fetch')));
+run(coreExports.getInput('language'), Number(coreExports.getInput('versions_to_fetch')), Boolean(coreExports.getBooleanInput('verbose')));
 
 export { run };
 //# sourceMappingURL=index.js.map

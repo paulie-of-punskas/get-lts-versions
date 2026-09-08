@@ -9,7 +9,7 @@ import { unifyName } from './utilities.js';
 const CACHE_DIR = path.join(process.env.GITHUB_WORKSPACE || '.', '.cache');
 const CACHE_MAX_AGE_DAYS = 7;
 
-export async function run(language: string, numOfVersions: number) {
+export async function run(language: string, numOfVersions: number, verbose: boolean) {
     /**
      * @param {string} language - name of the language.
      * @param {number} numOfVersions - how many LTS versions to retrieve. If it exceeds supported versions,
@@ -30,7 +30,7 @@ export async function run(language: string, numOfVersions: number) {
         // Check for existing cache for a lts-versions-`language`-`numOfVersions`
         const restored = await cache.restoreCache(cachePaths, cacheKey);
         if (restored) {
-            const fileAge = await getFileAgeInDays(cacheFile);
+            const fileAge = await getFileAgeInDays(cacheFile, verbose);
             if (fileAge <= CACHE_MAX_AGE_DAYS) {
                 console.log(`Found cache for ${parsedLanguage} and its ${numOfVersions} LTS versions.`);
                 const cachedData = await fs.readFile(cacheFile, 'utf-8');
@@ -52,4 +52,4 @@ export async function run(language: string, numOfVersions: number) {
     }
 }
 
-run(core.getInput('language'), Number(core.getInput('versions_to_fetch')));
+run(core.getInput('language'), Number(core.getInput('versions_to_fetch')), Boolean(core.getBooleanInput('verbose')));
