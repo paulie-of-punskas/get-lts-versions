@@ -87003,7 +87003,7 @@ async function getFileAgeInDays(fullFilePath, verbose) {
     try {
         const fileStats = await stat$2(fullFilePath);
         if (verbose) {
-            console.log(`Cache file datetime values:\n- modify time: ${fileStats.mtime}\n-status change time: ${fileStats.ctime}\n-creation time: ${fileStats.birthtime}\n`);
+            console.log(`Cache file datetime values:\n- modify time: ${fileStats.mtime.toISOString()}\n- status change time: ${fileStats.ctime.toISOString()}\n- creation time: ${fileStats.birthtime.toISOString()}\n`);
         }
         const ageInMS = Date.now() - fileStats.mtimeMs;
         return Math.floor(ageInMS / (1000 * 60 * 60 * 24));
