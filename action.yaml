@@ -9,6 +9,10 @@ inputs:
     description: How many long term support versions to fetch and return
     required: false
     default: "3"
+  verbose:
+    description: Should additional function information be printed for user
+    required: false
+    default: "false"
 
 runs:
   using: "node24"
