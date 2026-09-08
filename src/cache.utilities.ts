@@ -20,7 +20,8 @@ interface CachingParameters {
 export async function getFileAgeInDays(fullFilePath: string): Promise<number> {
     try {
         const fileStats = await stat(fullFilePath);
-        const ageInMS = Date.now() - fileStats.ctimeMs;
+        console.log(`Cache file datetime values:\n- modify time: ${fileStats.mtime}\n-status change time: ${fileStats.ctime}\n-creation time: ${fileStats.birthtime}\n`);
+        const ageInMS = Date.now() - fileStats.mtimeMs;
         return Math.floor(ageInMS / (1000 * 60 * 60 * 24));
     } catch (error) {
         throw new Error(`${fullFilePath} was not found.`);
