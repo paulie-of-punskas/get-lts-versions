@@ -22,4 +22,6 @@ jobs:
             const script = require('./scripts/check_for_new_languages.js')
             if (areLanguageNamesUpToDate()) {
               console.log("No updates to language names are needed")
+            } else {
+              throw new Error("New languages were added. Please update /src/assets/language_names.json and aliases.")
             }
