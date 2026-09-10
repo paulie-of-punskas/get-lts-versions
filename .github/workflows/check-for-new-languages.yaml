@@ -2,6 +2,9 @@ name: Check for language updates
 description: Workflow checks if new languages were added to EOL API
 
 on:
+  push:
+    paths:
+      - '.github/workflows/check-for-new-languages.yaml'
   workflow_dispatch:
   schedule:
     - cron: "0 18 * * *"
