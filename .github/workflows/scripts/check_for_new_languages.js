@@ -15,7 +15,7 @@ async function getAllEOLProducts() {
             return [];
         }
         const result = await response.json();
-        return result.result;
+        return result;
     } catch (error) {
         if (error instanceof Error) {
             console.error(`Caught an unexpected error: ${error.message}`);
