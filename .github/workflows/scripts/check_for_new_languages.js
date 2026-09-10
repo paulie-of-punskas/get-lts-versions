@@ -16,7 +16,7 @@ function convertLanguageNamesToSet() {
     return new Set(Object.keys(LANGUAGE_NAMES.aliases));
 }
 
-function areLanguageNamesUpToDate() {
+export function areLanguageNamesUpToDate() {
     const languageNames = returnLanguageNamesFromEOL();
     const languageNamesSet = convertLanguageNamesToSet();
     let areLanguagesUpToDate = true;
