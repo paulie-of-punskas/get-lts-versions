@@ -23,7 +23,8 @@ jobs:
         with:
           script: |
             const script = require('.github/workflows/scripts/check_for_new_languages.js')
-            if (script.areLanguageNamesUpToDate()) {
+            const result = await script.areLanguageNamesUpToDate();
+            if (result) {
               console.log("No updates to language names are needed")
             } else {
               throw new Error("New languages were added. Please update /src/assets/language_names.json and aliases.")
