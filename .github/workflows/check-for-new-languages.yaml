@@ -1,0 +1,30 @@
+name: Check for language updates
+description: Workflow checks if new languages were added to EOL API
+
+on:
+  push:
+    paths:
+      - '.github/workflows/check-for-new-languages.yaml'
+  workflow_dispatch:
+  schedule:
+    - cron: "0 18 * * *"
+
+jobs:
+  check-for-language-updates:
+    name: Check if new language was added
+    runs-on: ubuntu-slim
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Run script
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const script = require('.github/workflows/scripts/check_for_new_languages.js')
+            if (script.areLanguageNamesUpToDate()) {
+              console.log("No updates to language names are needed")
+            } else {
+              throw new Error("New languages were added. Please update /src/assets/language_names.json and aliases.")
+            }

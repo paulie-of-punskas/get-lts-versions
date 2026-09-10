@@ -92,7 +92,7 @@
     },
     {
       "languageFullName": "Java (Oracle JDK)",
-      "inputNames": ["java-oracle-jdk", "oracle-jdk"],
+      "inputNames": ["java-oracle-jdk", "oracle-jdk", "openjdk-builds-from-oracle"],
       "eolName": "oracle-jdk"
     },
     {
@@ -208,6 +208,7 @@
     "oracle-graalvm": "oracle-graalvm",
     "java-oracle-jdk": "oracle-jdk",
     "oracle-jdk": "oracle-jdk",
+    "openjdk-builds-from-oracle": "oracle-jdk",
     "java-redhat": "redhat-build-of-openjdk",
     "redhat-build-of-openjdk": "redhat-build-of-openjdk",
     "java-sapmachine": "sapmachine",
