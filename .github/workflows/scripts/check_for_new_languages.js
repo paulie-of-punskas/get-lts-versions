@@ -24,7 +24,7 @@ async function getAllEOLProducts() {
     }
 }
 
-function returnLanguageNamesFromEOL() {
+async function returnLanguageNamesFromEOL() {
     let languageNames = [];
     const returnedJSON = await getAllEOLProducts();
     const languages = returnedJSON.result;
@@ -41,7 +41,7 @@ function convertLanguageNamesToSet() {
 }
 
 export async function areLanguageNamesUpToDate() {
-    const languageNames = returnLanguageNamesFromEOL();
+    const languageNames = await returnLanguageNamesFromEOL();
     const languageNamesSet = convertLanguageNamesToSet();
     let areLanguagesUpToDate = true;
 
