@@ -13,11 +13,11 @@ on:
       - '.github/workflows/ci.yaml'
 
 env:
-  node-version: 24
+  NODE_VERSION: 24
 
 jobs:
   build-and-test:
-    name: CI - Node $node-version
+    name: CI - Node $NODE_VERSION
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -26,10 +26,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Use Node.js $node-version
+      - name: Use Node.js $NODE_VERSION
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 #v6.0.0
         with:
-          node-version: $node-version
+          node-version: $NODE_VERSION
           cache: 'npm'
 
       - name: Run npm CI
