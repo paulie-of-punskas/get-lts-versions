@@ -14,7 +14,7 @@ on:
 
 jobs:
   build-and-test:
-    name: CI - Node $NODE_VERSION
+    name: CI - Node ${{ env.NODE_VERSION}}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
