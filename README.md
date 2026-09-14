@@ -62,49 +62,48 @@ max number of supported versions will be returned.
 
 ### Examples
 ```YAML
-name: CI
+name: CI - build
 
 on:
   push:
-    branches:
-      - 'main'
-  workflow_dispatch:
-
-env:
-  language-name: "temurin"
 
 jobs:
-  get-java-lts:
-    name: Get LTS for Java
+  get-lts-version:
+    name: Get LTS for Golang
     runs-on: ubuntu-slim
     outputs:
-      lts_versions_fetched: ${{ steps.getJavaVersion.outputs.lts_versions }}
+      lts_versions_fetched: ${{ steps.getLTSversion.outputs.lts_versions }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Get LTS for Java Temurin JDK
-        uses: paulie-of-punskas/get-lts-versions@c63a51cd259a35cd4f0a2f87215198d4ee3b833c #v1.0.3
-        id: getJavaVersion
+      - name: Get LTS for Golang
+        uses: paulie-of-punskas/get-lts-versions@42c4bebdaf53b932d3dd67e428437f78d8b4a7a0 # v1.0.5
+        id: getLTSversion
         with:
-          language: ${{ env.language-name }}
-          versions_to_fetch: "3"
+          language: 'golang'
 
-  setup-java-environment:
-    name: Setup environment
+  setup-environment-run-build:
+    name: Build | Go ${{ matrix.lts_version }}
     runs-on: ubuntu-22.04
-    needs: get-java-lts
+    needs: get-lts-version
     strategy:
       matrix:
-        lts_java_version: ${{ fromJson(needs.get-java-lts.outputs.lts_versions_fetched) }}
+        lts_version: ${{ fromJson(needs.get-lts-version.outputs.lts_versions_fetched) }}
     steps:
-      - name: Set up latest JDK for x64
-        uses: actions/setup-java@v4
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up environment ${{ matrix.lts_version }}
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          java-version: ${{ matrix.lts_java_version }}
-          distribution: ${{ env.language-name }}
-          architecture: x64
+          go-version: ${{ matrix.lts_version }}
+          architecture: 'x64'
+
+      - name: Build
+        shell: bash
+        run: go build .
 ```
 
 ## Support / Contributions
