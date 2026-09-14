@@ -16,7 +16,7 @@ env:
 
 jobs:
   build-and-test:
-    name: CI - Node $env.node-version
+    name: CI - Node $node-version
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
