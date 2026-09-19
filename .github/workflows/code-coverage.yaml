@@ -2,9 +2,13 @@ name: Code coverage - Node 24
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    paths:
+      - 'src/**'
+      - 'test/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'jest.config.js'
 
 jobs:
   run-code-coverage:
