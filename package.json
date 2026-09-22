@@ -33,7 +33,7 @@
     "typescript-eslint": "^8.70.1"
   },
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest --verbose",
+    "test": "npx jest --clearCache && NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest --verbose",
     "build": "rm -rf ./dist && esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js",
     "format": "prettier --write **/*.ts",
     "lint": "npx eslint src"

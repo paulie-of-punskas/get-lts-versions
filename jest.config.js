@@ -28,13 +28,10 @@ export default {
   testMatch: ['**/*.test.ts'],
   testPathIgnorePatterns: ['/dist/', '/node_modules/'],
   transform: {
-    '^.+\\.ts$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig.json',
-        useESM: true
-      }
-    ]
+    '^.+\\.ts$': ['ts-jest', {
+      useESM: true,
+      tsconfig: 'tsconfig.test.json',
+    }],
   },
   verbose: true
 }
