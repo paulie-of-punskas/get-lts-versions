@@ -1,7 +1,7 @@
 {
   "author": "paulie-aus-punskas a.k.a. paulie-of-punskas",
   "description": "Code is used for fetching EOL for language, from https://endoflife.date",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "repository": {
     "url": "https://github.com/paulie-of-punskas/get-lts-versions",
     "url2": "https://codeberg.org/paulie-aus-punskas/get-lts-versions"
@@ -18,26 +18,26 @@
   ],
   "type": "module",
   "devDependencies": {
-    "@eslint/compat": "^2.0.2",
+    "@eslint/js": "^10.0.1",
     "@jest/globals": "^30.2.0",
-    "@rollup/plugin-commonjs": "^29.0.0",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^16.0.3",
-    "@rollup/plugin-typescript": "^12.3.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.2.0",
+    "esbuild": "0.28.2",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
     "jest": "^30.2.0",
     "prettier": "^3.8.1",
-    "rollup": "^4.57.1",
     "ts-jest": "^29.4.6",
     "ts-jest-resolver": "^2.0.1",
     "tslib": "^2.8.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.1"
   },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest --verbose",
-    "build": "rm -rf ./dist && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
-    "format": "prettier --write **/*.ts"
+    "build": "rm -rf ./dist && esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js",
+    "format": "prettier --write **/*.ts",
+    "lint": "npx eslint src"
   },
   "dependencies": {
     "@actions/cache": "6.1.0",

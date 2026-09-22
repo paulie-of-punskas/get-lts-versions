@@ -26,7 +26,9 @@ export async function getFileAgeInDays(fullFilePath: string, verbose: boolean): 
         const ageInMS = Date.now() - fileStats.mtimeMs;
         return Math.floor(ageInMS / (1000 * 60 * 60 * 24));
     } catch (error) {
-        throw new Error(`${fullFilePath} was not found.`);
+        throw new Error(`${fullFilePath} was not found.`, {
+            cause: error
+         });
     }
 }
 

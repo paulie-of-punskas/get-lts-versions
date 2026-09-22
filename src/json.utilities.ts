@@ -10,7 +10,7 @@ export function isJSONok(jsonInput: string): boolean {
     if (typeof jsonInput !== 'string' || jsonInput === null) return false;
 
     const jsonFile: EOLresponse = JSON.parse(jsonInput) as EOLresponse;
-    if (!jsonFile.hasOwnProperty('result')) return false;
+    if (!Object.prototype.hasOwnProperty.call(jsonFile, 'result')) return false;
 
     try {
         new EOLresponse(
@@ -44,7 +44,7 @@ export function isJSONok(jsonInput: string): boolean {
 
 export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions = 3, checkEOL = true): string {
     let maxAvailableVersions: number;
-    let ltsVersions: Array<string> = [];
+    const ltsVersions: Array<string> = [];
 
     const jsonData = JSON.parse(jsonInput);
 
@@ -56,7 +56,7 @@ export function getNltsVersionsAndCheckEOdates(jsonInput: string, numOfVersions 
 
     // retrieve and push LTS versions to an array
     for (let j = 0; j < maxAvailableVersions; j++) {
-        let releaseData = new LanguageReleases(
+        const releaseData = new LanguageReleases(
             jsonData.result.releases[j].name,
             jsonData.result.releases[j].latest.name,
             jsonData.result.releases[j].isLts,
