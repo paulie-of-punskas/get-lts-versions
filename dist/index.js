@@ -68615,8 +68615,8 @@ async function writeRenewCache(action5, cacheParams) {
 }
 
 // src/index.ts
-var fs8 = __toESM(require("fs/promises"), 1);
-var path11 = __toESM(require("path"), 1);
+var fs8 = __toESM(require("fs/promises"));
+var path11 = __toESM(require("path"));
 var CACHE_DIR = path11.join(process.env.GITHUB_WORKSPACE || ".", ".cache");
 var CACHE_MAX_AGE_DAYS = 7;
 async function run(language, numOfVersions, verbose) {

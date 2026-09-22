@@ -35,7 +35,11 @@ jobs:
         shell: bash
         run: npm ci
 
-      - name: Run tests and code coverage
+      - name: Run eslint
+        shell: bash
+        run: npm run lint
+
+      - name: Run tests and print code coverage
         shell: bash
         run: |
           npm install jest --global

@@ -16,7 +16,6 @@
     "endoflife.date",
     "EOL"
   ],
-  "type": "module",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@jest/globals": "^30.2.0",
