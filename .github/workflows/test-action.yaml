@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/**'
       - 'test/**'
+      - 'dist/**'
       - '.github/workflows/test-action.yaml'
   schedule:
     - cron: "0 8 * * 1"
@@ -19,17 +20,17 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
-        with:
-          node-version: ${{ env.node-version }}
-          cache: 'npm'
+      # - name: Use Node.js ${{ env.node-version }}
+      #   uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+      #   with:
+      #     node-version: ${{ env.node-version }}
+      #     cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      # - name: Install dependencies
+      #   run: npm ci
 
-      - name: Build
-        run: npm run build
+      # - name: Build
+      #   run: npm run build
 
       - name: Check for Golang LTS versions
         id: go
