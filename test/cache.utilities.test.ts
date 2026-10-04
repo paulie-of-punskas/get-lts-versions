@@ -21,10 +21,10 @@ describe("getFileAge()", () => {
     });
 
     test("expect test file to be 0 days old", async () => {
-        expect(await getFileAgeInDays(testFilePath)).toBe(0);
+        expect(await getFileAgeInDays(testFilePath, false)).toBe(0);
     });
 
     test("expect error if file does not exist", async () => {
-        await expect(getFileAgeInDays("x")).rejects.toThrow("x was not found.");
+        await expect(getFileAgeInDays("x", false)).rejects.toThrow("x was not found.");
     });
 });

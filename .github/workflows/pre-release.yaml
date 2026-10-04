@@ -13,8 +13,6 @@ jobs:
   check:
     name: Run pre-release checks
     runs-on: ubuntu-latest
-    env:
-      node-version: 24
 
     steps:
       - name: Checkout code

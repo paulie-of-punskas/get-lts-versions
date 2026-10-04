@@ -30,7 +30,9 @@ describe('LanguageReleases.checkEOL() - JSON Python', () => {
             jsonDataPython[0][4].isEol,
             jsonDataPython[0][4].eolFrom,
             jsonDataPython[0][4].eoasFrom || "",
-            jsonDataPython[0][4].latest
+            new LanguageLatestRelease(jsonDataPython[0][4].latest.name,
+                jsonDataPython[0][4].latest.date,
+                jsonDataPython[0][4].latest.link)
         );
 
         const spy = jest.spyOn(console, 'log');
@@ -47,7 +49,9 @@ describe('LanguageReleases.checkEOL() - JSON Python', () => {
             jsonDataPython[0][5].isEol,
             jsonDataPython[0][5].eolFrom,
             jsonDataPython[0][5].eoasFrom || "",
-            jsonDataPython[0][5].latest
+            new LanguageLatestRelease(jsonDataPython[0][5].latest.name,
+                jsonDataPython[0][5].latest.date,
+                jsonDataPython[0][5].latest.link)
         );
 
         const spy = jest.spyOn(console, 'log');
@@ -57,7 +61,7 @@ describe('LanguageReleases.checkEOL() - JSON Python', () => {
 });
 
 test('EOLresponse - throw error if empty input', () => {
-    expect(() => new EOLresponse(undefined)).toThrow(
+    expect(() => new EOLresponse()).toThrow(
         'EOLresponse: result parameter is required.'
     );
 });
@@ -88,7 +92,9 @@ test('LanguageReleases - JSON Python', () => {
         jsonDataPython[0][0].isEol,
         jsonDataPython[0][0].eolFrom,
         jsonDataPython[0][0].eoasFrom || "",
-        jsonDataPython[0][0].latest
+        new LanguageLatestRelease(jsonDataPython[0][0].latest.name,
+                jsonDataPython[0][0].latest.date,
+                jsonDataPython[0][0].latest.link)
     );
 
     expect(typeof release.majorMinorVersion).toBe("string");
