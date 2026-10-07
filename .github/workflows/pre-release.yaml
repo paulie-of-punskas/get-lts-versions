@@ -43,7 +43,7 @@ jobs:
                     const data = await response.json();
                     return data.tag_name;
                 } catch (error) {
-                    console.error(`Failed to fetch version from GitHub: ${error}`);
+                    core.setFailed(`Failed to fetch version from GitHub: ${error}`);
                     return "";
                 }
             })();
