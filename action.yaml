@@ -15,5 +15,7 @@ inputs:
     default: "false"
 
 runs:
-  using: "node24"
-  main: "dist/index.js"
+  using: "composite"
+  steps:
+    - run: "./get-lts-versions"
+      shell: bash

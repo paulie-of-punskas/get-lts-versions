@@ -1,4 +1,4 @@
-name: Code coverage - Node 24
+name: Code coverage - Golang
 
 on:
   push:
@@ -12,7 +12,8 @@ on:
 
 jobs:
   run-code-coverage:
-    name: Code coverage - Node ${{ matrix.node-version }}
+    if: ${{ false }}
+    name: Code coverage - Go ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     env:
       node-version: 24
