@@ -133,3 +133,5 @@ out
 #
 Todo.md
 c3po.sh
+get-lts-versions
+ci.sh

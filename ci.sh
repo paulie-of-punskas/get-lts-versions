@@ -1,7 +1,9 @@
 # Run CI checks for Golang:
 set -e
 MODULE_NAME=$(head -1 go.mod | cut -c 8-)
-printf "> Running CI checks for %s\n" $MODULE_NAME
+printf "========================================================\n"
+printf "Running CI checks for %s\n" $MODULE_NAME
+printf "========================================================\n"
 
 # Run tests and print detailed test code coverage
 echo "> Running tests..."
