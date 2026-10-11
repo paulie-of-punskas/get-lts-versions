@@ -29,6 +29,9 @@ jobs:
       - name: Build
         run: go build .
 
+      - name: Run compiled program, through action.yaml
+        uses: ./
+
       # - name: Check for Golang LTS versions
       #   id: go
       #   uses: ./
