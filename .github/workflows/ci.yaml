@@ -12,7 +12,6 @@ on:
 
 jobs:
   setup-environment-test-and-build:
-    if: ${{ false }}
     name: CI - Go ${{ matrix.go-version }}
     runs-on: ubuntu-22.04
     strategy:
