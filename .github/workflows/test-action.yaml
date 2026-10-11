@@ -3,8 +3,7 @@ name: Test - get LTS versions
 on:
   push:
     paths:
-      - 'src/**'
-      - 'test/**'
+      - '*.go'
       - '.github/workflows/test-action.yaml'
   schedule:
     - cron: "0 8 * * 1"
