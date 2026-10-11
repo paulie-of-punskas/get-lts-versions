@@ -1,4 +1,5 @@
-name: CI - Golang
+name: CI
+description: CI job for Golang/Go
 
 on:
   push:
@@ -10,20 +11,18 @@ on:
 jobs:
   setup-environment-test-and-build:
     name: CI - Go ${{ matrix.go-version }}
-    runs-on: ubuntu-22.04
-    strategy:
-      fail-fast: false
-      matrix:
-        go-version: [1.24]
+    runs-on: ubuntu-latest
+    env:
+      go-version: 1.24.2
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Setup environment
+      - name: Setup Go ${{ env.go-version }} environment
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: '${{ env.go-version }}'
+          cache: true
           architecture: 'x64'
 
       - name: Run tests

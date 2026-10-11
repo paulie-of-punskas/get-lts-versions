@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestStructLanguageAlias(t *testing.T) {
+func TestStructLanguage(t *testing.T) {
 	TestData := []byte(`{
 			"languages": [
 				{
@@ -22,23 +22,25 @@ func TestStructLanguageAlias(t *testing.T) {
 	var language LanguageNames
 
 	err := json.Unmarshal(TestData, &language)
+
 	if err != nil {
 		t.Errorf("Could not decode JSON to LanguageNames structure")
 	}
-	t.Run("Check if TestData contains LanguageAliases structure - map[string]string", func(t *testing.T) {
-		want := "visual-cobol"
-		got := language.Aliases["cobol"]
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
-	})
 
-	t.Run("Check if TestData contains Aliases structure", func(t *testing.T) {
+	t.Run("Check if TestData languages contains LanguageFullName property", func(t *testing.T) {
 		//
 		got := language.Languages[0].LanguageFullName
 		want := "COBOL"
 		if got != want {
 			t.Errorf("got: %q, want: %q", got, want)
+		}
+	})
+
+	t.Run("Check if TestData contains LanguageAliases.Aliases property - map[string]string", func(t *testing.T) {
+		want := "visual-cobol"
+		got := language.Aliases["cobol"]
+		if got != want {
+			t.Errorf("got %q, want %q", got, want)
 		}
 	})
 }
