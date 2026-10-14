@@ -31,9 +31,6 @@ jobs:
       - name: Build
         run: go build .
 
-      # - name: Run compiled program, through action.yaml
-      #   uses: ./
-
       - name: Check for Golang LTS versions
         id: go
         uses: ./
@@ -53,9 +50,6 @@ jobs:
           language: "python"
           versions_to_fetch: "5"
           print_eol_information: "false"
-
-      - name: Print GHA output content
-        run: cat "$GITHUB_OUTPUT"
 
       - name: Print returned value for Python
         shell: bash
