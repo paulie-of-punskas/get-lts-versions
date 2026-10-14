@@ -21,8 +21,8 @@ func TestGetNltsVersionsAndCheckEOLdates(t *testing.T) {
 			panic("Could not find \"./test_data/eol_return_golang.json\"")
 		}
 
-		want := [2]string{"1.27", "1.26"}
-		got := [2]string{}
+		want := [3]string{"1.27", "1.26"}
+		got := [3]string{}
 
 		functionResult, _ := GetNltsVersionsAndCheckEOLdates(string(fileContent), 3, false)
 
