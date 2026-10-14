@@ -39,6 +39,10 @@ func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkE
 		if !releaseData.IsEol && releaseData.MajorMinorVersion != "" && releaseData.Latest.MajorMinorPatchVersion != "" {
 			ltsVersions = append(ltsVersions, string(releaseData.MajorMinorVersion))
 		}
+
+		if checkEOL {
+			releaseData.checkEOL(eolResponse.Result.Name, releaseData.MajorMinorVersion, releaseData.EolFrom)
+		}
 	}
 
 	// json.Marshal returns nil as well
