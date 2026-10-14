@@ -4,6 +4,16 @@ import (
 	"testing"
 )
 
+func TestSanitizeString(t *testing.T) {
+	t.Run("Expect 'xYz  ' to be return as 'xyz'", func(t *testing.T) {
+		want := "xyz"
+		got := SanitizeString("xYz  ")
+		if want != got {
+			t.Errorf("Wanted: %s, got: %s", want, got)
+		}
+	})
+}
+
 func TestUnifyName(t *testing.T) {
 	t.Run("Expect 'java-openjdk' to be converted to 'openjdk'", func(t *testing.T) {
 		want := "openjdk"

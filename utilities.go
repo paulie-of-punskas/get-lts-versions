@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+func SanitizeString(strintToSanitize string) string {
+	return strings.ToLower(strings.TrimSpace(strintToSanitize))
+}
+
 func ReadLanguageNames() LanguageNames {
 	var languages LanguageNames
 	fileContent, err := os.ReadFile(filepath.Join("./assets/language_names.json"))
@@ -25,7 +29,7 @@ func ReadLanguageNames() LanguageNames {
 func UnifyName(language string) string {
 	languages := ReadLanguageNames()
 	languageAliases := languages.Aliases
-	normalizedLanguage := strings.ToLower(strings.TrimSpace(language))
+	normalizedLanguage := SanitizeString(language)
 
 	if languageAliases[normalizedLanguage] != "" {
 		return languageAliases[normalizedLanguage]
@@ -41,7 +45,7 @@ func UnifyName(language string) string {
 // Get full language name from language_names.json > languages[]
 func GetFullLanguageName(language string) string {
 	languagesList := ReadLanguageNames()
-	normalizedLanguage := strings.ToLower(strings.TrimSpace(language))
+	normalizedLanguage := SanitizeString(language)
 
 	for j := 0; j < len(languagesList.Languages); j++ {
 		if slices.Contains(languagesList.Languages[j].InputNames, normalizedLanguage) {
