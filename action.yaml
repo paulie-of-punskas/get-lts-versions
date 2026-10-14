@@ -9,13 +9,13 @@ inputs:
     description: How many long term support versions to fetch and return
     required: false
     default: "3"
-  verbose:
-    description: Should additional function information be printed for user
+  print_eol_information:
+    description: Should additional function about end of life be printed to user
     required: false
     default: "false"
 
 runs:
   using: "composite"
   steps:
-    - run: "./get-lts-versions"
+    - run: "./get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -verbose=${{ inputs.print_eol_information }}"
       shell: bash
