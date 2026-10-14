@@ -6,6 +6,7 @@ on:
       - '*.go'
       - 'go.mod'
       - '.github/workflows/test-action.yaml'
+      - 'action.yaml'
   schedule:
     - cron: "0 8 * * 1"
 
@@ -17,7 +18,8 @@ jobs:
       go-version: 1.24.2
 
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup Go ${{ env.go-version }} environment
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
@@ -29,28 +31,26 @@ jobs:
       - name: Build
         run: go build .
 
-      - name: Run compiled program, through action.yaml
+      - name: Check for Golang LTS versions
+        id: go
         uses: ./
+        with:
+          language: "go"
+          versions_to_fetch: "3"
+          print_eol_information: "true"
 
-      # - name: Check for Golang LTS versions
-      #   id: go
-      #   uses: ./
-      #   with:
-      #     language: "go"
-      #     versions_to_fetch: "3"
+      - name: Print returned value for Golang
+        shell: bash
+        run: echo "${{ steps.go.outputs.lts_versions }}"
 
-      # - name: Print returned value for Golang
-      #   shell: bash
-      #   run: echo "${{ steps.go.outputs.lts_versions }}"
+      - name: Check for Python LTS versions and verbose parameter
+        id: python
+        uses: ./
+        with:
+          language: "python"
+          versions_to_fetch: "5"
+          print_eol_information: "false"
 
-      # - name: Check for Python LTS versions and verbose parameter
-      #   id: python
-      #   uses: ./
-      #   with:
-      #     language: "python"
-      #     versions_to_fetch: "3"
-      #     verbose: true
-
-      # - name: Print returned value for Python
-      #   shell: bash
-      #   run: echo "${{ steps.python.outputs.lts_versions }}"
+      - name: Print returned value for Python
+        shell: bash
+        run: echo "${{ steps.python.outputs.lts_versions }}"

@@ -9,13 +9,18 @@ inputs:
     description: How many long term support versions to fetch and return
     required: false
     default: "3"
-  verbose:
-    description: Should additional function information be printed for user
+  print_eol_information:
+    description: Should additional function about end of life be printed to user
     required: false
     default: "false"
+outputs:
+  lts_versions:
+    description: JSON array containing LTS versions
+    value: ${{ steps.get-lts-versions.outputs.lts_versions }}
 
 runs:
   using: "composite"
   steps:
-    - run: "./get-lts-versions"
+    - id: get-lts-versions
+      run: ./get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }} -write_to_gha=true
       shell: bash

@@ -1,18 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+)
 
 func main() {
-	fmt.Println("This message was printed from a compiled program")
-	fmt.Println("::notice::This is a notice, that should be formatted nicely in GitHub Actions.")
-	// resSendRequest, err := SendRequest("go")
-	// if err != nil {
-	// 	panic("Error occurred")
-	// }
+	languagePtr := flag.String("language", "", "")
+	versionsToFetchPtr := flag.Int("versions", 0, "")
+	checkEOLptr := flag.Bool("check_eol", true, "")
+	writeToGHAptr := flag.Bool("write_to_gha", true, "")
 
-	// res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, 3, true)
-	// if errRes != nil {
-	// 	panic("Error occurred while fetching LTS versions")
-	// }
-	// fmt.Println(string(res))
+	flag.Parse()
+
+	resSendRequest, err := SendRequest(*languagePtr)
+	if err != nil {
+		panic("Error occurred while sending request")
+	}
+
+	res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr)
+	if errRes != nil {
+		panic("Error occurred while fetching LTS versions")
+	}
+
+	if *writeToGHAptr {
+		WriteJSONArrayToGitHubOutput("lts_versions", string(res))
+	}
 }
