@@ -2,13 +2,13 @@ package main
 
 import (
 	"flag"
-	"fmt"
 )
 
 func main() {
 	languagePtr := flag.String("language", "", "")
 	versionsToFetchPtr := flag.Int("versions", 0, "")
 	checkEOLptr := flag.Bool("check_eol", true, "")
+	writeToGHAptr := flag.Bool("write_to_gha", true, "")
 
 	flag.Parse()
 
@@ -21,5 +21,8 @@ func main() {
 	if errRes != nil {
 		panic("Error occurred while fetching LTS versions")
 	}
-	fmt.Println(string(res))
+
+	if *writeToGHAptr {
+		WriteJSONArrayToGitHubOutput("lts_versions", string(res))
+	}
 }
