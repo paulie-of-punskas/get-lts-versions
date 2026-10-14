@@ -13,9 +13,14 @@ inputs:
     description: Should additional function about end of life be printed to user
     required: false
     default: "false"
+outputs:
+  lts_versions:
+    description: Array holding returned LTS versions
+    value: ${{ steps.get-lts-versions.outputs.lts_versions }}
 
 runs:
   using: "composite"
   steps:
-    - run: "./get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }}"
+    - id: get-lts-versions
+      run: echo "lts_versions=$(get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }})" >> $GITHUB_OUTPUT
       shell: bash
