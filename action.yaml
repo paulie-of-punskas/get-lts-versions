@@ -17,5 +17,5 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: "./get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -verbose=${{ inputs.print_eol_information }}"
+    - run: "./get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }}"
       shell: bash
