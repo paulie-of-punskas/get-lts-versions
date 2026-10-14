@@ -5,6 +5,46 @@ import (
 	"fmt"
 )
 
+func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkEOL bool) ([]byte, error) {
+	var eolResponse EOLresponse
+	var maxAvailableVersions int
+	ltsVersions := []string{}
+
+	err := json.Unmarshal([]byte(jsonInput), &eolResponse)
+	if err != nil {
+		fmt.Errorf("Could not convert input file to EOLresponse")
+		return []byte{}, err
+	}
+
+	if numOfVersions > len(eolResponse.Result.Releases) {
+		maxAvailableVersions = len(eolResponse.Result.Releases)
+	} else {
+		maxAvailableVersions = numOfVersions
+	}
+
+	for j := 0; j < maxAvailableVersions; j++ {
+		releaseData := LanguageReleases{
+			eolResponse.Result.Releases[j].MajorMinorVersion,
+			eolResponse.Result.Releases[j].IsLts,
+			eolResponse.Result.Releases[j].IsEol,
+			eolResponse.Result.Releases[j].EolFrom,
+			eolResponse.Result.Releases[j].EoasFrom,
+			LanguageLatestRelease{
+				eolResponse.Result.Releases[j].Latest.MajorMinorPatchVersion,
+				eolResponse.Result.Releases[j].Latest.Date,
+				eolResponse.Result.Releases[j].Latest.Link,
+			},
+		}
+
+		if !releaseData.IsEol && releaseData.MajorMinorVersion != "" && releaseData.Latest.MajorMinorPatchVersion != "" {
+			ltsVersions = append(ltsVersions, string(releaseData.MajorMinorVersion))
+		}
+	}
+
+	// json.Marshal returns nil as well
+	return json.Marshal(ltsVersions)
+}
+
 func IsRequestReturnedContentOK(jsonInput string) bool {
 	// convert string input to a byte stream and then to JSON and Language structure
 	var eolResponse EOLresponse

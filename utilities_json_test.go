@@ -1,10 +1,38 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
 )
+
+func TestGetNltsVersionsAndCheckEOLdates(t *testing.T) {
+	t.Run("Expect false if empty string is provided", func(t *testing.T) {
+		_, err := GetNltsVersionsAndCheckEOLdates("", 3, false)
+		if err == nil {
+			t.Errorf("Empty input should have resulted in error")
+		}
+	})
+
+	t.Run("Expect a non empty array string returned for 3 versions", func(t *testing.T) {
+		fileContent, err := os.ReadFile(filepath.Join("./test_data/eol_return_golang.json"))
+		if err != nil {
+			panic("Could not find \"./test_data/eol_return_golang.json\"")
+		}
+
+		want := [2]string{"1.27", "1.26"}
+		got := [2]string{}
+
+		functionResult, _ := GetNltsVersionsAndCheckEOLdates(string(fileContent), 3, false)
+
+		json.Unmarshal(functionResult, &got)
+		if want != got {
+			t.Errorf("Wanted: %v, got: %v", want, got)
+		}
+	})
+
+}
 
 func TestIsRequestReturnedContentOK(t *testing.T) {
 	t.Run("Expect false if empty string is provided", func(t *testing.T) {

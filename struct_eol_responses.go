@@ -13,19 +13,18 @@ type EOLresponseResult struct {
 }
 
 type LanguageReleases struct {
-	MajorMinorVersion      string                `json:""`
-	MajorMinorPatchVersion string                `json:""`
-	IsLts                  bool                  `json:""`
-	IsEol                  bool                  `json:""`
-	EolFrom                string                `json:""`
-	EoasFrom               string                `json:""`
-	Latest                 LanguageLatestRelease `json:""`
+	MajorMinorVersion string                `json:"name"`
+	IsLts             bool                  `json:"isLts"`
+	IsEol             bool                  `json:"isEol"`
+	EolFrom           string                `json:"eolFrom"`
+	EoasFrom          string                `json:"eoasFrom"`
+	Latest            LanguageLatestRelease `json:"latest"`
 }
 
 type LanguageLatestRelease struct {
-	MajorMinorPatchVersion string // result.releases[n].latest.name
-	Date                   string
-	Link                   string
+	MajorMinorPatchVersion string `json:"name"`
+	Date                   string `json:"date"`
+	Link                   string `json:"link"`
 }
 
 type LanguageLTS struct {
