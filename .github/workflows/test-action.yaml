@@ -42,6 +42,9 @@ jobs:
           versions_to_fetch: "3"
           print_eol_information: "true"
 
+      - name: Print GHA output content
+        run: cat "$GITHUB_OUTPUT"
+
       - name: Print returned value for Golang
         shell: bash
         run: echo "${{ steps.go.outputs.lts_versions }}"
@@ -53,6 +56,9 @@ jobs:
           language: "python"
           versions_to_fetch: "5"
           print_eol_information: "false"
+
+      - name: Print GHA output content
+        run: cat "$GITHUB_OUTPUT"
 
       - name: Print returned value for Python
         shell: bash
