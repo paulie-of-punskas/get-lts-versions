@@ -6,6 +6,7 @@ on:
       - '*.go'
       - 'go.mod'
       - '.github/workflows/test-action.yaml'
+      - 'action.yaml'
   schedule:
     - cron: "0 8 * * 1"
 
