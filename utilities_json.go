@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkEOL bool) ([]byte, error) {
+func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkEOL bool) ([]string, error) {
 	var eolResponse EOLresponse
 	var maxAvailableVersions int
 	ltsVersions := []string{}
@@ -13,7 +13,7 @@ func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkE
 	err := json.Unmarshal([]byte(jsonInput), &eolResponse)
 	if err != nil {
 		fmt.Errorf("Could not convert input file to EOLresponse")
-		return []byte{}, err
+		return []string{}, err
 	}
 
 	if numOfVersions > len(eolResponse.Result.Releases) {
@@ -46,7 +46,7 @@ func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkE
 	}
 
 	// json.Marshal returns nil as well
-	return json.Marshal(ltsVersions)
+	return ltsVersions, nil
 }
 
 func IsRequestReturnedContentOK(jsonInput string) bool {
