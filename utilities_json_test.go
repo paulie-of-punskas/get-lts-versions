@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -22,16 +21,12 @@ func TestGetNltsVersionsAndCheckEOLdates(t *testing.T) {
 		}
 
 		want := [3]string{"1.27", "1.26"}
-		got := [3]string{}
+		got, _ := GetNltsVersionsAndCheckEOLdates(string(fileContent), 3, false)
 
-		functionResult, _ := GetNltsVersionsAndCheckEOLdates(string(fileContent), 3, false)
-
-		json.Unmarshal(functionResult, &got)
-		if want != got {
+		if want[0] != got[0] || want[1] != got[1] {
 			t.Errorf("Wanted: %v, got: %v", want, got)
 		}
 	})
-
 }
 
 func TestIsRequestReturnedContentOK(t *testing.T) {

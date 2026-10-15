@@ -23,6 +23,6 @@ func main() {
 	}
 
 	if *writeToGHAptr {
-		WriteJSONArrayToGitHubOutput("lts_versions", string(res))
+		WriteJSONArrayToGitHubOutput("lts_versions", res)
 	}
 }
