@@ -22,5 +22,5 @@ runs:
   using: "composite"
   steps:
     - id: get-lts-versions
-      run: ./get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }} -write_to_gha=true
+      run: $GITHUB_ACTION_PATH/get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }} -write_to_gha=true
       shell: bash
