@@ -3,9 +3,12 @@
 ![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg)
 
 # Info
-JS/TS script & GitHub Action used for fetching Long Term Support versions. 
+Golang CLI & GitHub Action used for fetching Long Term Support versions. 
 Code sends a GET request to [endoflife.date API](https://endoflife.date/docs/api/v1/) and returns an array with corresponding data.
 If larger number of LTS is requested, then function returns max supported number of versions.
+
+# Requirements
+Linux x64 based runner. By default, GitHub Actions provides [Ubuntu based runners](https://github.com/actions/runner-images/tree/main).
 
 ## Features
 - Powered by [endoflife.date](https://endoflife.date) — reliable LTS data of over 20 programming languages
