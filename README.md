@@ -1,4 +1,4 @@
-![CI - Node 24](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg)
+![CI](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg)
 
 ![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg)
 
@@ -11,7 +11,7 @@ If larger number of LTS is requested, then function returns max supported number
 - Powered by [endoflife.date](https://endoflife.date) — reliable LTS data of over 20 programming languages
 - Flexible language naming — use common aliases (`go` or `golang`, `java-temurin` or `temurin`, etc.)
 - Seamless GitHub Actions integration — simple inputs and JSON output for workflow automation
-- Minimal dependencies — lightweight TypeScript/JavaScript implementation. Uses only [@actions/core](https://www.npmjs.com/package/@actions/core) and [@actions/github](https://www.npmjs.com/package/@actions/github) as external dependencies.
+- No external dependencies — action uses a compiled Golang binary, that is based on native packages.
 - Caching - `get-lts-versions` caches results of endoflife.date and updates them weekly.
 
 ## Supported programming languages
