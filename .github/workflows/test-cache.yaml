@@ -12,9 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
       - name: Unify name
         shell: bash
-        run: $GITHUB_ACTION_PATH/get-lts-versions -language=golang -parse_name
+        run: $GITHUB_ACTION_PATH/get-lts-versions -language=golang -parse_language
 
       - name: Restore cache
         id: lts-cache
@@ -58,7 +61,7 @@ jobs:
             // that includes cache "from" main and other branches
             let ltsCache = 0;
             getCachesResult.actions_caches.forEach((cache) => {
-                if (cache.key === 'lts-versions-go' || cache.key === 'lts-versions-python') {
+                if (cache.key === 'lts-versions-go-3' || cache.key === 'lts-versions-python-3') {
                   ltsCache++
                 }
             });
