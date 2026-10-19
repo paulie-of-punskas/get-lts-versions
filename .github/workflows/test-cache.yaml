@@ -21,7 +21,7 @@ jobs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: ./get-lts-versions -language=golang -parse_language
+        run: ./get-lts-versions -language=golang -parse_language=true
 
       - name: Read the unified name
         shell: bash
