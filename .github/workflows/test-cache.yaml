@@ -23,20 +23,20 @@ jobs:
       - name: Read the unified name
         shell: bash
         run: |
-          echo "Parsed language name: ${{ steps.lts-unified-name.outputs.parsed_language_name }}"
+          echo Parsed language name: ${{ steps.lts-unified-name.outputs.parsed_language_name }}
 
-      # - name: Restore cache
-      #   id: lts-cache
-      #   uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
-      #   with:
-      #     path: ${{ env.CACHE_DIR }}
-      #     key: lts-versions-${{ env.parsed_language_name }}-3
+      - name: Restore cache
+        id: lts-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: "./.cache"
+          key: lts-versions-${{ steps.lts-unified-name.outputs.parsed_language_name }}-3
 
       # - name: Save cache
       #   uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
       #   with:
       #     path: ${{ env.CACHE_DIR }}
-      #     key: ${{ steps.lts-cache.outputs.cache-primary-key }}
+      #     key: lts-versions-${{ steps.lts-unified-name.outputs.parsed_language_name }}-3
 
 
   fetch-caches:
