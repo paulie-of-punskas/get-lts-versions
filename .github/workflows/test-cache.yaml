@@ -43,7 +43,7 @@ jobs:
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         id: is-cache-older-than-seven
         shell: bash
-        run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_language_name }}"
+        run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_language_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
 
 
       # - name: Save cache
