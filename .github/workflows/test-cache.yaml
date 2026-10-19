@@ -17,14 +17,20 @@ jobs:
 
       - name: Unify name
         shell: bash
+        id: lts-unified-name
         run: ./get-lts-versions -language=golang -parse_language
 
-      - name: Restore cache
-        id: lts-cache
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
-        with:
-          path: ${{ env.CACHE_DIR }}
-          key: lts-versions-${{ env.parsed_language_name }}-3
+      - name: Read the unified name
+        shell: bash
+        run: |
+          echo "Parsed language name: ${{ steps.lts-unified-name.outputs.parsed_language_name }}"
+
+      # - name: Restore cache
+      #   id: lts-cache
+      #   uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+      #   with:
+      #     path: ${{ env.CACHE_DIR }}
+      #     key: lts-versions-${{ env.parsed_language_name }}-3
 
       # - name: Save cache
       #   uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
