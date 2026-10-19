@@ -18,7 +18,8 @@ func main() {
 		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*languagePtr))
 	}
 
-	if *checkFileAge != "" {
+	if *checkFileAge != "" && *parseLanguagePtr {
+		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*languagePtr))
 		GetFileAgeInDays(*checkFileAge, true)
 	}
 
