@@ -5,6 +5,7 @@ on:
     paths:
       - '*.go'
       - 'go.mod'
+      - 'get-lts-versions'
       - '.github/workflows/test-action.yaml'
       - 'action.yaml'
   schedule:

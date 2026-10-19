@@ -7,22 +7,34 @@ import (
 func main() {
 	languagePtr := flag.String("language", "", "")
 	versionsToFetchPtr := flag.Int("versions", 0, "")
-	checkEOLptr := flag.Bool("check_eol", true, "")
-	writeToGHAptr := flag.Bool("write_to_gha", true, "")
+	checkEOLptr := flag.Bool("check_eol", false, "")
+	writeToGHAptr := flag.Bool("write_to_gha", false, "")
+	parseLanguagePtr := flag.Bool("parse_language", false, "")
+	checkFileAge := flag.String("check_file_age", "", "")
 
 	flag.Parse()
 
-	resSendRequest, err := SendRequest(*languagePtr)
-	if err != nil {
-		panic("Error occurred while sending request")
+	if *writeToGHAptr && *parseLanguagePtr {
+		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*languagePtr))
 	}
 
-	res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr)
-	if errRes != nil {
-		panic("Error occurred while fetching LTS versions")
+	if *checkFileAge != "" {
+		GetFileAgeInDays(*checkFileAge, true)
 	}
 
-	if *writeToGHAptr {
+	if *writeToGHAptr && !*parseLanguagePtr {
+
+		resSendRequest, err := SendRequest(*languagePtr)
+		if err != nil {
+			panic("Error occurred while sending request")
+		}
+
+		res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr)
+		if errRes != nil {
+			panic("Error occurred while fetching LTS versions")
+		}
+
 		WriteJSONArrayToGitHubOutput("lts_versions", res)
 	}
+
 }

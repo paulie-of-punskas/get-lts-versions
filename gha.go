@@ -6,13 +6,13 @@ import (
 	"os"
 )
 
-func WriteJSONArrayToGitHubOutput(name string, value any) error {
+func WriteJSONArrayToGitHubOutput(ghaVariableName string, ghaVariableContent any) error {
 	ghaOutputFile := os.Getenv("GITHUB_OUTPUT")
 	if ghaOutputFile == "" {
 		return fmt.Errorf("Function is not run within GitHub Actions environment.")
 	}
 
-	data, err := json.Marshal(value)
+	data, err := json.Marshal(ghaVariableContent)
 	if err != nil {
 		return fmt.Errorf("Could not parse output as JSON: %w", err)
 	}
@@ -23,7 +23,7 @@ func WriteJSONArrayToGitHubOutput(name string, value any) error {
 	}
 	defer ghaFile.Close()
 
-	if _, err := fmt.Fprintf(ghaFile, "%s=%s\n", name, data); err != nil {
+	if _, err := fmt.Fprintf(ghaFile, "%s=%s\n", ghaVariableName, data); err != nil {
 		return fmt.Errorf("Could not write GITHUB_OUTPUT: %w", err)
 	}
 
