@@ -3,6 +3,9 @@ name: Test - check if caches exist
 on:
   push:
     paths:
+      - '*.go'
+      - 'go.mod'
+      - 'get-lts-versions'
       - '.github/workflows/test-cache.yaml'
   workflow_dispatch:
 
