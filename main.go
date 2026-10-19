@@ -26,7 +26,7 @@ func main() {
 		WriteJSONArrayToGitHubOutput("cache_file_age", resAge)
 	}
 
-	if *writeToGHAptr && !*parseLanguagePtr {
+	if *writeToGHAptr && !*parseLanguagePtr && *checkFileAge == "" {
 
 		resSendRequest, err := SendRequest(*languagePtr)
 		if err != nil {
