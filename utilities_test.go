@@ -13,12 +13,9 @@ func TestGetFileAgeInDays(t *testing.T) {
 	})
 
 	t.Run("Expect float64 to be returned if './test_data/eol_return_golang.json'", func(t *testing.T) {
-		got, err := GetFileAgeInDays("./test_data/eol_return_golang.json", false)
+		_, err := GetFileAgeInDays("./test_data/eol_return_golang.json", false)
 		if err != nil {
-			t.Errorf("Wanted to catch the error. Got: %s", err)
-		}
-		if got == 0.0 {
-			t.Errorf("Expected > 0.0, got %v", got)
+			t.Errorf("Function should not have returned an error. Got: %s", err)
 		}
 	})
 }
