@@ -18,7 +18,7 @@ go tool cover -func=$COVERAGE_FILE
 echo ""
 
 # Build
-go build .
+source build.sh
 echo "> Tests and builds are OK!"
 
 # clean up
