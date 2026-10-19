@@ -37,7 +37,14 @@ jobs:
 
       - name: Check for cache age
         id: cache-age
-        run: ./get-lts-versions -check_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+        run: ./get-lts-versions -write_to_gha=true -check_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+
+      - name: Check if cache is older than 7 days
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        id: is-cache-older-than-seven
+        shell: bash
+        run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_language_name }}"
+
 
       # - name: Save cache
       #   uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9

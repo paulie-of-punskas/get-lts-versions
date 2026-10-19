@@ -18,8 +18,12 @@ func main() {
 		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*languagePtr))
 	}
 
-	if *checkFileAge != "" {
-		GetFileAgeInDays(*checkFileAge, true)
+	if *writeToGHAptr && *checkFileAge != "" {
+		resAge, errAge := GetFileAgeInDays(*checkFileAge, false)
+		if errAge != nil {
+			panic("Error occurred while while calculating file age")
+		}
+		WriteJSONArrayToGitHubOutput("cache_file_age", resAge)
 	}
 
 	if *writeToGHAptr && !*parseLanguagePtr {
