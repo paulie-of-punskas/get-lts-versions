@@ -21,9 +21,9 @@ jobs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: ./get-lts-versions -language=golang -parse_language=true
+        run: ./get-lts-versions -language=golang -parse_language=true -write_to_gha=true
 
-      - name: Read the unified name
+      - name: Print the unified name
         shell: bash
         run: |
           echo Parsed language name: ${{ steps.lts-unified-name.outputs.parsed_language_name }}
