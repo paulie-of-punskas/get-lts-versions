@@ -32,6 +32,10 @@ jobs:
           path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
           key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3
 
+      - name: Check for cache age
+        id: cache-age
+        run: ./get-lts-versions -check_file_age=${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+
       # - name: Save cache
       #   uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
       #   with:

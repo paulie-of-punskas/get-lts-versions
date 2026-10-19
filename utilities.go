@@ -14,6 +14,9 @@ func GetFileAgeInDays(fullFilePath string, verbose bool) (float64, error) {
 	}
 
 	ageInMs := time.Now().UnixMilli() - file.ModTime().UnixMilli()
-	return math.Floor(float64((ageInMs / (1000 * 60 * 60 * 24)))), nil
-
+	ageInDays := math.Floor(float64((ageInMs / (1000 * 60 * 60 * 24))))
+	if verbose {
+		fmt.Printf("%s age in days: %s\n", fullFilePath, fmt.Sprintf("%v", ageInDays))
+	}
+	return ageInDays, nil
 }

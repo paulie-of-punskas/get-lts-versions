@@ -10,11 +10,16 @@ func main() {
 	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", true, "")
 	parseLanguagePtr := flag.Bool("parse_language", true, "")
+	checkFileAge := flag.String("check_file_age", "", "")
 
 	flag.Parse()
 
 	if *writeToGHAptr && *parseLanguagePtr {
 		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*languagePtr))
+	}
+
+	if *checkFileAge != "" {
+		GetFileAgeInDays(*checkFileAge, true)
 	}
 
 	if *writeToGHAptr {
