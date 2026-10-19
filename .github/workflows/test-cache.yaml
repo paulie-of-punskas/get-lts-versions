@@ -17,7 +17,7 @@ jobs:
 
       - name: Unify name
         shell: bash
-        run: $GITHUB_ACTION_PATH/get-lts-versions -language=golang -parse_language
+        run: ./get-lts-versions -language=golang -parse_language
 
       - name: Restore cache
         id: lts-cache
