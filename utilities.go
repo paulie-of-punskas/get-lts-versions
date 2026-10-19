@@ -2,14 +2,18 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
+	"time"
 )
 
-func GetFileAgeInDays(fullFilePath string, verbose bool): int, error {
-	file, err := os.Stat(fullFilePath, os.O_APPEND|os.O_WRONLY, 0)
+func GetFileAgeInDays(fullFilePath string, verbose bool) (float64, error) {
+	file, err := os.Stat(fullFilePath)
 	if err != nil {
-		return fmt.Errorf("Could not find/open %s - %s", fullFilePath, err)
+		return 0.0, fmt.Errorf("Could not find/open %s - %s", fullFilePath, err)
 	}
-	defer file.Close()
-	
+
+	ageInMs := time.Now().UnixMilli() - file.ModTime().UnixMilli()
+	return math.Floor(float64((ageInMs / (1000 * 60 * 60 * 24)))), nil
+
 }

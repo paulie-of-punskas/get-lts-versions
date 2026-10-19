@@ -7,6 +7,29 @@ on:
   workflow_dispatch:
 
 jobs:
+  check-for-cache-with-gha:
+    name: Check for cache with GHA
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Unify name
+        shell: bash
+        run: $GITHUB_ACTION_PATH/get-lts-versions -language=golang -parse_name
+
+      - name: Restore cache
+        id: lts-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ env.CACHE_DIR }}
+          key: lts-versions-${{ env.parsed_language_name }}-3
+
+      # - name: Save cache
+      #   uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+      #   with:
+      #     path: ${{ env.CACHE_DIR }}
+      #     key: ${{ steps.lts-cache.outputs.cache-primary-key }}
+
+
   fetch-caches:
     name: Fetch caches
     runs-on: ubuntu-latest

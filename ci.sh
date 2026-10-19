@@ -22,5 +22,5 @@ go build .
 echo "> Tests and builds are OK!"
 
 # clean up
-rm ./$MODULE_NAME
+# rm ./$MODULE_NAME
 rm ./$COVERAGE_FILE
