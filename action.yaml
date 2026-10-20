@@ -21,10 +21,47 @@ outputs:
 runs:
   using: "composite"
   steps:
-    # - id: parse-name
-    #   run: $GITHUB_ACTION_PATH/get-lts-versions -language=${{ inputs.language }} -parse_name
-    #   shell: bash
+      - name: Unify name
+        shell: bash
+        id: lts-unified-name
+        run: $GITHUB_ACTION_PATH/get-lts-versions -language=${{ inputs.language }} -parse_language=true -write_to_gha=true
 
-    - id: get-lts-versions
-      run: $GITHUB_ACTION_PATH/get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }} -write_to_gha=true
-      shell: bash
+      - name: Print the unified name
+        shell: bash
+        run: |
+          echo Parsed language name: ${{ steps.lts-unified-name.outputs.parsed_language_name }}
+
+      - name: Restore cache
+        id: lts-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}
+
+      - name: Check for cache age
+        id: cache-age
+        shell: bash
+        run: $GITHUB_ACTION_PATH/get-lts-versions -write_to_gha=true -check_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json
+
+      - name: Check if cache is older than 7 days
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        id: is-cache-older-than-seven
+        shell: bash
+        run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_language_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
+
+      - name: Renew cache
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        id: get-lts-versions
+        shell: bash
+        run: $GITHUB_ACTION_PATH/get-lts-versions -language=${{ steps.lts-unified-name.outputs.parsed_language_name }} -write_data_to_file=true
+
+      - name: Save cache
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}
+
+    # - id: get-lts-versions
+    #   run: $GITHUB_ACTION_PATH/get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }} -write_to_gha=true
+    #   shell: bash
