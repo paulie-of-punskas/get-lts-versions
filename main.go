@@ -58,7 +58,7 @@ func main() {
 	}
 
 	// case for updating/creating cache, extracting EOL data and saving it to GHA
-	if *writeToFilePtr && *languagePtr != "" {
+	if *writeToFilePtr && *languagePtr != "" && *versionsToFetchPtr != 0 {
 		var rootDir string
 		if os.Getenv("GITHUB_WORKSPACE") != "" {
 			rootDir = os.Getenv("GITHUB_WORKSPACE")

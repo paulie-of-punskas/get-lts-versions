@@ -79,11 +79,13 @@ runs:
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -write_to_gha=true \
               -language=$LANGUAGE \
+              -versions=${{ inputs.versions_to_fetch }} \
               -write_data_to_file=true
           elif [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -le 7 ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -write_to_gha=true \
               -language=$LANGUAGE \
+              -versions=${{ inputs.versions_to_fetch }} \
               -parse_language=false
           fi
 
