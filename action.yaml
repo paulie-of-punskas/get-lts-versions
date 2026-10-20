@@ -67,7 +67,7 @@ runs:
         env:
           CACHE_HIT: ${{ steps.lts-cache.outputs.cache-hit }}
           CACHE_FILE_AGE: ${{ steps.cache-age.outputs.cache_file_age }}
-          LANGUAGE: ${{ steps.lts-unified-name.outputs.parsed_language_name }}
+          LANGUAGE: fromJSON(${{ steps.lts-unified-name.outputs.parsed_language_name }})
         run: |
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "false" ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
