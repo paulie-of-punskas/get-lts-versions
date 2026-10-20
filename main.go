@@ -11,7 +11,7 @@ import (
 func main() {
 	languagePtr := flag.String("language", "", "")
 	versionsToFetchPtr := flag.Int("versions", 3, "")
-	checkEOLptr := flag.Bool("check_eol", false, "")
+	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
 	// writeToFilePtr := flag.Bool("write_data_to_file", false, "")
 	parseLanguagePtr := flag.Bool("parse_language", false, "")
