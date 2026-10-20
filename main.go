@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
+	// "strings"
 )
 
 func main() {
@@ -81,8 +81,8 @@ func main() {
 		}
 
 		// prepare file, that will be cached later in action.yaml
-		resAsSingleString := strings.Join(res, "\n") + "\n"
-		os.WriteFile(cacheFileName, []byte(resAsSingleString), 0644)
+		// resAsSingleString := strings.Join(res, "\n") + "\n"
+		os.WriteFile(cacheFileName, []byte(resSendRequest), 0644)
 
 		// return array to GHA
 		WriteJSONArrayToGitHubOutput("lts_versions", res)
