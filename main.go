@@ -52,7 +52,7 @@ func main() {
 
 		cachedLTSversions, errResLTSversions := GetNltsVersionsAndCheckEOLdates(string(cacheFileContent), *versionsToFetchPtr, *checkEOLptr)
 		if errResLTSversions != nil {
-			panic(fmt.Sprintf("Error occurred while extracting LTS versions from cached file - %s", errResLTSversions))
+			panic(fmt.Sprintf("Error occurred while extracting LTS versions from cached file - %s. File content: %s", errResLTSversions, string(cacheFileContent)))
 		}
 		WriteJSONArrayToGitHubOutput("lts_versions", cachedLTSversions)
 	}

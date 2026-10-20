@@ -46,7 +46,8 @@ runs:
 
       - name: Print cache age
         shell: bash
-        run: echo Cache age ${{ steps.cache-age.outputs.cache_file_age }}
+        run: |
+          echo Cache age: ${{ steps.cache-age.outputs.cache_file_age }}
 
       - name: Check if cache is older than 7 days
         if: ${{ steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age > 7 }}
