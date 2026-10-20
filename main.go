@@ -24,6 +24,7 @@ func main() {
 	// case when only language needs to be parsed to GHA
 	if *languagePtr != "" && *writeToGHAptr && *parseLanguagePtr {
 		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*languagePtr))
+		return
 	}
 
 	// case for saving cache age to GHA
@@ -33,6 +34,7 @@ func main() {
 			panic("Error occurred while while calculating file age")
 		}
 		WriteJSONArrayToGitHubOutput("cache_file_age", resAge)
+		return
 	}
 
 	// case when cache exists and is less than 7 days old
@@ -58,6 +60,7 @@ func main() {
 			panic(fmt.Sprintf("Error occurred while extracting LTS versions from cached file - %s. File content: %s", errResLTSversions, string(cacheFileContent)))
 		}
 		WriteJSONArrayToGitHubOutput("lts_versions", cachedLTSversions)
+		return
 	}
 
 	// case for updating/creating cache, extracting EOL data and saving it to GHA
@@ -90,5 +93,6 @@ func main() {
 
 		// return array to GHA
 		WriteJSONArrayToGitHubOutput("lts_versions", res)
+		return
 	}
 }
