@@ -74,7 +74,8 @@ runs:
           CACHE_FILE_AGE: ${{ steps.cache-age.outputs.cache_file_age }}
           LANGUAGE: ${{ fromJson(steps.lts-unified-name.outputs.parsed_language_name) }}
         run: |
-          if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "false" ]]; then
+          # $CACHE_HIT == "" is used for case when no cache is found, xref: https://github.com/actions/cache#outputs
+          if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "" ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -write_to_gha=true \
               -language=$LANGUAGE \
