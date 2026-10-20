@@ -6,13 +6,13 @@ import (
 	"os"
 )
 
-func WriteJSONArrayToGitHubOutput(ghaVariableName string, ghaVariableContent any) error {
+func WriteJSONArrayToGitHubOutput(ghaVariableName string, ghaVariableValue any) error {
 	ghaOutputFile := os.Getenv("GITHUB_OUTPUT")
 	if ghaOutputFile == "" {
 		return fmt.Errorf("Function is not run within GitHub Actions environment.")
 	}
 
-	data, err := json.Marshal(ghaVariableContent)
+	data, err := json.Marshal(ghaVariableValue)
 	if err != nil {
 		return fmt.Errorf("Could not parse output as JSON: %w", err)
 	}

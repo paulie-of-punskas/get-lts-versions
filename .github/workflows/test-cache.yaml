@@ -45,12 +45,17 @@ jobs:
         shell: bash
         run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_language_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
 
+      - name: Renew cache
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        id: cache-renew
+        run: ./get-lts-versions -language=${{ steps.lts-unified-name.outputs.parsed_language_name }} -write_data_to_file=true
 
-      # - name: Save cache
-      #   uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
-      #   with:
-      #     path: ${{ env.CACHE_DIR }}
-      #     key: lts-versions-${{ steps.lts-unified-name.outputs.parsed_language_name }}-3
+      - name: Save cache
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3
 
 
   fetch-caches:
