@@ -39,10 +39,14 @@ runs:
           key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}
 
       - name: Check cache age and write it to GHA
-        if: ${{ steps.lts-cache.outputs.cache-hit != 'true' }}
+        if: ${{ steps.lts-cache.outputs.cache-hit == 'true' }}
         id: cache-age
         shell: bash
         run: $GITHUB_ACTION_PATH/get-lts-versions -write_to_gha=true -check_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json
+
+      - name: Print cache age
+        shell: bash
+        run: echo Cache age ${{ steps.cache-age.outputs.cache_file_age }}
 
       - name: Check if cache is older than 7 days
         if: ${{ steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age > 7 }}
@@ -60,10 +64,6 @@ runs:
       #   id: get-lts-versions
       #   shell: bash
       #   run: $GITHUB_ACTION_PATH/get-lts-versions -write_to_gha=true -language=${{ steps.lts-unified-name.outputs.parsed_language_name }} -parse_language=false
-
-      - name: Print cache age
-        shell: bash
-        run: echo Cache age ${{ steps.cache-age.outputs.cache_file_age }}
 
       - name: Update/create cache, extract EOL data and save it to GHA. Return cached EOL data.
         id: get-lts-versions
