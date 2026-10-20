@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	// "strings"
 )
 
@@ -17,9 +18,11 @@ func main() {
 	parseLanguagePtr := flag.Bool("parse_language", false, "")
 	checkFileAgePtr := flag.String("check_file_age", "", "")
 	cacheHitPtr := flag.String("cache_hit", "", "")
-	cacheAgePtr := flag.Int("cache_age", 0, "")
+	cacheAgePtr := flag.String("cache_age", "", "")
 
 	flag.Parse()
+
+	cacheAge, _ := strconv.Atoi(*cacheAgePtr)
 
 	// case when only language needs to be parsed to GHA
 	if *languagePtr != "" && *writeToGHAptr && *parseLanguagePtr {
@@ -39,7 +42,7 @@ func main() {
 
 	// case when cache exists and is less than 7 days old
 	// if *languagePtr != "" && !*parseLanguagePtr && *writeToGHAptr {
-	if *cacheHitPtr == "true" && *cacheAgePtr <= 7 {
+	if *cacheHitPtr == "true" && cacheAge <= 7 {
 		var rootDir string
 		if os.Getenv("GITHUB_WORKSPACE") != "" {
 			rootDir = os.Getenv("GITHUB_WORKSPACE")
@@ -65,7 +68,7 @@ func main() {
 
 	// case for updating/creating cache, extracting EOL data and saving it to GHA
 	// if *writeToFilePtr && *languagePtr != "" && *versionsToFetchPtr != 0 {
-	if *cacheAgePtr > 7 || *cacheHitPtr != "true" {
+	if *cacheHitPtr != "true" || cacheAge > 7 {
 		var rootDir string
 		if os.Getenv("GITHUB_WORKSPACE") != "" {
 			rootDir = os.Getenv("GITHUB_WORKSPACE")
