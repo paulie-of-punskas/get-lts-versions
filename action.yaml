@@ -66,7 +66,7 @@ runs:
         shell: bash
         env:
           CACHE_HIT: ${{ steps.lts-cache.outputs.cache-hit }}
-          CACHE_FILE_AGE: ${{ steps.cache-age.outputs.cache_file_age }}
+          CACHE_FILE_AGE: ${{ fromJson(steps.cache-age.outputs.cache_file_age) }}
           LANGUAGE: ${{ fromJson(steps.lts-unified-name.outputs.parsed_language_name) }}
         run: |
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "false" ]]; then
