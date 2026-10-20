@@ -13,40 +13,52 @@ func main() {
 	versionsToFetchPtr := flag.Int("versions", 3, "")
 	checkEOLptr := flag.Bool("check_eol", false, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
-	writeToFile := flag.Bool("write_data_to_file", false, "")
+	writeToFilePtr := flag.Bool("write_data_to_file", false, "")
 	parseLanguagePtr := flag.Bool("parse_language", false, "")
-	checkFileAge := flag.String("check_file_age", "", "")
+	checkFileAgePtr := flag.String("check_file_age", "", "")
 
 	flag.Parse()
 
-	if *writeToGHAptr && *parseLanguagePtr {
+	// case when only language needs to be parsed to GHA
+	if *languagePtr != "" && *writeToGHAptr && *parseLanguagePtr {
 		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*languagePtr))
 	}
 
-	if *writeToGHAptr && *checkFileAge != "" {
-		resAge, errAge := GetFileAgeInDays(*checkFileAge, false)
+	// case for saving cache age to GHA
+	if *writeToGHAptr && *checkFileAgePtr != "" {
+		resAge, errAge := GetFileAgeInDays(*checkFileAgePtr, false)
 		if errAge != nil {
 			panic("Error occurred while while calculating file age")
 		}
 		WriteJSONArrayToGitHubOutput("cache_file_age", resAge)
 	}
 
-	if *writeToGHAptr && !*parseLanguagePtr && *checkFileAge == "" {
+	// case when cache exists and is less than 7 days old
+	if *languagePtr != "" && !*parseLanguagePtr && *writeToGHAptr {
+		var rootDir string
+		if os.Getenv("GITHUB_WORKSPACE") != "" {
+			rootDir = os.Getenv("GITHUB_WORKSPACE")
+		} else {
+			rootDir = "."
+		}
+		cacheDir := filepath.Join(rootDir, ".cache")
+		parsedLanguage := UnifyName(*languagePtr)
 
-		resSendRequest, err := SendRequest(*languagePtr)
+		cacheFileName := filepath.Join(cacheDir, parsedLanguage+"-"+fmt.Sprintf("%v", *versionsToFetchPtr)+".json")
+		cacheFileContent, err := os.ReadFile(cacheFileName)
 		if err != nil {
-			panic("Error occurred while sending request")
+			panic(fmt.Sprintf("Error occurred while reading cache file - %s", cacheFileName))
 		}
 
-		res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr)
-		if errRes != nil {
-			panic("Error occurred while fetching LTS versions")
+		cachedLTSversions, errResLTSversions := GetNltsVersionsAndCheckEOLdates(string(cacheFileContent), *versionsToFetchPtr, *checkEOLptr)
+		if errResLTSversions != nil {
+			panic("Error occurred while extracting LTS versions from cached file")
 		}
-
-		WriteJSONArrayToGitHubOutput("lts_versions", res)
+		WriteJSONArrayToGitHubOutput("lts_versions", cachedLTSversions)
 	}
 
-	if *writeToFile && *languagePtr != "" {
+	// case for updating/creating cache, extracting EOL data and saving it to GHA
+	if *writeToFilePtr && *languagePtr != "" {
 		var rootDir string
 		if os.Getenv("GITHUB_WORKSPACE") != "" {
 			rootDir = os.Getenv("GITHUB_WORKSPACE")
@@ -68,7 +80,11 @@ func main() {
 			panic("Error occurred while fetching LTS versions")
 		}
 
+		// prepare file, that will be cached later in action.yaml
 		resAsSingleString := strings.Join(res, "\n") + "\n"
 		os.WriteFile(cacheFileName, []byte(resAsSingleString), 0644)
+
+		// return array to GHA
+		WriteJSONArrayToGitHubOutput("lts_versions", res)
 	}
 }
