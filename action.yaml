@@ -78,7 +78,7 @@ runs:
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "" ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -cache_age="$CACHE_FILE_AGE" \
-              -cache_exists="$CACHE_HIT" \
+              -cache_hit="$CACHE_HIT" \
               -language=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -check_eol
@@ -86,7 +86,7 @@ runs:
               # -write_data_to_file=true
           elif [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -le 7 ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
-              -cache_exists="$CACHE_HIT" \
+              -cache_hit="$CACHE_HIT" \
               -cache_age="$CACHE_FILE_AGE" \
               -language=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \

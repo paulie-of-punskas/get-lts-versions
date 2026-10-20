@@ -16,7 +16,7 @@ func main() {
 	// writeToFilePtr := flag.Bool("write_data_to_file", false, "")
 	parseLanguagePtr := flag.Bool("parse_language", false, "")
 	checkFileAgePtr := flag.String("check_file_age", "", "")
-	cacheExistsPtr := flag.Bool("cache_exists", false, "")
+	cacheHitPtr := flag.String("cache_hit", "", "")
 	cacheAgePtr := flag.Int("cache_age", 0, "")
 
 	flag.Parse()
@@ -39,7 +39,7 @@ func main() {
 
 	// case when cache exists and is less than 7 days old
 	// if *languagePtr != "" && !*parseLanguagePtr && *writeToGHAptr {
-	if *cacheExistsPtr && *cacheAgePtr <= 7 {
+	if *cacheHitPtr == "true" && *cacheAgePtr <= 7 {
 		var rootDir string
 		if os.Getenv("GITHUB_WORKSPACE") != "" {
 			rootDir = os.Getenv("GITHUB_WORKSPACE")
@@ -65,7 +65,7 @@ func main() {
 
 	// case for updating/creating cache, extracting EOL data and saving it to GHA
 	// if *writeToFilePtr && *languagePtr != "" && *versionsToFetchPtr != 0 {
-	if *cacheAgePtr > 7 || *cacheExistsPtr != true {
+	if *cacheAgePtr > 7 || *cacheHitPtr != "true" {
 		var rootDir string
 		if os.Getenv("GITHUB_WORKSPACE") != "" {
 			rootDir = os.Getenv("GITHUB_WORKSPACE")
