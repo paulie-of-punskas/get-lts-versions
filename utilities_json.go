@@ -12,8 +12,7 @@ func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkE
 
 	err := json.Unmarshal([]byte(jsonInput), &eolResponse)
 	if err != nil {
-		fmt.Errorf("Could not convert input file to EOLresponse")
-		return []string{}, err
+		return []string{}, fmt.Errorf("Could not convert input file to EOLresponse")
 	}
 
 	if numOfVersions > len(eolResponse.Result.Releases) {
