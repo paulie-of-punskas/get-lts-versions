@@ -17,11 +17,6 @@ func SanitizeString(strintToSanitize string) string {
 
 func ReadLanguageNames() LanguageNames {
 	var languages LanguageNames
-	// fileContent, err := os.ReadFile(filepath.Join("./assets/language_names.json"))
-
-	// if err != nil {
-	// 	panic("Could not find \"./assets/language_names.json\"")
-	// }
 
 	err := json.Unmarshal(languageNamesJSON, &languages)
 	if err != nil {
