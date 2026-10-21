@@ -1,12 +1,15 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
-	"os"
-	"path/filepath"
+	"fmt"
 	"slices"
 	"strings"
 )
+
+//go:embed assets/language_names.json
+var languageNamesJSON []byte
 
 func SanitizeString(strintToSanitize string) string {
 	return strings.ToLower(strings.TrimSpace(strintToSanitize))
@@ -14,13 +17,16 @@ func SanitizeString(strintToSanitize string) string {
 
 func ReadLanguageNames() LanguageNames {
 	var languages LanguageNames
-	fileContent, err := os.ReadFile(filepath.Join("./assets/language_names.json"))
+	// fileContent, err := os.ReadFile(filepath.Join("./assets/language_names.json"))
 
+	// if err != nil {
+	// 	panic("Could not find \"./assets/language_names.json\"")
+	// }
+
+	err := json.Unmarshal(languageNamesJSON, &languages)
 	if err != nil {
-		panic("Could not find \"./assets/language_names.json\"")
+		panic(fmt.Sprintf("Could not parse embedded language_names.json %s", err))
 	}
-
-	json.Unmarshal(fileContent, &languages)
 
 	return languages
 }
