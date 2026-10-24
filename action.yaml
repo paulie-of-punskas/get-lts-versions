@@ -42,7 +42,7 @@ runs:
         if: ${{ steps.lts-cache.outputs.cache-hit == 'true' }}
         id: cache-age
         shell: bash
-        run: $GITHUB_ACTION_PATH/get-lts-versions -write_to_gha=true -check_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json
+        run: $GITHUB_ACTION_PATH/get-lts-versions -write_to_gha=true -get_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json
 
       - name: Print cache age
         shell: bash
@@ -77,26 +77,20 @@ runs:
           # $CACHE_HIT == "" is used for case when no cache is found, xref: https://github.com/actions/cache#outputs
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "" ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
-              -cache_age="$CACHE_FILE_AGE" \
-              -cache_hit="$CACHE_HIT" \
+              -cache_renew=true \
               -language=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
-              -check_eol
-              # -write_to_gha=true \
-              # -write_data_to_file=true
+              -check_eol=true
           elif [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -le 7 ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
-              -cache_hit="$CACHE_HIT" \
-              -cache_age="$CACHE_FILE_AGE" \
+              -get_cache=true \
               -language=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
-              -check_eol
-              # -write_to_gha=true \
-              # -parse_language=false
+              -check_eol=true
           fi
 
       - name: Save cache
-        if: ${{ (steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age > 7) || steps.lts-cache.outputs.cache-hit == 'false' }}
+        if: ${{ (steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age > 7) || steps.lts-cache.outputs.cache-hit == 'false' || steps.lts-cache.outputs.cache-hit == '' }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json

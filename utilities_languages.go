@@ -36,11 +36,7 @@ func UnifyName(language string) string {
 		return languageAliases[normalizedLanguage]
 	}
 
-	builder := strings.Builder{}
-	builder.WriteString("Could not find alias for '")
-	builder.WriteString(language)
-	builder.WriteString("'")
-	panic(builder.String())
+	panic(fmt.Sprintf("Could not find alias for '%s'", language))
 }
 
 // Get full language name from language_names.json > languages[]

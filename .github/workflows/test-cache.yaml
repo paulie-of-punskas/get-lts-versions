@@ -33,7 +33,7 @@ jobs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: ./get-lts-versions -language=golang -parse_language=true -write_to_gha=true
+        run: ./get-lts-versions -parse_language=golang -write_to_gha=true
 
       - name: Print the unified name
         shell: bash
@@ -49,7 +49,7 @@ jobs:
 
       - name: Check for cache age
         id: cache-age
-        run: ./get-lts-versions -write_to_gha=true -check_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+        run: ./get-lts-versions -write_to_gha=true -get_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
 
       - name: Check if cache is older than 7 days
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
