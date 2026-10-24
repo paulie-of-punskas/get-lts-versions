@@ -32,7 +32,7 @@ runs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: $GITHUB_ACTION_PATH/get-lts-versions -parse_language=true -write_to_gha=true
+        run: $GITHUB_ACTION_PATH/get-lts-versions -parse_language=${{ inputs.language }} -write_to_gha=true
 
       - name: Print the unified name
         shell: bash
