@@ -21,6 +21,14 @@ outputs:
 runs:
   using: "composite"
   steps:
+      - name: Check for runner' OS
+        shell: bash
+        run: |
+          if [[ ! -f /etc/os-release ]]; then
+            printf "Runner is not Linux based. The action will now stop."
+            exit 1
+          fi
+
       - name: Unify name
         shell: bash
         id: lts-unified-name
