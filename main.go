@@ -8,6 +8,8 @@ import (
 	// "strings"
 )
 
+var version = "1.1.0"
+
 func main() {
 	languagePtr := flag.String("language", "", "")
 	versionsToFetchPtr := flag.Int("versions", 3, "")
@@ -20,8 +22,13 @@ func main() {
 	// cacheAgePtr := flag.String("cache_age", "", "")
 	cacheRenewPtr := flag.Bool("cache_renew", false, "")
 	getCachePtr := flag.Bool("get_cache", false, "")
+	printVersion := flag.Bool("print_version", false, "")
 
 	flag.Parse()
+
+	if *printVersion {
+		fmt.Println(version)
+	}
 
 	// cacheAge, _ := strconv.Atoi(*cacheAgePtr)
 
