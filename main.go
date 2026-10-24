@@ -11,7 +11,7 @@ import (
 var version = "1.1.0"
 
 func main() {
-	languagePtr := flag.String("language", "", "")
+	// languagePtr := flag.String("language", "", "")
 	versionsToFetchPtr := flag.Int("versions", 3, "")
 	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
@@ -33,7 +33,7 @@ func main() {
 	// cacheAge, _ := strconv.Atoi(*cacheAgePtr)
 
 	// case when only language needs to be parsed to GHA
-	if *writeToGHAptr && *parseLanguagePtr != "" && *languagePtr != "" {
+	if *writeToGHAptr && *parseLanguagePtr != "" {
 		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*parseLanguagePtr))
 		return
 	}
@@ -50,9 +50,9 @@ func main() {
 
 	// renew cache function - even if one exists and is not older than 7 days
 	if *cacheRenewPtr {
-		cacheFileName := GetCacheFileFullPath(*languagePtr, *versionsToFetchPtr)
+		cacheFileName := GetCacheFileFullPath(UnifyName(*parseLanguagePtr), *versionsToFetchPtr)
 
-		resSendRequest, err := SendRequest(*languagePtr)
+		resSendRequest, err := SendRequest(UnifyName(*parseLanguagePtr))
 		if err != nil {
 			panic("Error occurred while sending request")
 		}
@@ -72,7 +72,7 @@ func main() {
 	}
 
 	if *getCachePtr {
-		cacheFileName := GetCacheFileFullPath(*languagePtr, *versionsToFetchPtr)
+		cacheFileName := GetCacheFileFullPath(UnifyName(*parseLanguagePtr), *versionsToFetchPtr)
 
 		cacheFileContent, err := os.ReadFile(cacheFileName)
 		if err != nil {

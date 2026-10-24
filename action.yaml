@@ -32,7 +32,7 @@ runs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: $GITHUB_ACTION_PATH/get-lts-versions -language=${{ inputs.language }} -parse_language=true -write_to_gha=true
+        run: $GITHUB_ACTION_PATH/get-lts-versions -parse_language=true -write_to_gha=true
 
       - name: Print the unified name
         shell: bash
@@ -86,13 +86,13 @@ runs:
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "" ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -cache_renew=true \
-              -language=$LANGUAGE \
+              -parse_language=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -check_eol=true
           elif [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -le 7 ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -get_cache=true \
-              -language=$LANGUAGE \
+              -parse_language=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -check_eol=true
           fi

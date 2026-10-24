@@ -61,7 +61,7 @@ jobs:
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         id: cache-renew
         # run: ./get-lts-versions -language=${{ steps.lts-unified-name.outputs.parsed_language_name }} -write_data_to_file=true
-        run: ./get-lts-versions -language=${{ steps.lts-unified-name.outputs.parsed_language_name }}
+        run: ./get-lts-versions -parse_language=${{ steps.lts-unified-name.outputs.parsed_language_name }}
 
       - name: Save cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
