@@ -4,7 +4,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 )
+
+func GetCacheFileFullPath(languageName string, versionsToFetch int) string {
+	var rootDir string
+	if os.Getenv("GITHUB_WORKSPACE") != "" {
+		rootDir = os.Getenv("GITHUB_WORKSPACE")
+	} else {
+		rootDir = "."
+	}
+	cacheDir := filepath.Join(rootDir, ".cache")
+	parsedLanguage := UnifyName(languageName)
+
+	return filepath.Join(cacheDir, parsedLanguage+"-"+fmt.Sprintf("%v", versionsToFetch)+".json")
+}
 
 func WriteJSONArrayToGitHubOutput(ghaVariableName string, ghaVariableValue any) error {
 	ghaOutputFile := os.Getenv("GITHUB_OUTPUT")

@@ -36,6 +36,7 @@ func (lr LanguageReleases) checkEOL(languageName, majorMinorVersion, inputEOLdat
 	eolDate, err := time.Parse("2006-01-02", inputEOLdate)
 	if err != nil {
 		fmt.Printf("Could not convert %s to Date", inputEOLdate)
+		return ""
 	}
 
 	diffDays := math.Ceil(float64(eolDate.UnixMilli()-time.Now().UnixMilli()) / (1000 * 60 * 60 * 24))
