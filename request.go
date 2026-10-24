@@ -18,7 +18,7 @@ func SendRequest(language string) (string, error) {
 	req, clientErr := http.NewRequest(http.MethodGet, eolURL.String(), nil)
 
 	if clientErr != nil {
-		return "", fmt.Errorf("Could create request for %s - %s", eolURL.String(), clientErr)
+		return "", fmt.Errorf("Could not create request for %s - %s", eolURL.String(), clientErr)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -27,7 +27,7 @@ func SendRequest(language string) (string, error) {
 	res, requestErr := requestClient.Do(req)
 
 	if requestErr != nil {
-		return "", fmt.Errorf("Error sending request for %s - %s", eolURL.String(), requestErr)
+		return "", fmt.Errorf("Error sending request to %s - %s", eolURL.String(), requestErr)
 	}
 
 	if res.Body != nil {

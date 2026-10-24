@@ -20,11 +20,30 @@ func TestGetCacheFileFullPath(t *testing.T) {
 }
 
 func TestWriteJSONArrayToGitHubOutput(t *testing.T) {
-	t.Run("Should return string that does not container 'runner', if run locally", func(t *testing.T) {
+	t.Run("Should return string that does not contain 'runner', if run locally", func(t *testing.T) {
 		// want := "Function is not run within GitHub Actions environment."
-		err := WriteJSONArrayToGitHubOutput("xx", "xx")
-		if os.Getenv("GITHUB_WORKSPACE") == "" && err == nil {
-			t.Errorf("Unexpected return. Got: %s", err)
+		got := WriteJSONArrayToGitHubOutput("xx", "xx")
+		want := "Function is not run within GitHub Actions environment"
+		if got.Error() != want {
+			t.Errorf("Unexpected return - got: %s", got)
+		}
+	})
+
+	t.Run("Should return error if 'GITHUB_OUTPUT' env variable exists, but ghaVariableValue is not a JSON file", func(t *testing.T) {
+		t.Setenv("GITHUB_OUTPUT", "/labas/")
+		got := WriteJSONArrayToGitHubOutput("xx", complex(1, 2))
+		want := "Could convert ghaVariableValue to JSON"
+		if got.Error() != want {
+			t.Errorf("Unexpected return - got: %s", got)
+		}
+	})
+
+	t.Run("Should return error if 'GITHUB_OUTPUT' env variable exists, but ghaVariableValue is not a JSON file", func(t *testing.T) {
+		t.Setenv("GITHUB_OUTPUT", "/labas/")
+		got := WriteJSONArrayToGitHubOutput("xx", "/labas/")
+		want := "Could not open directory of GITHUB_OUTPUT - /labas/"
+		if got.Error() != want {
+			t.Errorf("Unexpected return - got: %s", got)
 		}
 	})
 }

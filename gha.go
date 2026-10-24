@@ -23,17 +23,17 @@ func GetCacheFileFullPath(languageName string, versionsToFetch int) string {
 func WriteJSONArrayToGitHubOutput(ghaVariableName string, ghaVariableValue any) error {
 	ghaOutputFile := os.Getenv("GITHUB_OUTPUT")
 	if ghaOutputFile == "" {
-		return fmt.Errorf("Function is not run within GitHub Actions environment.")
+		return fmt.Errorf("Function is not run within GitHub Actions environment")
 	}
 
 	data, err := json.Marshal(ghaVariableValue)
 	if err != nil {
-		return fmt.Errorf("Could not parse output as JSON: %w", err)
+		return fmt.Errorf("Could convert ghaVariableValue to JSON")
 	}
 
 	ghaFile, err := os.OpenFile(ghaOutputFile, os.O_APPEND|os.O_WRONLY, 0)
 	if err != nil {
-		return fmt.Errorf("Could not open GITHUB_OUTPUT: %w", err)
+		return fmt.Errorf("Could not open directory of GITHUB_OUTPUT - %s", os.Getenv("GITHUB_OUTPUT"))
 	}
 	defer ghaFile.Close()
 
