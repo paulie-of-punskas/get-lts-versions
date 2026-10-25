@@ -28,7 +28,6 @@ func TestStructLanguage(t *testing.T) {
 	}
 
 	t.Run("Check if TestData languages contains LanguageFullName property", func(t *testing.T) {
-		//
 		got := language.Languages[0].LanguageFullName
 		want := "COBOL"
 		if got != want {
