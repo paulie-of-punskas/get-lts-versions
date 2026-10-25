@@ -110,4 +110,4 @@ jobs:
             git add ./get-lts-versions
             git commit -m "Compile and add binary"
             # git push HEAD:$(git branch --show-current)
-            git push ${{ github.event.pull_request.head.ref }}
+            git push origin ${{ github.event.pull_request.head.ref }}
