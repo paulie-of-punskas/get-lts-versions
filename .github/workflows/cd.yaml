@@ -106,6 +106,7 @@ jobs:
         run: |
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
             git add ./get-lts-versions
             git commit -m "Compile and add binary"
             git push HEAD:$(git branch --show-current)
