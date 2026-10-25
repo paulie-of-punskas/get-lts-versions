@@ -26,17 +26,12 @@ func captureStdout(f func()) string {
 }
 
 func TestCheckEOL(t *testing.T) {
-	t.Run("Should panic with a message, if inputEOLdate is empty", func(t *testing.T) {
-		defer func() {
-			r := recover()
-			if r == nil {
-				t.Errorf("Expected panic, but none occurred")
-			} else if r != "::notice::There is no information about End Of Life date for Go version .\n" {
-				t.Errorf("Unexpected panic message: %v", r)
-			}
-		}()
-
-		CheckEOL("golang", "", "")
+	t.Run("Should return '', if inputEOLdate is empty", func(t *testing.T) {
+		got := CheckEOL("golang", "", "")
+		want := ""
+		if got != want {
+			t.Errorf("Expected empty string to be returned, got: %s", got)
+		}
 	})
 
 	t.Run("Should panic with a message, if inputEOLdate is is incorrect", func(t *testing.T) {

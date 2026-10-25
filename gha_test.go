@@ -9,7 +9,7 @@ import (
 func TestGetCacheFileFullPath(t *testing.T) {
 	t.Run("Should return string that does not container 'runner', if run locally", func(t *testing.T) {
 		got := GetCacheFileFullPath("golang", 5)
-		if os.Getenv("GITHUB_WORKSPACE") != "" && strings.Contains(got, "runner") {
+		if os.Getenv("GITHUB_WORKSPACE") == "" && strings.Contains(got, "runner") {
 			t.Errorf("Test run locally should not have 'runner' string")
 		}
 
