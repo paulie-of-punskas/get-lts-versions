@@ -93,7 +93,7 @@ jobs:
 
             const isVersionUpdated = isSemVerUpdated(${{ steps.build-version.outputs.app_version }}, versionOnGitHub);
             if (!isVersionUpdated) {
-                core.setFailed(`Package version (${packageJson.version}) needs to be higher than latest release (${versionOnGitHub.replace("v", "")}) on GitHub`);
+                core.setFailed(`Package version (${{ steps.build-version.outputs.app_version }}) needs to be higher than latest release (${versionOnGitHub.replace("v", "")}) on GitHub`);
             }
 
       # - name: Commit compiled binary to the branch
