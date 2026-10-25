@@ -1,4 +1,7 @@
-![CI](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg) ![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg) ![Test - cache](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache.yaml/badge.svg)
+[![CI](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml)
+[![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml)
+[![Test - integration and caching](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache.yaml)
+[![CodeQL](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/github-code-scanning/codeql)
 
 # Info
 Golang CLI & GitHub Action used for fetching Long Term Support versions. 
