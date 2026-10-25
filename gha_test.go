@@ -21,10 +21,9 @@ func TestGetCacheFileFullPath(t *testing.T) {
 
 func TestWriteJSONArrayToGitHubOutput(t *testing.T) {
 	t.Run("Should return string that does not contain 'runner', if run locally", func(t *testing.T) {
-		// want := "Function is not run within GitHub Actions environment."
 		got := WriteJSONArrayToGitHubOutput("xx", "xx")
 		want := "Function is not run within GitHub Actions environment"
-		if got.Error() != want {
+		if os.Getenv("GITHUB_WORKSPACE") == "" && got.Error() != want {
 			t.Errorf("Unexpected return - got: %s", got)
 		}
 	})
