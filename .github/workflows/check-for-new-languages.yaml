@@ -27,5 +27,5 @@ jobs:
             if (result) {
               console.log("No updates to language names are needed")
             } else {
-              throw new Error("New languages were added. Please update /src/assets/language_names.json and aliases.")
+              throw new Error("New languages were added. Please update /assets/language_names.json and aliases.")
             }
