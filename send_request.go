@@ -10,15 +10,16 @@ import (
 // Sends request to the EOL website.
 // If 200 - returns a Body, if 404 - returns error with language not found information
 // else returns an error depending on the task
-func SendRequest(language string) (string, error) {
+func SendRequest(url, language string) (string, error) {
 	eolURL := strings.Builder{}
-	eolURL.WriteString("https://endoflife.date/api/v1/products/")
+	eolURL.WriteString(url)
+	eolURL.WriteString("/")
 	eolURL.WriteString(SanitizeString(language))
 
 	req, clientErr := http.NewRequest(http.MethodGet, eolURL.String(), nil)
 
 	if clientErr != nil {
-		return "", fmt.Errorf("Could not create request for %s - %s", eolURL.String(), clientErr)
+		return "", fmt.Errorf("Could not create HTTP request for %s - %s", eolURL.String(), clientErr)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -27,7 +28,7 @@ func SendRequest(language string) (string, error) {
 	res, requestErr := requestClient.Do(req)
 
 	if requestErr != nil {
-		return "", fmt.Errorf("Error sending request to %s - %s", eolURL.String(), requestErr)
+		return "", fmt.Errorf("Error sending HTTP request to %s - %s", eolURL.String(), requestErr)
 	}
 
 	if res.Body != nil {
@@ -35,7 +36,7 @@ func SendRequest(language string) (string, error) {
 	}
 
 	if res.StatusCode != 200 && res.StatusCode != 404 {
-		return "", fmt.Errorf("Request for %s returned %s", eolURL.String(), res.Status)
+		return "", fmt.Errorf("HTTP request for %s returned %s", eolURL.String(), res.Status)
 	} else if res.StatusCode == 404 {
 		return "", fmt.Errorf("%s was not found on %s", language, eolURL.String())
 	}

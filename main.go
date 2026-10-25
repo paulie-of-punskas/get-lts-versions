@@ -44,7 +44,7 @@ func main() {
 	if *cacheRenewPtr {
 		cacheFileName := GetCacheFileFullPath(UnifyName(*parseLanguagePtr), *versionsToFetchPtr)
 
-		resSendRequest, err := SendRequest(UnifyName(*parseLanguagePtr))
+		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*parseLanguagePtr))
 		if err != nil {
 			panic("Error occurred while sending request")
 		}
