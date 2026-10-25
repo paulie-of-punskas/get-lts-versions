@@ -1,10 +1,9 @@
-![CI](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg)
-
-![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg)
+![CI](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg) ![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg) ![Test - cache](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache.yaml/badge.svg)
 
 # Info
 Golang CLI & GitHub Action used for fetching Long Term Support versions. 
-Code sends a GET request to [endoflife.date API](https://endoflife.date/docs/api/v1/) and returns an array with corresponding data.
+Code sends a GET request to [endoflife.date API](https://endoflife.date/docs/api/v1/) and returns
+an array with a long term support versions - see [Outputs](#outputs).
 If larger number of LTS is requested, then function returns max supported number of versions.
 
 # Requirements
@@ -15,7 +14,7 @@ Linux x64 based runner. By default, GitHub Actions provides [Ubuntu based runner
 - Flexible language naming — use common aliases (`go` or `golang`, `java-temurin` or `temurin`, etc.)
 - Seamless GitHub Actions integration — simple inputs and JSON output for workflow automation
 - No external dependencies — action uses a compiled Golang binary, that is based on native packages.
-- Caching - `get-lts-versions` caches results of endoflife.date and updates them weekly.
+- Caching - `get-lts-versions` caches results of endoflife.date and refreshes it weekly.
 
 ## Supported programming languages
 | Language Name | Input Name | EndOfLife Name |
@@ -61,7 +60,7 @@ Linux x64 based runner. By default, GitHub Actions provides [Ubuntu based runner
 max number of supported versions will be returned.
 
 ### Outputs
-`lts_versions` - JSON array of LTS version strings. Long Term Support version strings are returned in "MAJOR.MINOR.PATCH+build" semantic versioning. If "build" is not available, then ordinary SemVer is returned. Use `fromJson()` to correctly parse strings in GHA workflow expressions: `["26.0.1+8","25.0.3+9"]`. GitHub Actions "setup-<language>" actions will automatically recognize the input.
+`lts_versions` - JSON array of LTS version strings - e.g. `["25", "24", "23"]`. Long Term Support version strings are returned in "MAJOR.MINOR.PATCH" semantic versioning. Use `fromJson()` to correctly parse strings in GHA workflow expressions: `["26","25"]`. GitHub Actions "setup-<language>" actions will automatically recognize the input.
 
 ### Examples
 ```YAML
@@ -82,7 +81,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Get LTS for Golang
-        uses: paulie-of-punskas/get-lts-versions@42c4bebdaf53b932d3dd67e428437f78d8b4a7a0 # v1.0.5
+        uses: paulie-of-punskas/get-lts-versions@1a0bf246bd3c838645ac2cacf1da12177563f616 # v1.0.5
         id: getLTSversion
         with:
           language: 'golang'
