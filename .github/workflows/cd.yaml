@@ -99,11 +99,11 @@ jobs:
                 core.setFailed(`Package version (${appVersion}) needs to be higher than latest release (${versionOnGitHub.replace("v", "")}) on GitHub`);
             }
 
-      # - name: Commit compiled binary to the branch
-      #   shell: bash
-      #   run: |
-      #       git config user.name "github-actions[bot]"
-      #       git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #       git add ./get-lts-versions
-      #       git commit -m "Compile and add binary"
-      #       git push
+      - name: Commit compiled binary to the branch
+        shell: bash
+        run: |
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add ./get-lts-versions
+            git commit -m "Compile and add binary"
+            git push
