@@ -7,16 +7,14 @@ import (
 	"time"
 )
 
-func CheckEOL(languageName, majorMinorVersion, inputEOLdate string) string {
+func CheckEOL(languageName, majorMinorVersion, inputEOLdate string) {
 	if inputEOLdate == "" {
-		fmt.Printf("::notice::There is no information about End Of Life date for %s %s.\n", GetFullLanguageName(languageName), majorMinorVersion)
-		return ""
+		panic(fmt.Sprintf("::notice::There is no information about End Of Life date for %s version %s.\n", GetFullLanguageName(languageName), majorMinorVersion))
 	}
 
 	eolDate, err := time.Parse("2006-01-02", inputEOLdate)
 	if err != nil {
-		fmt.Printf("Could not convert %s to Date", inputEOLdate)
-		return ""
+		panic(fmt.Sprintf("Could not convert %s to Date", inputEOLdate))
 	}
 
 	diffDays := math.Ceil(float64(eolDate.UnixMilli()-time.Now().UnixMilli()) / (1000 * 60 * 60 * 24))
@@ -25,7 +23,6 @@ func CheckEOL(languageName, majorMinorVersion, inputEOLdate string) string {
 	} else if diffDays <= 180 {
 		fmt.Printf("::notice::%s %s End Of Life is approaching. It still has %v day(s) of security support.", GetFullLanguageName(languageName), majorMinorVersion, diffDays)
 	}
-	return ""
 }
 
 func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkEOL bool) ([]string, error) {

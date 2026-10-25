@@ -1,10 +1,78 @@
 package main
 
 import (
+	"bytes"
+	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
+	"time"
 )
+
+func captureStdout(f func()) string {
+	old := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	f() // run the function that writes to stdout
+
+	_ = w.Close()
+	var buf bytes.Buffer
+	_, _ = io.Copy(&buf, r)
+	os.Stdout = old
+
+	return buf.String()
+}
+
+func TestCheckEOL(t *testing.T) {
+	t.Run("Should panic with a message, if inputEOLdate is empty", func(t *testing.T) {
+		defer func() {
+			r := recover()
+			if r == nil {
+				t.Errorf("Expected panic, but none occurred")
+			} else if r != "::notice::There is no information about End Of Life date for Go version .\n" {
+				t.Errorf("Unexpected panic message: %v", r)
+			}
+		}()
+
+		CheckEOL("golang", "", "")
+	})
+
+	t.Run("Should panic with a message, if inputEOLdate is is incorrect", func(t *testing.T) {
+		defer func() {
+			r := recover()
+			if r == nil {
+				t.Errorf("Expected panic, but none occurred")
+			} else if r != "Could not convert 2000-12-32 to Date" {
+				t.Errorf("Unexpected panic message: %v", r)
+			}
+		}()
+
+		CheckEOL("golang", "", "2000-12-32")
+	})
+
+	t.Run("Should print warning message", func(t *testing.T) {
+		got := captureStdout(func() {
+			CheckEOL("golang", "", "2000-12-31")
+		})
+
+		if !strings.Contains(got, "::warning::") {
+			t.Errorf("Expected a string that contains ::warning:: to be printed, got - %s", got)
+		}
+	})
+
+	t.Run("Should print notice message", func(t *testing.T) {
+		got := captureStdout(func() {
+			dateHalfYearHead := time.Now().AddDate(0, 0, 180)
+			CheckEOL("golang", "", dateHalfYearHead.Format("2006-01-02"))
+		})
+
+		if !strings.Contains(got, "::notice::") {
+			t.Errorf("Expected a string that contains ::notice:: to be printed, got - %s", got)
+		}
+	})
+}
 
 func TestGetNltsVersionsAndCheckEOLdates(t *testing.T) {
 	t.Run("Expect false if empty string is provided", func(t *testing.T) {
