@@ -1,4 +1,4 @@
-import LANGUAGE_NAMES from "../../../src/assets/language_names.json" with { type: "json" };
+import LANGUAGE_NAMES from "../../../assets/language_names.json" with { type: "json" };
 
 async function getAllEOLProducts() {
     const header = new Headers();
