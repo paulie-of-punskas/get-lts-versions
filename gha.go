@@ -37,7 +37,8 @@ func WriteJSONArrayToGitHubOutput(ghaVariableName string, ghaVariableValue any) 
 	}
 	defer ghaFile.Close()
 
-	if _, err := fmt.Fprintf(ghaFile, "%s=%s\n", ghaVariableName, data); err != nil {
+	_, err = fmt.Fprintf(ghaFile, "%s=%s\n", ghaVariableName, data)
+	if err != nil {
 		return fmt.Errorf("Could not write GITHUB_OUTPUT: %w", err)
 	}
 
