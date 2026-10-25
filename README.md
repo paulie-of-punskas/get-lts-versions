@@ -1,17 +1,20 @@
-![CI - Node 24](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg)
+![CI](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg)
 
 ![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg)
 
 # Info
-JS/TS script & GitHub Action used for fetching Long Term Support versions. 
+Golang CLI & GitHub Action used for fetching Long Term Support versions. 
 Code sends a GET request to [endoflife.date API](https://endoflife.date/docs/api/v1/) and returns an array with corresponding data.
 If larger number of LTS is requested, then function returns max supported number of versions.
+
+# Requirements
+Linux x64 based runner. By default, GitHub Actions provides [Ubuntu based runners](https://github.com/actions/runner-images/tree/main).
 
 ## Features
 - Powered by [endoflife.date](https://endoflife.date) — reliable LTS data of over 20 programming languages
 - Flexible language naming — use common aliases (`go` or `golang`, `java-temurin` or `temurin`, etc.)
 - Seamless GitHub Actions integration — simple inputs and JSON output for workflow automation
-- Minimal dependencies — lightweight TypeScript/JavaScript implementation. Uses only [@actions/core](https://www.npmjs.com/package/@actions/core) and [@actions/github](https://www.npmjs.com/package/@actions/github) as external dependencies.
+- No external dependencies — action uses a compiled Golang binary, that is based on native packages.
 - Caching - `get-lts-versions` caches results of endoflife.date and updates them weekly.
 
 ## Supported programming languages

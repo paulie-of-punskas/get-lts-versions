@@ -3,10 +3,74 @@ name: Test - check if caches exist
 on:
   push:
     paths:
+      - '*.go'
+      - 'go.mod'
+      - 'get-lts-versions'
       - '.github/workflows/test-cache.yaml'
   workflow_dispatch:
 
 jobs:
+  check-for-cache-with-gha:
+    name: Check for cache with GHA
+    runs-on: ubuntu-latest
+    env:
+      go-version: 1.24.2
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup Go ${{ env.go-version }} environment
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '${{ env.go-version }}'
+          cache: true
+          architecture: 'x64'
+
+      - name: Build
+        run: go build .
+
+      - name: Unify name
+        shell: bash
+        id: lts-unified-name
+        run: ./get-lts-versions -parse_language=golang -write_to_gha=true
+
+      - name: Print the unified name
+        shell: bash
+        run: |
+          echo Parsed language name: ${{ steps.lts-unified-name.outputs.parsed_language_name }}
+
+      - name: Restore cache
+        id: lts-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3
+
+      - name: Check for cache age
+        id: cache-age
+        run: ./get-lts-versions -write_to_gha=true -get_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+
+      - name: Check if cache is older than 7 days
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        id: is-cache-older-than-seven
+        shell: bash
+        run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_language_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
+
+      - name: Renew cache
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        id: cache-renew
+        # run: ./get-lts-versions -language=${{ steps.lts-unified-name.outputs.parsed_language_name }} -write_data_to_file=true
+        run: ./get-lts-versions -parse_language=${{ steps.lts-unified-name.outputs.parsed_language_name }}
+
+      - name: Save cache
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3
+
+
   fetch-caches:
     name: Fetch caches
     runs-on: ubuntu-latest
@@ -35,7 +99,7 @@ jobs:
             // that includes cache "from" main and other branches
             let ltsCache = 0;
             getCachesResult.actions_caches.forEach((cache) => {
-                if (cache.key === 'lts-versions-go' || cache.key === 'lts-versions-python') {
+                if (cache.key === 'lts-versions-go-3' || cache.key === 'lts-versions-python-3') {
                   ltsCache++
                 }
             });

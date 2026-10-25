@@ -130,6 +130,9 @@ out
 .yarn/install-state.gz
 .pnp.*
 
-#
+# project related
 Todo.md
 c3po.sh
+# get-lts-versions
+ci.sh
+build.sh

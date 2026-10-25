@@ -1,42 +1,40 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: CI - Node 24
+name: CI
+description: CI job for Golang/Go
 
 on:
   push:
     paths:
-      - 'src/**'
-      - 'test/**'
-      - 'package.json'
-      - 'package-lock.json'
+      - '*.go'
+      - 'go.mod'
       - '.github/workflows/ci.yaml'
 
 jobs:
-  build-and-test:
-    name: CI - Node ${{ matrix.node-version }}
-    runs-on: ubuntu-latest
+  setup-environment-test-and-build:
+    name: CI - Go ${{ matrix.go-version }}
+    runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
-        node-version: [24]
+        # os: [ ubuntu-latest, macos-latest, windows-latest ]
+        os: [ ubuntu-latest ]
+        go-version: [ 1.24.2 ]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 #v6.0.0
+      - name: Setup Go ${{ matrix.go-version }} environment
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          go-version: '${{ matrix.go-version }}'
+          cache: true
+          architecture: 'x64'
 
-      - name: Run npm CI
-        shell: bash
-        run: npm ci
-
-      - name: Run tests and code coverage
+      - name: Run tests
         shell: bash
         run: |
-          npm install jest --global
-          NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest --verbose
+          go test . -v
+
+      # - name: Build
+      #   shell: bash
+      #   run: |
+      #     # if windows, then build exe?
+      #     go build .
