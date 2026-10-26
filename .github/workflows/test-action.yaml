@@ -11,6 +11,9 @@ on:
   schedule:
     - cron: "0 8 * * 1"
 
+permissions:
+  contents: read
+
 jobs:
   get-lts-versions:
     name: Fetch LTS versions

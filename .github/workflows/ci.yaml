@@ -8,6 +8,9 @@ on:
       - 'go.mod'
       - '.github/workflows/ci.yaml'
 
+permissions:
+  contents: read
+
 jobs:
   setup-environment-test-and-build:
     name: CI - Go ${{ matrix.go-version }}

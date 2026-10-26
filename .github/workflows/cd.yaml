@@ -5,9 +5,13 @@ on:
   pull_request:
     branches: [ "main" ]
     types: [ "opened", "synchronize" ]
+    paths:
+      - '*.go'
+      - 'go.mod'
 
 permissions:
     contents: write
+    pull-requests: write
 
 jobs:
   check:

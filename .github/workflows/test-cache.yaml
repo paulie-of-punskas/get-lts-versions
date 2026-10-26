@@ -9,6 +9,9 @@ on:
       - '.github/workflows/test-cache.yaml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   check-for-cache-with-gha:
     name: Check for cache with GHA

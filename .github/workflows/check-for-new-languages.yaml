@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "0 18 * * *"
 
+permissions:
+  contents: read
+
 jobs:
   check-for-language-updates:
     name: Check if new language was added
