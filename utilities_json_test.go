@@ -71,20 +71,34 @@ func TestCheckEOL(t *testing.T) {
 
 func TestGetNltsVersionsAndCheckEOLdates(t *testing.T) {
 	t.Run("Expect false if empty string is provided", func(t *testing.T) {
-		_, err := GetNltsVersionsAndCheckEOLdates("", 3, false)
+		_, err := GetNltsVersionsAndCheckEOLdates("", 3, false, false)
 		if err == nil {
 			t.Errorf("Empty input should have resulted in error")
 		}
 	})
 
-	t.Run("Expect a non empty array string returned for 3 versions", func(t *testing.T) {
+	t.Run("Expect a string array of MajorMinor versions returned", func(t *testing.T) {
 		fileContent, err := os.ReadFile(filepath.Join("./test_data/eol_return_golang.json"))
 		if err != nil {
 			panic("Could not find \"./test_data/eol_return_golang.json\"")
 		}
 
 		want := [3]string{"1.27", "1.26"}
-		got, _ := GetNltsVersionsAndCheckEOLdates(string(fileContent), 3, false)
+		got, _ := GetNltsVersionsAndCheckEOLdates(string(fileContent), 3, false, false)
+
+		if want[0] != got[0] || want[1] != got[1] {
+			t.Errorf("Wanted: %v, got: %v", want, got)
+		}
+	})
+
+	t.Run("Expect a string array of MajorMinorPatch versions returned", func(t *testing.T) {
+		fileContent, err := os.ReadFile(filepath.Join("./test_data/eol_return_golang.json"))
+		if err != nil {
+			panic("Could not find \"./test_data/eol_return_golang.json\"")
+		}
+
+		want := [3]string{"1.27.2", "1.26.9"}
+		got, _ := GetNltsVersionsAndCheckEOLdates(string(fileContent), 3, false, true)
 
 		if want[0] != got[0] || want[1] != got[1] {
 			t.Errorf("Wanted: %v, got: %v", want, got)
