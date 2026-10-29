@@ -6,10 +6,11 @@ import (
 	"os"
 )
 
-var version = "1.1.0"
+var version = "1.1.1"
 
 func main() {
 	versionsToFetchPtr := flag.Int("versions", 3, "")
+	returnMajorMinorPatch := flag.Bool("return_major_minor_patch_version", false, "")
 	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
 	parseLanguagePtr := flag.String("parse_language", "", "")
@@ -49,7 +50,7 @@ func main() {
 			panic("Error occurred while sending request")
 		}
 
-		res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr)
+		res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr, *returnMajorMinorPatch)
 		if errRes != nil {
 			panic("Error occurred while fetching LTS versions")
 		}
@@ -71,7 +72,7 @@ func main() {
 			panic(fmt.Sprintf("Error occurred while reading cache file - %s", cacheFileName))
 		}
 
-		cachedLTSversions, errResLTSversions := GetNltsVersionsAndCheckEOLdates(string(cacheFileContent), *versionsToFetchPtr, *checkEOLptr)
+		cachedLTSversions, errResLTSversions := GetNltsVersionsAndCheckEOLdates(string(cacheFileContent), *versionsToFetchPtr, *checkEOLptr, *returnMajorMinorPatch)
 		if errResLTSversions != nil {
 			panic(fmt.Sprintf("Error occurred while extracting LTS versions from cached file - %s. File content: %s", errResLTSversions, string(cacheFileContent)))
 		}

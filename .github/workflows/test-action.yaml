@@ -42,6 +42,7 @@ jobs:
           language: "go"
           versions_to_fetch: "3"
           print_eol_information: "true"
+          return_major_minor_patch_version: "false"
 
       - name: Print returned value for Golang
         shell: bash
@@ -54,6 +55,7 @@ jobs:
           language: "python"
           versions_to_fetch: "5"
           print_eol_information: "false"
+          return_major_minor_patch_version: "true"
 
       - name: Print returned value for Python
         shell: bash

@@ -12,6 +12,10 @@ inputs:
   print_eol_information:
     description: Should additional function about end of life be printed to user
     required: false
+    default: "true"
+  return_major_minor_patch_version:
+    description: Should action return versions in X.Y.Z format. By default X.Y will be returned.
+    required: false
     default: "false"
 outputs:
   lts_versions:
@@ -54,25 +58,12 @@ runs:
 
       - name: Print cache age
         shell: bash
-        run: |
-          echo Cache age: ${{ steps.cache-age.outputs.cache_file_age }}
+        run: printf "Cache age - ${{ steps.cache-age.outputs.cache_file_age }}"
 
       - name: Check if cache is older than 7 days
         if: ${{ steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age > 7 }}
         shell: bash
         run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_language_name }} - ${{ steps.cache-age.outputs.cache_file_age }}. It will be renewed."
-
-      # - name: Update/create cache, extract EOL data and save it to GHA
-      #   if: ${{ (steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age > 7) || steps.lts-cache.outputs.cache-hit == 'false' }}
-      #   id: get-lts-versions
-      #   shell: bash
-      #   run: $GITHUB_ACTION_PATH/get-lts-versions -write_to_gha=true -language=${{ steps.lts-unified-name.outputs.parsed_language_name }} -write_data_to_file=true
-
-      # - name: Return cached EOL data
-      #   if: ${{ (steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age <= 7) }}
-      #   id: get-lts-versions
-      #   shell: bash
-      #   run: $GITHUB_ACTION_PATH/get-lts-versions -write_to_gha=true -language=${{ steps.lts-unified-name.outputs.parsed_language_name }} -parse_language=false
 
       - name: Update/create cache, extract EOL data and save it to GHA. Return cached EOL data.
         id: get-lts-versions
@@ -88,13 +79,15 @@ runs:
               -cache_renew=true \
               -parse_language=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
-              -check_eol=true
+              -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
+              -check_eol=${{ inputs.print_eol_information }}
           elif [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -le 7 ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -get_cache=true \
               -parse_language=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
-              -check_eol=true
+              -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
+              -check_eol=${{ inputs.print_eol_information }}
           fi
 
       - name: Save cache
@@ -103,7 +96,3 @@ runs:
         with:
           path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json
           key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}
-
-    # - id: get-lts-versions
-    #   run: $GITHUB_ACTION_PATH/get-lts-versions -language=${{ inputs.language }} -versions=${{ inputs.versions_to_fetch }} -check_eol=${{ inputs.print_eol_information }} -write_to_gha=true
-    #   shell: bash

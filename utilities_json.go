@@ -27,7 +27,7 @@ func CheckEOL(languageName, majorMinorVersion, inputEOLdate string) string {
 	return ""
 }
 
-func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkEOL bool) ([]string, error) {
+func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkEOL bool, returnMajorMinorPatchVersion bool) ([]string, error) {
 	var eolResponse EOLresponse
 	var maxAvailableVersions int
 	ltsVersions := []string{}
@@ -54,7 +54,11 @@ func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkE
 		}
 
 		if !releaseData.IsEol && releaseData.MajorMinorVersion != "" && releaseData.Latest.MajorMinorPatchVersion != "" {
-			ltsVersions = append(ltsVersions, string(releaseData.MajorMinorVersion))
+			versionToReturn := releaseData.MajorMinorVersion
+			if returnMajorMinorPatchVersion {
+				versionToReturn = releaseData.Latest.MajorMinorPatchVersion
+			}
+			ltsVersions = append(ltsVersions, string(versionToReturn))
 		}
 
 		if checkEOL {

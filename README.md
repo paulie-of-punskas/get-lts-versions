@@ -60,7 +60,10 @@ Linux x64 based runner. By default, GitHub Actions provides [Ubuntu based runner
 ### Inputs
 `language` - any name from [supported languages list](#supported-programming-languages)  
 `versions_to_fetch` - how many long term support versions to fetch. Must be a positive integer. If none is set,
-max number of supported versions will be returned.
+max number of supported versions will be returned.  
+`print_eol_information` - additional notice will be printed to user in Actions section, if given version is past or approaching EOL date.  
+`return_major_minor_patch_version` - should SemVer up to a patch version (X.Y.Z) be returned. By default, X.Y will be returned,
+as it's easier to parse for "actions/setup-<language>".
 
 ### Outputs
 `lts_versions` - JSON array of LTS version strings - e.g. `["25", "24", "23"]`. Long Term Support version strings are returned in "MAJOR.MINOR.PATCH" semantic versioning. Use `fromJson()` to correctly parse strings in GHA workflow expressions: `["26","25"]`. GitHub Actions "setup-<language>" actions will automatically recognize the input.
