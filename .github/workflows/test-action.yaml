@@ -55,7 +55,7 @@ jobs:
           language: "python"
           versions_to_fetch: "5"
           print_eol_information: "false"
-          return_major_minor_patch_version: "false"
+          return_major_minor_patch_version: "true"
 
       - name: Print returned value for Python
         shell: bash
