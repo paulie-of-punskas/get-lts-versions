@@ -10,7 +10,7 @@ var version = "1.1.1"
 
 func main() {
 	versionsToFetchPtr := flag.Int("versions", 3, "")
-	returnMajorMinorPatch := flag.Bool("return_major_minor_patch_verion", false, "")
+	returnMajorMinorPatch := flag.Bool("return_major_minor_patch_version", false, "")
 	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
 	parseLanguagePtr := flag.String("parse_language", "", "")
