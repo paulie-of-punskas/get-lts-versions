@@ -19,16 +19,16 @@ func TestStructLanguage(t *testing.T) {
 				"visual-cobol": "visual-cobol"
 			}
 		}`)
-	var language LanguageNames
+	var language ProductNames
 
 	err := json.Unmarshal(TestData, &language)
 
 	if err != nil {
-		t.Errorf("Could not decode JSON to LanguageNames structure")
+		t.Errorf("Could not decode JSON to ProductNames structure")
 	}
 
 	t.Run("Check if TestData languages contains LanguageFullName property", func(t *testing.T) {
-		got := language.Languages[0].LanguageFullName
+		got := language.Languages[0].FullName
 		want := "Visual COBOL"
 		if got != want {
 			t.Errorf("got: %q, want: %q", got, want)

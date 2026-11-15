@@ -13,7 +13,8 @@ func main() {
 	returnMajorMinorPatch := flag.Bool("return_major_minor_patch_version", false, "")
 	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
-	parseLanguagePtr := flag.String("parse_language", "", "")
+	parseProductTypePtr := flag.String("parse_product", "", "")
+	parseProductNamePtr := flag.String("parse_language", "", "")
 	getFileAgePtr := flag.String("get_file_age", "", "")
 	cacheRenewPtr := flag.Bool("cache_renew", false, "")
 	getCachePtr := flag.Bool("get_cache", false, "")
@@ -26,8 +27,8 @@ func main() {
 	}
 
 	// case when only language needs to be parsed to GHA
-	if *writeToGHAptr && *parseLanguagePtr != "" {
-		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*parseLanguagePtr))
+	if *writeToGHAptr && *parseProductNamePtr != "" {
+		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*parseProductTypePtr, *parseProductNamePtr))
 		return
 	}
 
@@ -43,9 +44,9 @@ func main() {
 
 	// renew cache function - even if one exists and is not older than 7 days
 	if *cacheRenewPtr {
-		cacheFileName := GetCacheFileFullPath(UnifyName(*parseLanguagePtr), *versionsToFetchPtr)
+		cacheFileName := GetCacheFileFullPath(*parseProductTypePtr, UnifyName(*parseProductTypePtr, *parseProductNamePtr), *versionsToFetchPtr)
 
-		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*parseLanguagePtr))
+		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*parseProductTypePtr, *parseProductNamePtr))
 		if err != nil {
 			panic("Error occurred while sending request")
 		}
@@ -65,7 +66,7 @@ func main() {
 	}
 
 	if *getCachePtr {
-		cacheFileName := GetCacheFileFullPath(UnifyName(*parseLanguagePtr), *versionsToFetchPtr)
+		cacheFileName := GetCacheFileFullPath(*parseProductTypePtr, UnifyName(*parseProductTypePtr, *parseProductNamePtr), *versionsToFetchPtr)
 
 		cacheFileContent, err := os.ReadFile(cacheFileName)
 		if err != nil {

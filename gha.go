@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func GetCacheFileFullPath(languageName string, versionsToFetch int) string {
+func GetCacheFileFullPath(productType, productName string, versionsToFetch int) string {
 	var rootDir string
 	if os.Getenv("GITHUB_WORKSPACE") != "" {
 		rootDir = os.Getenv("GITHUB_WORKSPACE")
@@ -15,9 +15,9 @@ func GetCacheFileFullPath(languageName string, versionsToFetch int) string {
 		rootDir = "."
 	}
 	cacheDir := filepath.Join(rootDir, ".cache")
-	parsedLanguage := UnifyName(languageName)
+	parsedProductName := UnifyName(productType, productName)
 
-	return filepath.Join(cacheDir, parsedLanguage+"-"+fmt.Sprintf("%v", versionsToFetch)+".json")
+	return filepath.Join(cacheDir, productType+"-"+parsedProductName+"-"+fmt.Sprintf("%v", versionsToFetch)+".json")
 }
 
 func WriteJSONArrayToGitHubOutput(ghaVariableName string, ghaVariableValue any) error {
