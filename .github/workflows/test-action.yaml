@@ -39,8 +39,8 @@ jobs:
         id: go
         uses: ./
         with:
-          type: "language"
-          name: "os"
+          product_type: "language"
+          product_name: "os"
           versions_to_fetch: "3"
           print_eol_information: "true"
           return_major_minor_patch_version: "false"
@@ -53,8 +53,8 @@ jobs:
         id: python
         uses: ./
         with:
-          type: "language"
-          name: "python"
+          product_type: "language"
+          product_name: "python"
           versions_to_fetch: "5"
           print_eol_information: "false"
           return_major_minor_patch_version: "true"
