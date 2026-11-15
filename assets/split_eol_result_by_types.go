@@ -73,8 +73,8 @@ func main() {
 	}
 
 	output := map[string]any{
-		categoryName: eolElements,
-		"aliases":    aliases,
+		"product": eolElements,
+		"aliases": aliases,
 	}
 
 	encoded, err := json.MarshalIndent(output, "", "  ")

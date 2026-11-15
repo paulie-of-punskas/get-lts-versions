@@ -1,3 +1,4 @@
+clear
 # Run CI checks for Golang:
 set -e
 MODULE_NAME=$(head -1 go.mod | cut -c 8-)

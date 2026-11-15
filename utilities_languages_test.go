@@ -17,7 +17,7 @@ func TestSanitizeString(t *testing.T) {
 func TestUnifyName(t *testing.T) {
 	t.Run("Expect 'redhat-build-of-openjdk' to be converted to 'rhjdk'", func(t *testing.T) {
 		want := "redhat-build-of-openjdk"
-		got := UnifyName("os", "redhat-build-of-openjdk")
+		got := UnifyName("lang", "redhat-build-of-openjdk")
 
 		if want != got {
 			t.Errorf("Wanted: %s, got: %s", want, got)

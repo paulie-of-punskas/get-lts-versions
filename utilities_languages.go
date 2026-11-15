@@ -55,9 +55,9 @@ func GetFullProductName(productType, productName string) string {
 	languagesList := ReadProductNames(productType, productName)
 	normalizedLanguage := SanitizeString(productName)
 
-	for j := 0; j < len(languagesList.Languages); j++ {
-		if slices.Contains(languagesList.Languages[j].InputNames, normalizedLanguage) {
-			return languagesList.Languages[j].FullName
+	for j := 0; j < len(languagesList.Product); j++ {
+		if slices.Contains(languagesList.Product[j].InputNames, normalizedLanguage) {
+			return languagesList.Product[j].FullName
 		}
 	}
 

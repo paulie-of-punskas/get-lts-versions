@@ -7,7 +7,7 @@ import (
 
 func TestStructLanguage(t *testing.T) {
 	TestData := []byte(`{
-			"lang": [
+			"product": [
 				{
 					"fullName": "Visual COBOL",
 					"inputNames": ["cobol", "visual-cobol"],
@@ -28,7 +28,7 @@ func TestStructLanguage(t *testing.T) {
 	}
 
 	t.Run("Check if TestData languages contains LanguageFullName property", func(t *testing.T) {
-		got := language.Languages[0].FullName
+		got := language.Product[0].FullName
 		want := "Visual COBOL"
 		if got != want {
 			t.Errorf("got: %q, want: %q", got, want)

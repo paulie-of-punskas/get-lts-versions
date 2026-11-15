@@ -133,7 +133,7 @@
     "yocto-project": "yocto",
     "zentyal": "zentyal"
   },
-  "os": [
+  "product": [
     {
       "fullName": "AlmaLinux OS",
       "inputNames": [

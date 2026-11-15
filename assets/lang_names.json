@@ -65,7 +65,7 @@
     "windows-powershell": "windows-powershell",
     "zulu": "azul-zulu"
   },
-  "lang": [
+  "product": [
     {
       "fullName": "Alibaba Dragonwell",
       "inputNames": [
