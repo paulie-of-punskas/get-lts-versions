@@ -81,8 +81,8 @@ runs:
         env:
           CACHE_HIT: ${{ steps.lts-cache.outputs.cache-hit }}
           CACHE_FILE_AGE: ${{ steps.cache-age.outputs.cache_file_age }}
-          TYPE: ${{ steps.lts-unified-name.outputs.parsed_product_type }}
-          LANGUAGE: ${{ steps.lts-unified-name.outputs.parsed_product_name }}
+          TYPE: ${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_type) }}
+          LANGUAGE: ${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}
         run: |
           # $CACHE_HIT == "" is used for case when no cache is found, xref: https://github.com/actions/cache#outputs
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "" ]]; then
