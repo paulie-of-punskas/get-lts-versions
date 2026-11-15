@@ -45,7 +45,7 @@ runs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: $GITHUB_ACTION_PATH/get-lts-versions -parse_product_type=${{ inputs.product_type }} -parse_product_name=${{ inputs.product_name }} -write_to_gha=true
+        run: $GITHUB_ACTION_PATH/get-lts-versions -type=${{ inputs.product_type }} -name=${{ inputs.product_name }} -write_to_gha=true
 
       - name: Print unified type and name from input
         shell: bash
@@ -88,16 +88,16 @@ runs:
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "" ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -cache_renew=true \
-              -parse_product_type=$PRODUCT \
-              -parse_product_name=$LANGUAGE \
+              -type=$PRODUCT \
+              -name=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
               -check_eol=${{ inputs.print_eol_information }}
           elif [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -le 7 ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -get_cache=true \
-              -parse_product_type=$PRODUCT \
-              -parse_product_name=$LANGUAGE \
+              -type=$PRODUCT \
+              -name=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
               -check_eol=${{ inputs.print_eol_information }}

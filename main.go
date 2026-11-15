@@ -13,8 +13,8 @@ func main() {
 	returnMajorMinorPatch := flag.Bool("return_major_minor_patch_version", false, "")
 	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
-	parseProductTypePtr := flag.String("parse_product_type", "", "")
-	parseProductNamePtr := flag.String("parse_product_name", "", "")
+	productTypePtr := flag.String("type", "", "")
+	productNamePtr := flag.String("name", "", "")
 	getFileAgePtr := flag.String("get_file_age", "", "")
 	cacheRenewPtr := flag.Bool("cache_renew", false, "")
 	getCachePtr := flag.Bool("get_cache", false, "")
@@ -27,9 +27,10 @@ func main() {
 	}
 
 	// case when product name and type need to be parsed to GHA
-	if *writeToGHAptr && *parseProductTypePtr != "" && *parseProductNamePtr != "" {
-		WriteJSONArrayToGitHubOutput("parsed_product_type", *parseProductTypePtr)
-		WriteJSONArrayToGitHubOutput("parsed_product_name", UnifyName(*parseProductTypePtr, *parseProductNamePtr))
+	if *writeToGHAptr && *productTypePtr != "" && *productNamePtr != "" {
+		WriteJSONArrayToGitHubOutput("parsed_product_type", *productTypePtr)
+		WriteJSONArrayToGitHubOutput("parsed_product_name", UnifyName(*productTypePtr, *productNamePtr))
+		fmt.Printf("Writing %s %s to GitHub Output", *productTypePtr, UnifyName(*productTypePtr, *productNamePtr))
 		return
 	}
 
@@ -45,9 +46,9 @@ func main() {
 
 	// renew cache function - even if one exists and is not older than 7 days
 	if *cacheRenewPtr {
-		cacheFileName := GetCacheFileFullPath(*parseProductTypePtr, UnifyName(*parseProductTypePtr, *parseProductNamePtr), *versionsToFetchPtr)
+		cacheFileName := GetCacheFileFullPath(*productTypePtr, UnifyName(*productTypePtr, *productNamePtr), *versionsToFetchPtr)
 
-		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*parseProductTypePtr, *parseProductNamePtr))
+		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*productTypePtr, *productNamePtr))
 		if err != nil {
 			panic("Error occurred while sending request")
 		}
@@ -67,7 +68,7 @@ func main() {
 	}
 
 	if *getCachePtr {
-		cacheFileName := GetCacheFileFullPath(*parseProductTypePtr, UnifyName(*parseProductTypePtr, *parseProductNamePtr), *versionsToFetchPtr)
+		cacheFileName := GetCacheFileFullPath(*productTypePtr, UnifyName(*productTypePtr, *productNamePtr), *versionsToFetchPtr)
 
 		cacheFileContent, err := os.ReadFile(cacheFileName)
 		if err != nil {

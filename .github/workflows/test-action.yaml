@@ -40,7 +40,7 @@ jobs:
         uses: ./
         with:
           product_type: "language"
-          product_name: "os"
+          product_name: "golang"
           versions_to_fetch: "3"
           print_eol_information: "true"
           return_major_minor_patch_version: "false"
