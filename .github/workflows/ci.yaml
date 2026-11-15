@@ -35,9 +35,3 @@ jobs:
         shell: bash
         run: |
           go test . -v
-
-      # - name: Build
-      #   shell: bash
-      #   run: |
-      #     # if windows, then build exe?
-      #     go build .

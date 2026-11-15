@@ -1,4 +1,5 @@
 import LANGUAGE_NAMES from "../../../assets/lang_names.json" with { type: "json" };
+import OS_NAMES from "../../../assets/os_names.json" with { type: "json" };
 
 async function getAllEOLProducts() {
     const header = new Headers();
@@ -40,7 +41,7 @@ function convertLanguageNamesToSet() {
     return new Set(Object.keys(LANGUAGE_NAMES.aliases));
 }
 
-export async function areLanguageNamesUpToDate() {
+export async function areProductsUpToDate() {
     const languageNames = await returnLanguageNamesFromEOL();
     const languageNamesSet = convertLanguageNamesToSet();
     let areLanguagesUpToDate = true;

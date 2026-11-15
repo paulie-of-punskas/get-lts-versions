@@ -77,7 +77,21 @@ func TestGetNltsVersionsAndCheckEOLdates(t *testing.T) {
 		}
 	})
 
-	t.Run("Expect a string array of MajorMinor versions returned", func(t *testing.T) {
+	t.Run("Expect a string array of MajorMinor versions returned for RHEL", func(t *testing.T) {
+		fileContent, err := os.ReadFile(filepath.Join("./test_data/eol_return_rhel.json"))
+		if err != nil {
+			panic("Could not find \"./test_data/eol_return_rhel.json\"")
+		}
+
+		want := [3]string{"10", "9", "8"}
+		got, _ := GetNltsVersionsAndCheckEOLdates(string(fileContent), 3, false, false)
+
+		if want[0] != got[0] || want[1] != got[1] {
+			t.Errorf("Wanted: %v, got: %v", want, got)
+		}
+	})
+
+	t.Run("Expect a string array of MajorMinor versions returned for golang", func(t *testing.T) {
 		fileContent, err := os.ReadFile(filepath.Join("./test_data/eol_return_golang.json"))
 		if err != nil {
 			panic("Could not find \"./test_data/eol_return_golang.json\"")

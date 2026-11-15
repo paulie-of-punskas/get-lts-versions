@@ -13,8 +13,8 @@ func main() {
 	returnMajorMinorPatch := flag.Bool("return_major_minor_patch_version", false, "")
 	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
-	parseProductTypePtr := flag.String("parse_product", "", "")
-	parseProductNamePtr := flag.String("parse_language", "", "")
+	parseProductTypePtr := flag.String("parse_product_type", "", "")
+	parseProductNamePtr := flag.String("parse_product_name", "", "")
 	getFileAgePtr := flag.String("get_file_age", "", "")
 	cacheRenewPtr := flag.Bool("cache_renew", false, "")
 	getCachePtr := flag.Bool("get_cache", false, "")
@@ -26,9 +26,10 @@ func main() {
 		fmt.Println(version)
 	}
 
-	// case when only language needs to be parsed to GHA
-	if *writeToGHAptr && *parseProductNamePtr != "" {
-		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*parseProductTypePtr, *parseProductNamePtr))
+	// case when product name and type need to be parsed to GHA
+	if *writeToGHAptr && *parseProductTypePtr != "" && *parseProductNamePtr != "" {
+		WriteJSONArrayToGitHubOutput("parsed_product_type", *parseProductTypePtr)
+		WriteJSONArrayToGitHubOutput("parsed_product_name", UnifyName(*parseProductTypePtr, *parseProductNamePtr))
 		return
 	}
 
