@@ -26,9 +26,20 @@ jobs:
         with:
           script: |
             const script = require('.github/workflows/scripts/check_for_new_languages.js')
-            const result = await script.areProductsUpToDate();
-            if (result) {
+            const eolData = await script.getAllEOLProducts();
+            if (!Array.isArray(eolData.result) || eolData.result.length === 0) {
+              throw new Error("Could not fetch EOL product data, so the language check was skipped.");
+            }
+
+            const languagesUpToDate = script.areProductNamesUpToDate(eolData, "lang");
+            const osUpToDate = script.areProductNamesUpToDate(eolData, "os");
+
+            if (languagesUpToDate) {
               console.log("No updates to language names are needed")
+            }
+
+            if (osUpToDate) {
+              console.log("No updates to os names are needed")
             } else {
               throw new Error("New languages were added. Please update /assets/lang_names.json and aliases.")
             }
