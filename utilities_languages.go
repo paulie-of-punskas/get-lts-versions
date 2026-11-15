@@ -8,8 +8,11 @@ import (
 	"strings"
 )
 
-//go:embed assets/language_names.json
+//go:embed assets/lang_names.json
 var languageNamesJSON []byte
+
+//go:embed assets/os_names.json
+var osNamesJSON []byte
 
 func SanitizeString(strintToSanitize string) string {
 	return strings.ToLower(strings.TrimSpace(strintToSanitize))
@@ -20,7 +23,7 @@ func ReadLanguageNames() LanguageNames {
 
 	err := json.Unmarshal(languageNamesJSON, &languages)
 	if err != nil {
-		panic(fmt.Sprintf("Could not parse embedded language_names.json %s", err))
+		panic(fmt.Sprintf("Could not parse embedded lang_names.json %s", err))
 	}
 
 	return languages

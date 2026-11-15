@@ -1,0 +1,678 @@
+{
+  "aliases": {
+    "aix": "ibm-aix",
+    "alma": "almalinux",
+    "alma-linux": "almalinux",
+    "almalinux": "almalinux",
+    "alpine": "alpine-linux",
+    "alpine-linux": "alpine-linux",
+    "alpinelinux": "alpine-linux",
+    "amazon-linux": "amazon-linux",
+    "android": "android",
+    "androidos": "android",
+    "antix": "antix",
+    "antix-linux": "antix",
+    "antixlinux": "antix",
+    "aosp": "android",
+    "apple-tvos": "tvos",
+    "as400": "ibm-i",
+    "big-ip": "big-ip",
+    "centos": "centos",
+    "centos-stream": "centos-stream",
+    "cisco-ios-xe": "cisco-ios-xe",
+    "clear-linux": "clear-linux",
+    "clearlinux": "clear-linux",
+    "container-optimized-os": "cos",
+    "cos": "cos",
+    "debian": "debian",
+    "devuan": "devuan",
+    "esx": "esxi",
+    "esxi": "esxi",
+    "eurolinux": "eurolinux",
+    "fedora": "fedora",
+    "fortios": "fortios",
+    "freebsd": "freebsd",
+    "google-cos": "cos",
+    "i-series": "ibm-i",
+    "ibm-aix": "ibm-aix",
+    "ibm-i": "ibm-i",
+    "ibm-iseries": "ibm-i",
+    "ibmi": "ibm-i",
+    "ios": "ios",
+    "ipados": "ipados",
+    "iseries": "ibm-i",
+    "kde-plasma": "kde-plasma",
+    "kdeplasma": "kde-plasma",
+    "lineage": "lineageos",
+    "lineageos": "lineageos",
+    "linux": "linux",
+    "linux-kernel": "linux",
+    "linux-mint": "linuxmint",
+    "linuxkernel": "linux",
+    "linuxmint": "linuxmint",
+    "mac": "macos",
+    "macos": "macos",
+    "mageia": "mageia",
+    "mx": "mxlinux",
+    "mx-linux": "mxlinux",
+    "mx_linux": "mxlinux",
+    "mxlinux": "mxlinux",
+    "netapp-ontap": "netapp-ontap",
+    "netbackup-appliance-os": "netbackup-appliance-os",
+    "netbsd": "netbsd",
+    "nixos": "nixos",
+    "nixoslinux": "nixos",
+    "nura": "nura",
+    "nutanix-aos": "nutanix-aos",
+    "ontap": "netapp-ontap",
+    "ontap-os": "netapp-ontap",
+    "open-wrt": "openwrt",
+    "openbsd": "openbsd",
+    "opensuse": "opensuse",
+    "opensuseleap": "opensuse",
+    "openwrt": "openwrt",
+    "oracle-linux": "oracle-linux",
+    "oracle-solaris": "oracle-solaris",
+    "oraclelinux": "oracle-linux",
+    "os-400": "ibm-i",
+    "os400": "ibm-i",
+    "pan-os": "panos",
+    "panos": "panos",
+    "photon": "photon",
+    "pop-os": "pop-os",
+    "pop_os": "pop-os",
+    "popos": "pop-os",
+    "postmarketos": "postmarketos",
+    "proxmox-ve": "proxmox-ve",
+    "proxmoxve": "proxmox-ve",
+    "pve": "proxmox-ve",
+    "redhat": "rhel",
+    "redhatlinux": "rhel",
+    "rhel": "rhel",
+    "rocky": "rocky-linux",
+    "rocky-linux": "rocky-linux",
+    "rockylinux": "rocky-linux",
+    "routeros": "routeros",
+    "sl-micro": "suse-linux-micro",
+    "slackware": "slackware",
+    "slackware-linux": "slackware",
+    "slackwarelinux": "slackware",
+    "sles": "sles",
+    "sns-firmware": "sns-firmware",
+    "sns-smc": "sns-smc",
+    "solaris": "oracle-solaris",
+    "steamos": "steamos",
+    "suse-linux-micro": "suse-linux-micro",
+    "suseenterpriseserver": "sles",
+    "suselinuxenterpriseserver": "sles",
+    "suseserver": "sles",
+    "tails": "tails",
+    "truenas": "truenas",
+    "tvos": "tvos",
+    "ubuntu": "ubuntu",
+    "ubuntu-linux": "ubuntu",
+    "visionos": "visionos",
+    "vmesxi": "esxi",
+    "vmware-esxi": "esxi",
+    "vmware-photon": "photon",
+    "vmwareesxi": "esxi",
+    "vmwarephoton": "photon",
+    "watchos": "watchos",
+    "windows": "windows",
+    "windows-embedded": "windows-embedded",
+    "windows-nano-server": "windows-nano-server",
+    "windows-server": "windows-server",
+    "windows-server-core": "windows-server-core",
+    "windowsembedded": "windows-embedded",
+    "windowsnanoserver": "windows-nano-server",
+    "windowsserver": "windows-server",
+    "windowsservercore": "windows-server-core",
+    "xcp-ng": "xcp-ng",
+    "xcpng": "xcp-ng",
+    "yocto": "yocto",
+    "yocto-project": "yocto",
+    "zentyal": "zentyal"
+  },
+  "os": [
+    {
+      "fullName": "AlmaLinux OS",
+      "inputNames": [
+        "almalinux",
+        "alma-linux",
+        "alma"
+      ],
+      "eolName": "almalinux"
+    },
+    {
+      "fullName": "Alpine Linux",
+      "inputNames": [
+        "alpine-linux",
+        "alpine",
+        "alpinelinux"
+      ],
+      "eolName": "alpine-linux"
+    },
+    {
+      "fullName": "Amazon Linux",
+      "inputNames": [
+        "amazon-linux"
+      ],
+      "eolName": "amazon-linux"
+    },
+    {
+      "fullName": "Android OS",
+      "inputNames": [
+        "android",
+        "aosp",
+        "androidos"
+      ],
+      "eolName": "android"
+    },
+    {
+      "fullName": "antiX Linux",
+      "inputNames": [
+        "antix",
+        "antixlinux",
+        "antix-linux"
+      ],
+      "eolName": "antix"
+    },
+    {
+      "fullName": "Apple tvOS",
+      "inputNames": [
+        "tvos",
+        "apple-tvos"
+      ],
+      "eolName": "tvos"
+    },
+    {
+      "fullName": "BIG-IP",
+      "inputNames": [
+        "big-ip"
+      ],
+      "eolName": "big-ip"
+    },
+    {
+      "fullName": "CentOS Stream",
+      "inputNames": [
+        "centos-stream"
+      ],
+      "eolName": "centos-stream"
+    },
+    {
+      "fullName": "CentOS",
+      "inputNames": [
+        "centos"
+      ],
+      "eolName": "centos"
+    },
+    {
+      "fullName": "Cisco IOS XE",
+      "inputNames": [
+        "cisco-ios-xe"
+      ],
+      "eolName": "cisco-ios-xe"
+    },
+    {
+      "fullName": "Clear Linux",
+      "inputNames": [
+        "clear-linux",
+        "clearlinux"
+      ],
+      "eolName": "clear-linux"
+    },
+    {
+      "fullName": "Google Container-Optimized OS (COS)",
+      "inputNames": [
+        "cos",
+        "google-cos",
+        "container-optimized-os"
+      ],
+      "eolName": "cos"
+    },
+    {
+      "fullName": "Debian",
+      "inputNames": [
+        "debian"
+      ],
+      "eolName": "debian"
+    },
+    {
+      "fullName": "Devuan",
+      "inputNames": [
+        "devuan"
+      ],
+      "eolName": "devuan"
+    },
+    {
+      "fullName": "EuroLinux",
+      "inputNames": [
+        "eurolinux"
+      ],
+      "eolName": "eurolinux"
+    },
+    {
+      "fullName": "Fedora Linux",
+      "inputNames": [
+        "fedora"
+      ],
+      "eolName": "fedora"
+    },
+    {
+      "fullName": "FortiOS",
+      "inputNames": [
+        "fortios"
+      ],
+      "eolName": "fortios"
+    },
+    {
+      "fullName": "FreeBSD",
+      "inputNames": [
+        "freebsd"
+      ],
+      "eolName": "freebsd"
+    },
+    {
+      "fullName": "IBM AIX",
+      "inputNames": [
+        "ibm-aix",
+        "aix"
+      ],
+      "eolName": "ibm-aix"
+    },
+    {
+      "fullName": "IBM iSeries",
+      "inputNames": [
+        "ibm-i",
+        "iseries",
+        "i-series",
+        "ibm-iseries",
+        "ibmi",
+        "as400",
+        "os400",
+        "os-400"
+      ],
+      "eolName": "ibm-i"
+    },
+    {
+      "fullName": "Apple iOS",
+      "inputNames": [
+        "ios"
+      ],
+      "eolName": "ios"
+    },
+    {
+      "fullName": "Apple iPadOS",
+      "inputNames": [
+        "ipados"
+      ],
+      "eolName": "ipados"
+    },
+    {
+      "fullName": "KDE Plasma",
+      "inputNames": [
+        "kde-plasma",
+        "kdeplasma"
+      ],
+      "eolName": "kde-plasma"
+    },
+    {
+      "fullName": "LineageOS",
+      "inputNames": [
+        "lineageos",
+        "lineage"
+      ],
+      "eolName": "lineageos"
+    },
+    {
+      "fullName": "Linux Kernel",
+      "inputNames": [
+        "linux",
+        "linuxkernel",
+        "linux-kernel"
+      ],
+      "eolName": "linux"
+    },
+    {
+      "fullName": "Linux Mint",
+      "inputNames": [
+        "linuxmint",
+        "linux-mint"
+      ],
+      "eolName": "linuxmint"
+    },
+    {
+      "fullName": "Apple macOS",
+      "inputNames": [
+        "macos",
+        "mac"
+      ],
+      "eolName": "macos"
+    },
+    {
+      "fullName": "Mageia",
+      "inputNames": [
+        "mageia"
+      ],
+      "eolName": "mageia"
+    },
+    {
+      "fullName": "MX Linux",
+      "inputNames": [
+        "mxlinux",
+        "mx_linux",
+        "mx-linux",
+        "mx"
+      ],
+      "eolName": "mxlinux"
+    },
+    {
+      "fullName": "NetApp ONTAP",
+      "inputNames": [
+        "netapp-ontap",
+        "ontap",
+        "ontap-os"
+      ],
+      "eolName": "netapp-ontap"
+    },
+    {
+      "fullName": "NetBackup Appliance OS",
+      "inputNames": [
+        "netbackup-appliance-os"
+      ],
+      "eolName": "netbackup-appliance-os"
+    },
+    {
+      "fullName": "NetBSD",
+      "inputNames": [
+        "netbsd"
+      ],
+      "eolName": "netbsd"
+    },
+    {
+      "fullName": "NixOS",
+      "inputNames": [
+        "nixos",
+        "nixoslinux"
+      ],
+      "eolName": "nixos"
+    },
+    {
+      "fullName": "Nura",
+      "inputNames": [
+        "nura"
+      ],
+      "eolName": "nura"
+    },
+    {
+      "fullName": "Nutanix AOS",
+      "inputNames": [
+        "nutanix-aos"
+      ],
+      "eolName": "nutanix-aos"
+    },
+    {
+      "fullName": "OpenBSD",
+      "inputNames": [
+        "openbsd"
+      ],
+      "eolName": "openbsd"
+    },
+    {
+      "fullName": "openSUSE",
+      "inputNames": [
+        "opensuse",
+        "opensuseleap"
+      ],
+      "eolName": "opensuse"
+    },
+    {
+      "fullName": "OpenWrt",
+      "inputNames": [
+        "openwrt",
+        "open-wrt"
+      ],
+      "eolName": "openwrt"
+    },
+    {
+      "fullName": "Oracle Linux",
+      "inputNames": [
+        "oracle-linux",
+        "oraclelinux"
+      ],
+      "eolName": "oracle-linux"
+    },
+    {
+      "fullName": "Oracle Solaris",
+      "inputNames": [
+        "oracle-solaris",
+        "solaris"
+      ],
+      "eolName": "oracle-solaris"
+    },
+    {
+      "fullName": "Palo Alto Networks PAN-OS",
+      "inputNames": [
+        "panos",
+        "pan-os"
+      ],
+      "eolName": "panos"
+    },
+    {
+      "fullName": "Pop!_OS",
+      "inputNames": [
+        "pop-os",
+        "popos",
+        "pop_os"
+      ],
+      "eolName": "pop-os"
+    },
+    {
+      "fullName": "postmarketOS",
+      "inputNames": [
+        "postmarketos"
+      ],
+      "eolName": "postmarketos"
+    },
+    {
+      "fullName": "Proxmox VE",
+      "inputNames": [
+        "proxmox-ve",
+        "pve",
+        "proxmoxve"
+      ],
+      "eolName": "proxmox-ve"
+    },
+    {
+      "fullName": "Red Hat Enterprise Linux",
+      "inputNames": [
+        "rhel",
+        "redhat",
+        "redhatlinux"
+      ],
+      "eolName": "rhel"
+    },
+    {
+      "fullName": "Rocky Linux",
+      "inputNames": [
+        "rocky-linux",
+        "rocky",
+        "rockylinux"
+      ],
+      "eolName": "rocky-linux"
+    },
+    {
+      "fullName": "RouterOS",
+      "inputNames": [
+        "routeros"
+      ],
+      "eolName": "routeros"
+    },
+    {
+      "fullName": "Slackware Linux",
+      "inputNames": [
+        "slackware",
+        "slackwarelinux",
+        "slackware-linux"
+      ],
+      "eolName": "slackware"
+    },
+    {
+      "fullName": "SUSE Linux Enterprise Server",
+      "inputNames": [
+        "sles",
+        "suseenterpriseserver",
+        "suseserver",
+        "suselinuxenterpriseserver"
+      ],
+      "eolName": "sles"
+    },
+    {
+      "fullName": "Stormshield Firmware",
+      "inputNames": [
+        "sns-firmware"
+      ],
+      "eolName": "sns-firmware"
+    },
+    {
+      "fullName": "Stormshield Management Center",
+      "inputNames": [
+        "sns-smc"
+      ],
+      "eolName": "sns-smc"
+    },
+    {
+      "fullName": "SteamOS",
+      "inputNames": [
+        "steamos"
+      ],
+      "eolName": "steamos"
+    },
+    {
+      "fullName": "SUSE Linux Micro",
+      "inputNames": [
+        "suse-linux-micro",
+        "sl-micro"
+      ],
+      "eolName": "suse-linux-micro"
+    },
+    {
+      "fullName": "Tails",
+      "inputNames": [
+        "tails"
+      ],
+      "eolName": "tails"
+    },
+    {
+      "fullName": "TrueNAS",
+      "inputNames": [
+        "truenas"
+      ],
+      "eolName": "truenas"
+    },
+    {
+      "fullName": "Ubuntu",
+      "inputNames": [
+        "ubuntu",
+        "ubuntu-linux"
+      ],
+      "eolName": "ubuntu"
+    },
+    {
+      "fullName": "Apple visionOS",
+      "inputNames": [
+        "visionos"
+      ],
+      "eolName": "visionos"
+    },
+    {
+      "fullName": "VMware ESXi",
+      "inputNames": [
+        "esxi",
+        "esx",
+        "vmwareesxi",
+        "vmesxi",
+        "vmware-esxi"
+      ],
+      "eolName": "esxi"
+    },
+    {
+      "fullName": "VMware Photon",
+      "inputNames": [
+        "photon",
+        "vmware-photon",
+        "vmwarephoton"
+      ],
+      "eolName": "photon"
+    },
+    {
+      "fullName": "Apple watchOS",
+      "inputNames": [
+        "watchos"
+      ],
+      "eolName": "watchos"
+    },
+    {
+      "fullName": "Microsoft Windows Embedded",
+      "inputNames": [
+        "windows-embedded",
+        "windowsembedded"
+      ],
+      "eolName": "windows-embedded"
+    },
+    {
+      "fullName": "Microsoft Nano Server",
+      "inputNames": [
+        "windows-nano-server",
+        "windowsnanoserver"
+      ],
+      "eolName": "windows-nano-server"
+    },
+    {
+      "fullName": "Microsoft Windows Server Core",
+      "inputNames": [
+        "windows-server-core",
+        "windowsservercore"
+      ],
+      "eolName": "windows-server-core"
+    },
+    {
+      "fullName": "Microsoft Windows Server",
+      "inputNames": [
+        "windows-server",
+        "windowsserver"
+      ],
+      "eolName": "windows-server"
+    },
+    {
+      "fullName": "Microsoft Windows",
+      "inputNames": [
+        "windows"
+      ],
+      "eolName": "windows"
+    },
+    {
+      "fullName": "XCP-ng",
+      "inputNames": [
+        "xcp-ng",
+        "xcpng"
+      ],
+      "eolName": "xcp-ng"
+    },
+    {
+      "fullName": "Yocto Project",
+      "inputNames": [
+        "yocto",
+        "yocto-project"
+      ],
+      "eolName": "yocto"
+    },
+    {
+      "fullName": "Zentyal",
+      "inputNames": [
+        "zentyal"
+      ],
+      "eolName": "zentyal"
+    }
+  ]
+}
