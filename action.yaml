@@ -107,5 +107,5 @@ runs:
         if: ${{ (steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age > 7) || steps.lts-cache.outputs.cache-hit == 'false' || steps.lts-cache.outputs.cache-hit == '' }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
-          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}.json
-          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-${{ inputs.versions_to_fetch }}
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_type) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_type) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}
