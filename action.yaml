@@ -45,7 +45,7 @@ runs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: $GITHUB_ACTION_PATH/get-lts-versions -category=${{ inputs.category }} -name=${{ inputs.product_name }} -write_to_gha=true
+        run: $GITHUB_ACTION_PATH/get-lts-versions -category=${{ inputs.category }} -product_name=${{ inputs.product_name }} -write_to_gha=true
 
       - name: Print unified category and name from input
         shell: bash
