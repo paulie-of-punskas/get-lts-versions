@@ -1,10 +1,10 @@
-name: "Get Long Term Support versions for programming language, framework, Operating System"
+name: "Get Long Term Support versions for programming language, Operating System"
 description: "Action returns an array of N latest long term support versions"
 inputs:
-  product_type:
-    description: Type of the product (os, lang) are acceptable
+  category:
+    description: Type of the product ("os", "lang") are acceptable
     required: true
-    default: ""
+    default: "lang"
     type: string
   product_name:
     description: Name of product (language, os etc.) that LTS is required for e.g. python, almalinux, golang.
@@ -45,20 +45,20 @@ runs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: $GITHUB_ACTION_PATH/get-lts-versions -type=${{ inputs.product_type }} -name=${{ inputs.product_name }} -write_to_gha=true
+        run: $GITHUB_ACTION_PATH/get-lts-versions -category=${{ inputs.category }} -name=${{ inputs.product_name }} -write_to_gha=true
 
-      - name: Print unified type and name from input
+      - name: Print unified category and name from input
         shell: bash
         run: |
-          echo Parsed product type: ${{ steps.lts-unified-name.outputs.parsed_product_type }}
+          echo Parsed category: ${{ steps.lts-unified-name.outputs.parsed_category }}
           echo Parsed product name: ${{ steps.lts-unified-name.outputs.parsed_product_name }}
 
       - name: Restore cache
         id: lts-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_type) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}.json
-          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_type) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}
 
       - name: Check cache age and write it to GHA
         if: ${{ steps.lts-cache.outputs.cache-hit == 'true' }}
@@ -81,14 +81,14 @@ runs:
         env:
           CACHE_HIT: ${{ steps.lts-cache.outputs.cache-hit }}
           CACHE_FILE_AGE: ${{ steps.cache-age.outputs.cache_file_age }}
-          TYPE: ${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_type) }}
+          CATEGORY: ${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}
           LANGUAGE: ${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}
         run: |
           # $CACHE_HIT == "" is used for case when no cache is found, xref: https://github.com/actions/cache#outputs
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "" ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -cache_renew=true \
-              -type=$TYPE \
+              -category=$CATEGORY \
               -name=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
@@ -96,7 +96,7 @@ runs:
           elif [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -le 7 ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -get_cache=true \
-              -type=$TYPE \
+              -category=$CATEGORY \
               -name=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
@@ -107,5 +107,5 @@ runs:
         if: ${{ (steps.lts-cache.outputs.cache-hit == 'true' && steps.cache-age.outputs.cache_file_age > 7) || steps.lts-cache.outputs.cache-hit == 'false' || steps.lts-cache.outputs.cache-hit == '' }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
-          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_type) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}.json
-          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_type) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-${{ inputs.versions_to_fetch }}

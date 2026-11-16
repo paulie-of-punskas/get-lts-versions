@@ -39,7 +39,7 @@ jobs:
         id: go
         uses: ./
         with:
-          product_type: "lang"
+          category: "lang"
           product_name: "golang"
           versions_to_fetch: "3"
           print_eol_information: "true"
@@ -53,7 +53,7 @@ jobs:
         id: python
         uses: ./
         with:
-          product_type: "lang"
+          category: "lang"
           product_name: "python"
           versions_to_fetch: "5"
           print_eol_information: "false"
