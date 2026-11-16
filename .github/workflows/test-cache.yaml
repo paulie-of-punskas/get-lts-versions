@@ -52,7 +52,7 @@ jobs:
 
       - name: Check for cache age
         id: cache-age
-        run: ./get-lts-versions -write_to_gha=true -get_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
+        run: ./get-lts-versions -write_to_gha=true -get_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
 
       - name: Check if cache is older than 7 days
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
@@ -63,15 +63,16 @@ jobs:
       - name: Renew cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         id: cache-renew
-        # run: ./get-lts-versions -language=${{ steps.lts-unified-name.outputs.parsed_product_name }} -write_data_to_file=true
         run: ./get-lts-versions -category=lang -product_name=${{ steps.lts-unified-name.outputs.parsed_product_name }}
 
       - name: Save cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
-          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
-          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3
+          # path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
+          # key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3
 
 
   fetch-caches:
