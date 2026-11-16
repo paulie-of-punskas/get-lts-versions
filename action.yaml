@@ -89,7 +89,7 @@ runs:
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -cache_renew=true \
               -category=$CATEGORY \
-              -name=$LANGUAGE \
+              -product_name=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
               -check_eol=${{ inputs.print_eol_information }}
@@ -97,7 +97,7 @@ runs:
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -get_cache=true \
               -category=$CATEGORY \
-              -name=$LANGUAGE \
+              -product_name=$LANGUAGE \
               -versions=${{ inputs.versions_to_fetch }} \
               -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
               -check_eol=${{ inputs.print_eol_information }}
