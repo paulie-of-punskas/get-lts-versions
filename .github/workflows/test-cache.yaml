@@ -99,11 +99,11 @@ jobs:
 
             const getCachesResult = await getCaches();
 
-            // expect 'lts-versions-go' and 'lts-versions-python' to exist
+            // expect 'lts-versions-lang-go' and 'lts-versions-lang-python' to exist
             // that includes cache "from" main and other branches
             let ltsCache = 0;
             getCachesResult.actions_caches.forEach((cache) => {
-                if (cache.key === 'lts-versions-go-3' || cache.key === 'lts-versions-python-3') {
+                if (cache.key === 'lts-versions-lang-go-3' || cache.key === 'lts-versions-lang-python-3') {
                   ltsCache++
                 }
             });
