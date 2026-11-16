@@ -38,7 +38,7 @@ func main() {
 	if *writeToGHAptr && *getFileAgePtr != "" {
 		resAge, errAge := GetFileAgeInDays(*getFileAgePtr, false)
 		if errAge != nil {
-			panic("Error occurred while while calculating file age")
+			panic(fmt.Sprintf("Error occurred while calculating file age - %s", errAge))
 		}
 		WriteJSONArrayToGitHubOutput("cache_file_age", resAge)
 		return
