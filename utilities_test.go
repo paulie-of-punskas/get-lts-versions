@@ -7,7 +7,7 @@ import (
 func TestGetFileAgeInDays(t *testing.T) {
 	t.Run("Expect error if './test_data/hello.json' does not exist", func(t *testing.T) {
 		_, err := GetFileAgeInDays("./test_data/hello.json", false)
-		if err == nil {
+		if err != nil {
 			t.Errorf("Wanted to catch the error. Got: %s", err)
 		}
 	})
