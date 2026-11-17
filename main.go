@@ -63,7 +63,10 @@ func main() {
 		fmt.Printf("Writing file to %s...\n", cacheFileName)
 		// prepare file, that will be cached later in action.yaml
 		// resAsSingleString := strings.Join(res, "\n") + "\n"
-		os.WriteFile(cacheFileName, []byte(resSendRequest), 0644)
+		errWrite := os.WriteFile(cacheFileName, []byte(resSendRequest), 0644)
+		if errWrite != nil {
+			panic(fmt.Sprintf("Error occurred while writing to disk - %s", errWrite))
+		}
 
 		// return array to GHA
 		WriteJSONArrayToGitHubOutput("lts_versions", res)
