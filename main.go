@@ -46,24 +46,28 @@ func main() {
 
 	// renew cache function - even if one exists and is not older than 7 days
 	if *cacheRenewPtr {
+		fmt.Println("Getting full path...")
 		cacheFileName := GetCacheFileFullPath(*productCategoryPtr, UnifyName(*productCategoryPtr, *productNamePtr), *versionsToFetchPtr)
-
+		fmt.Println("Sending request...")
 		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*productCategoryPtr, *productNamePtr))
 		if err != nil {
 			panic("Error occurred while sending request")
 		}
 
+		fmt.Println("Getting n latest versions")
 		res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr, *returnMajorMinorPatch)
 		if errRes != nil {
 			panic("Error occurred while fetching LTS versions")
 		}
 
+		fmt.Println("Writing file...")
 		// prepare file, that will be cached later in action.yaml
 		// resAsSingleString := strings.Join(res, "\n") + "\n"
 		os.WriteFile(cacheFileName, []byte(resSendRequest), 0644)
 
 		// return array to GHA
 		WriteJSONArrayToGitHubOutput("lts_versions", res)
+		fmt.Println("Written to GitHub Output")
 		return
 	}
 

@@ -71,6 +71,11 @@ jobs:
         id: cache-renew
         run: ./get-lts-versions -cache_renew=true -category=lang -product_name=${{ steps.lts-unified-name.outputs.parsed_product_name }} -versions=3
 
+      - name: Check for .cache dir and created file file
+        run: |
+          echo "${{ github.workspace }}/.cache/${{ steps.lts-unified-name.outputs.parsed_category }}-${{ steps.lts-unified-name.outputs.parsed_product_name }}-3.json"
+          ls -la "${{ github.workspace }}/.cache" || true
+
       - name: Save cache
         # if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
