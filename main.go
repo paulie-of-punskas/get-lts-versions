@@ -47,7 +47,7 @@ func main() {
 	// renew cache function - even if one exists and is not older than 7 days
 	if *cacheRenewPtr {
 		fmt.Println("Getting full path...")
-		cacheFileName := GetCacheFileFullPath(*productCategoryPtr, UnifyName(*productCategoryPtr, *productNamePtr), *versionsToFetchPtr)
+		cacheFileName := CreateAndGetCacheFileFullPath(*productCategoryPtr, UnifyName(*productCategoryPtr, *productNamePtr), *versionsToFetchPtr)
 		fmt.Println("Sending request...")
 		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*productCategoryPtr, *productNamePtr))
 		if err != nil {
@@ -75,7 +75,7 @@ func main() {
 	}
 
 	if *getCachePtr {
-		cacheFileName := GetCacheFileFullPath(*productCategoryPtr, UnifyName(*productCategoryPtr, *productNamePtr), *versionsToFetchPtr)
+		cacheFileName := CreateAndGetCacheFileFullPath(*productCategoryPtr, UnifyName(*productCategoryPtr, *productNamePtr), *versionsToFetchPtr)
 
 		cacheFileContent, err := os.ReadFile(cacheFileName)
 		if err != nil {

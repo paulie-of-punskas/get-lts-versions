@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-func TestGetCacheFileFullPath(t *testing.T) {
+func TestCreateAndGetCacheFileFullPath(t *testing.T) {
 	t.Run("Should return string that does not contain 'runner', if run locally", func(t *testing.T) {
-		got := GetCacheFileFullPath("lang", "golang", 5)
+		got := CreateAndGetCacheFileFullPath("lang", "golang", 5)
 		if os.Getenv("GITHUB_WORKSPACE") == "" && strings.Contains(got, "runner") {
 			t.Errorf("Test run locally should not have 'runner' string")
 		}

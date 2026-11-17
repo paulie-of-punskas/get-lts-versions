@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func GetCacheFileFullPath(productType, productName string, versionsToFetch int) string {
+func CreateAndGetCacheFileFullPath(productType, productName string, versionsToFetch int) string {
 	var rootDir string
 	if os.Getenv("GITHUB_WORKSPACE") != "" {
 		rootDir = os.Getenv("GITHUB_WORKSPACE")
@@ -15,6 +15,15 @@ func GetCacheFileFullPath(productType, productName string, versionsToFetch int) 
 		rootDir = "."
 	}
 	cacheDir := filepath.Join(rootDir, ".cache")
+
+	// create cacheDir if it does not exist
+	if _, err := os.Stat(cacheDir); os.IsNotExist(err) {
+		err := os.MkdirAll(cacheDir, 0755)
+		if err != nil {
+			panic(fmt.Sprintf("failed to create cache directory %s: %v", cacheDir, err))
+		}
+	}
+
 	parsedProductName := UnifyName(productType, productName)
 
 	return filepath.Join(cacheDir, productType+"-"+parsedProductName+"-"+fmt.Sprintf("%v", versionsToFetch)+".json")
