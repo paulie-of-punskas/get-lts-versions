@@ -60,7 +60,7 @@ func main() {
 			panic("Error occurred while fetching LTS versions")
 		}
 
-		fmt.Println("Writing file...")
+		fmt.Printf("Writing file to %s...\n", cacheFileName)
 		// prepare file, that will be cached later in action.yaml
 		// resAsSingleString := strings.Join(res, "\n") + "\n"
 		os.WriteFile(cacheFileName, []byte(resSendRequest), 0644)
