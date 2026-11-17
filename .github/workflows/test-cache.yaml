@@ -64,7 +64,7 @@ jobs:
         if: ${{ steps.cache-age.outputs.cache_file_age == 0 }}
         id: is-cache-age-0
         shell: bash
-        run: printf "Cache age is ${{ steps.lts-unified-name.outputs.parsed_product_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
+        run: printf "Cache age for ${{ steps.lts-unified-name.outputs.parsed_product_name }} is ${{ steps.cache-age.outputs.cache_file_age }}"
 
       - name: Renew cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 || steps.cache-age.outputs.cache_file_age == 0 }}
