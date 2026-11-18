@@ -1,4 +1,4 @@
-name: Test - check if caches exist for language
+name: Test - check if caches exist for os
 
 on:
   push:
@@ -66,7 +66,7 @@ jobs:
       #   shell: bash
       #   run: printf "Cache age for ${{ steps.lts-unified-name.outputs.parsed_product_name }} is ${{ steps.cache-age.outputs.cache_file_age }}"
 
-      - name: Check for .cache dir and created file file
+      - name: Check for .cache dir and created file
         run: |
           echo "${{ github.workspace }}/.cache/${{ steps.lts-unified-name.outputs.parsed_category }}-${{ steps.lts-unified-name.outputs.parsed_product_name }}-3.json"
           ls -la "${{ github.workspace }}/.cache" || true

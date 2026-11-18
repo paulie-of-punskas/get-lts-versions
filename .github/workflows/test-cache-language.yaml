@@ -60,13 +60,13 @@ jobs:
         shell: bash
         run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_product_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
 
-      # - name: Check if cache is 0 (newly created or if does not exist at time of run)
-      #   if: ${{ steps.cache-age.outputs.cache_file_age == 0 }}
-      #   id: is-cache-age-0
-      #   shell: bash
-      #   run: printf "Cache age for ${{ steps.lts-unified-name.outputs.parsed_product_name }} is ${{ steps.cache-age.outputs.cache_file_age }}"
+      - name: Check if cache is 0 (newly created or if does not exist at time of run)
+        if: ${{ steps.cache-age.outputs.cache_file_age == 0 }}
+        id: is-cache-age-0
+        shell: bash
+        run: printf "Cache age for ${{ steps.lts-unified-name.outputs.parsed_product_name }} is ${{ steps.cache-age.outputs.cache_file_age }}"
 
-      - name: Check for .cache dir and created file file
+      - name: Check for .cache dir and created file
         run: |
           echo "${{ github.workspace }}/.cache/${{ steps.lts-unified-name.outputs.parsed_category }}-${{ steps.lts-unified-name.outputs.parsed_product_name }}-3.json"
           ls -la "${{ github.workspace }}/.cache" || true
