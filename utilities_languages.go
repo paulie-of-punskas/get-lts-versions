@@ -14,8 +14,10 @@ var languageNamesJSON []byte
 //go:embed assets/os_names.json
 var osNamesJSON []byte
 
-func SanitizeString(strintToSanitize string) string {
-	return strings.ToLower(strings.TrimSpace(strintToSanitize))
+func SanitizeString(stringtToSanitize string) string {
+	stringtToSanitize = strings.ReplaceAll(stringtToSanitize, `"`, "")
+	stringtToSanitize = strings.ReplaceAll(stringtToSanitize, `'`, "")
+	return strings.ToLower(strings.TrimSpace(stringtToSanitize))
 }
 
 // Deserialize EOL return

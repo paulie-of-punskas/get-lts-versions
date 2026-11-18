@@ -60,4 +60,22 @@ func TestGetFullProductName(t *testing.T) {
 
 		GetFullProductName("lang", "labas")
 	})
+
+	t.Run("Expect 'ubuntu' to have 'Ubuntu' as full name", func(t *testing.T) {
+		want := "Ubuntu"
+		got := GetFullProductName("os", "ubuntu")
+
+		if want != got {
+			t.Errorf("Wanted: %s, got: %s", want, got)
+		}
+	})
+
+	t.Run("Expect \"ubuntu\" to have 'Ubuntu' as full name", func(t *testing.T) {
+		want := "Ubuntu"
+		got := GetFullProductName("os", "\"ubuntu\"")
+
+		if want != got {
+			t.Errorf("Wanted: %s, got: %s", want, got)
+		}
+	})
 }

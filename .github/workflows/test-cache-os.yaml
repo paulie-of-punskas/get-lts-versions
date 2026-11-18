@@ -76,7 +76,7 @@ jobs:
       - name: Renew cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 || steps.cache-age.outputs.cache_file_age == 0 }}
         id: cache-renew
-        run: ./get-lts-versions -cache_renew=true -category=os -product_name=${{ steps.lts-unified-name.outputs.parsed_product_name }} -versions=3
+        run: ./get-lts-versions -cache_renew=true -category=${{ env.category }} -product_name=${{ steps.lts-unified-name.outputs.parsed_product_name }} -versions=3
 
       - name: Save cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 || steps.cache-age.outputs.cache_file_age == 0 }}
