@@ -60,11 +60,11 @@ jobs:
         shell: bash
         run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_product_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
 
-      - name: Check if cache is 0 (newly created or if does not exist at time of run)
-        if: ${{ steps.cache-age.outputs.cache_file_age == 0 }}
-        id: is-cache-age-0
-        shell: bash
-        run: printf "Cache age for ${{ steps.lts-unified-name.outputs.parsed_product_name }} is ${{ steps.cache-age.outputs.cache_file_age }}"
+      # - name: Check if cache is 0 (newly created or if does not exist at time of run)
+      #   if: ${{ steps.cache-age.outputs.cache_file_age == 0 }}
+      #   id: is-cache-age-0
+      #   shell: bash
+      #   run: printf "Cache age for ${{ steps.lts-unified-name.outputs.parsed_product_name }} is ${{ steps.cache-age.outputs.cache_file_age }}"
 
       - name: Check for .cache dir and created file
         run: |
@@ -72,12 +72,12 @@ jobs:
           ls -la "${{ github.workspace }}/.cache" || true
 
       - name: Renew cache
-        if: ${{ steps.cache-age.outputs.cache_file_age > 7 || steps.cache-age.outputs.cache_file_age == 0 }}
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         id: cache-renew
         run: ./get-lts-versions -cache_renew=true -category=lang -product_name=${{ steps.lts-unified-name.outputs.parsed_product_name }} -versions=3
 
       - name: Save cache
-        if: ${{ steps.cache-age.outputs.cache_file_age > 7 || steps.cache-age.outputs.cache_file_age == 0 }}
+        if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
