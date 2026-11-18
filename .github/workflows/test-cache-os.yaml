@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       go-version: 1.24.2
+      category: os
+      product_name: ubuntu
 
     steps:
       - name: Checkout code
@@ -36,7 +38,7 @@ jobs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: ./get-lts-versions -category=os -product_name=ubuntu -write_to_gha=true
+        run: ./get-lts-versions -category=${{ env.category }} -product_name=${{ env.product_name }} -write_to_gha=true
 
       - name: Print the unified name
         shell: bash
@@ -74,7 +76,7 @@ jobs:
       - name: Renew cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 || steps.cache-age.outputs.cache_file_age == 0 }}
         id: cache-renew
-        run: ./get-lts-versions -cache_renew=true -category=lang -product_name=${{ steps.lts-unified-name.outputs.parsed_product_name }} -versions=3
+        run: ./get-lts-versions -cache_renew=true -category=os -product_name=${{ steps.lts-unified-name.outputs.parsed_product_name }} -versions=3
 
       - name: Save cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 || steps.cache-age.outputs.cache_file_age == 0 }}
