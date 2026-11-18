@@ -6,7 +6,7 @@ on:
       - '*.go'
       - 'go.mod'
       - 'get-lts-versions'
-      - '.github/workflows/test-cache.yaml'
+      - '.github/workflows/test-cache-os.yaml'
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ jobs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: ./get-lts-versions -category=lang -product_name=golang -write_to_gha=true
+        run: ./get-lts-versions -category=os -product_name=ubuntu -write_to_gha=true
 
       - name: Print the unified name
         shell: bash
@@ -108,16 +108,16 @@ jobs:
 
             const getCachesResult = await getCaches();
 
-            // expect 'lts-versions-lang-go' and 'lts-versions-lang-python' to exist
+            // expect 'lts-versions-os-ubuntu' cache to exist
             // that includes cache "from" main and other branches
             let ltsCache = 0;
             getCachesResult.actions_caches.forEach((cache) => {
-                if (cache.key === 'lts-versions-lang-go-3' || cache.key === 'lts-versions-lang-python-3') {
+                if (cache.key === 'lts-versions-os-ubuntu-3') {
                   ltsCache++
                 }
             });
             console.log(`Returned cache:\n${JSON.stringify(getCachesResult.actions_caches)}`);
             if (ltsCache === 0) {
-                throw new Error(`Could not find LTS cache for python and go. Found number of cache: ${ltsCache}`);
+                throw new Error(`Could not find LTS cache for ubuntu. Found number of cache: ${ltsCache}`);
             }
             console.log("'oll korrect! (Caches were found successfully).'");
