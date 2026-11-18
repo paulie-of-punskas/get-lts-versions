@@ -27,7 +27,7 @@ func captureStdout(f func()) string {
 
 func TestCheckEOL(t *testing.T) {
 	t.Run("Should return '', if inputEOLdate is empty", func(t *testing.T) {
-		got := CheckEOL("golang", "", "")
+		got := CheckEOL("lang", "golang", "", "")
 		want := ""
 		if got != want {
 			t.Errorf("Expected empty string to be returned, got: %s", got)
@@ -44,12 +44,12 @@ func TestCheckEOL(t *testing.T) {
 			}
 		}()
 
-		CheckEOL("golang", "", "2000-12-32")
+		CheckEOL("lang", "golang", "", "2000-12-32")
 	})
 
 	t.Run("Should print warning message", func(t *testing.T) {
 		got := captureStdout(func() {
-			CheckEOL("golang", "", "2000-12-31")
+			CheckEOL("lang", "golang", "", "2000-12-31")
 		})
 
 		if !strings.Contains(got, "::warning::") {
@@ -60,7 +60,7 @@ func TestCheckEOL(t *testing.T) {
 	t.Run("Should print notice message", func(t *testing.T) {
 		got := captureStdout(func() {
 			dateHalfYearHead := time.Now().AddDate(0, 0, 180)
-			CheckEOL("golang", "", dateHalfYearHead.Format("2006-01-02"))
+			CheckEOL("lang", "golang", "", dateHalfYearHead.Format("2006-01-02"))
 		})
 
 		if !strings.Contains(got, "::notice::") {

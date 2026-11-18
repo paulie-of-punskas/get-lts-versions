@@ -19,7 +19,7 @@ jobs:
     env:
       go-version: 1.24.2
       category: os
-      product_name: ubuntu
+      # product_name: ubuntu
 
     steps:
       - name: Checkout code
@@ -38,7 +38,8 @@ jobs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: ./get-lts-versions -category=${{ env.category }} -product_name=${{ env.product_name }} -write_to_gha=true
+        # run: ./get-lts-versions -category=${{ env.category }} -product_name=${{ env.product_name }} -write_to_gha=true
+        run: ./get-lts-versions -category=${{ env.category }} -product_name=ubuntu -write_to_gha=true
 
       - name: Print the unified name
         shell: bash

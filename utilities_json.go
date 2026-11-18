@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-func CheckEOL(languageName, majorMinorVersion, inputEOLdate string) string {
+func CheckEOL(productType, productName, majorMinorVersion, inputEOLdate string) string {
 	if inputEOLdate == "" {
-		fmt.Printf("::notice::There is no information about End Of Life date for %s version %s.\n", GetFullProductName("lang", languageName), majorMinorVersion)
+		fmt.Printf("::notice::There is no information about End Of Life date for %s version %s.\n", GetFullProductName(productType, productName), majorMinorVersion)
 		return ""
 	}
 
@@ -20,9 +20,9 @@ func CheckEOL(languageName, majorMinorVersion, inputEOLdate string) string {
 
 	diffDays := math.Ceil(float64(eolDate.UnixMilli()-time.Now().UnixMilli()) / (1000 * 60 * 60 * 24))
 	if diffDays < 0 {
-		fmt.Printf("::warning::%s %s support has expired on %s. It no longer offers active or security support.", GetFullProductName("lang", languageName), majorMinorVersion, eolDate.UTC().Format("2006-01-02"))
+		fmt.Printf("::warning::%s %s support has expired on %s. It no longer offers active or security support.", GetFullProductName(productType, productName), majorMinorVersion, eolDate.UTC().Format("2006-01-02"))
 	} else if diffDays <= 180 {
-		fmt.Printf("::notice::%s %s End Of Life is approaching. It still has %v day(s) of security support.", GetFullProductName("lang", languageName), majorMinorVersion, diffDays)
+		fmt.Printf("::notice::%s %s End Of Life is approaching. It still has %v day(s) of security support.", GetFullProductName(productType, productName), majorMinorVersion, diffDays)
 	}
 	return ""
 }
@@ -62,7 +62,7 @@ func GetNltsVersionsAndCheckEOLdates(jsonInput string, numOfVersions int, checkE
 		}
 
 		if checkEOL {
-			CheckEOL(eolResponse.Result.Name, releaseData.MajorMinorVersion, releaseData.EolFrom)
+			CheckEOL(eolResponse.Result.Category, eolResponse.Result.Name, releaseData.MajorMinorVersion, releaseData.EolFrom)
 		}
 	}
 
