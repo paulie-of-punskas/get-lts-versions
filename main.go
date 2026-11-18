@@ -22,6 +22,10 @@ func main() {
 
 	flag.Parse()
 
+	// apply clean up language, os names
+	*productCategoryPtr = SanitizeString(*productCategoryPtr)
+	*productNamePtr = SanitizeString(*productNamePtr)
+
 	if *printVersion {
 		fmt.Println(version)
 	}
