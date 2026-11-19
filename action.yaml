@@ -91,14 +91,14 @@ runs:
           CACHE_HIT: ${{ steps.lts-cache.outputs.cache-hit }}
           CACHE_FILE_AGE: ${{ steps.cache-age.outputs.cache_file_age }}
           CATEGORY: ${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}
-          LANGUAGE: ${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}
+          PRODUCT_NAME: ${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}
         run: |
           # $CACHE_HIT == "" is used for case when no cache is found, xref: https://github.com/actions/cache#outputs
           if [[ "$CACHE_HIT" == "true" && "$CACHE_FILE_AGE" -gt 7 ]] || [[ "$CACHE_HIT" == "" ]]; then
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -cache_renew=true \
               -category=$CATEGORY \
-              -product_name=$LANGUAGE \
+              -product_name=$PRODUCT_NAME \
               -versions=${{ inputs.versions_to_fetch }} \
               -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
               -check_eol=${{ inputs.print_eol_information }}
@@ -106,7 +106,7 @@ runs:
             "$GITHUB_ACTION_PATH/get-lts-versions" \
               -get_cache=true \
               -category=$CATEGORY \
-              -product_name=$LANGUAGE \
+              -product_name=$PRODUCT_NAME \
               -versions=${{ inputs.versions_to_fetch }} \
               -return_major_minor_patch_version=${{ inputs.return_major_minor_patch_version }} \
               -check_eol=${{ inputs.print_eol_information }}
