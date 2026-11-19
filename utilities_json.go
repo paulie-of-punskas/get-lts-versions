@@ -20,9 +20,9 @@ func CheckEOL(productType, productName, majorMinorVersion, inputEOLdate string) 
 
 	diffDays := math.Ceil(float64(eolDate.UnixMilli()-time.Now().UnixMilli()) / (1000 * 60 * 60 * 24))
 	if diffDays < 0 {
-		fmt.Printf("::warning::%s %s support has expired on %s. It no longer offers active or security support.", GetFullProductName(productType, productName), majorMinorVersion, eolDate.UTC().Format("2006-01-02"))
+		fmt.Printf("::warning::%s %s support has expired on %s. It no longer offers active or security support.\n", GetFullProductName(productType, productName), majorMinorVersion, eolDate.UTC().Format("2006-01-02"))
 	} else if diffDays <= 180 {
-		fmt.Printf("::notice::%s %s End Of Life is approaching. It still has %v day(s) of security support.", GetFullProductName(productType, productName), majorMinorVersion, diffDays)
+		fmt.Printf("::notice::%s %s End Of Life is approaching. It still has %v day(s) of security support.\n", GetFullProductName(productType, productName), majorMinorVersion, diffDays)
 	}
 	return ""
 }
