@@ -34,8 +34,11 @@ runs:
   steps:
       - name: Check if required parameters exist and are not empty
         shell: bash
+        env:
+          CATEGORY: ${{ inputs.category }}
+          PRODUCT_NAME: ${{ inputs.product_name }}
         run: |
-          if [[ -z ${{ inputs.category }} || -z ${{ inputs.product_name }} ]]; then
+          if [[ -z "$CATEGORY" || -z "$PRODUCT_NAME" ]]; then
             echo "'category' and 'product_name' parameters cannot be empty"
             exit 1
           fi
