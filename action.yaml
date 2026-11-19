@@ -32,10 +32,10 @@ outputs:
 runs:
   using: "composite"
   steps:
-      - name: Check if required parameters are not empty
+      - name: Check if required parameters exist and are not empty
         shell: bash
         run: |
-          if [[ ${{ inputs.category }} == "" || ${{ inputs.product_name }} == "" ]]; then
+          if [[ ! -z ${{ inputs.category }} || ! -z ${{ inputs.product_name }} ]] || [[ ${{ inputs.category }} == "" || ${{ inputs.product_name }} == "" ]]; then
             echo "'category' and 'product_name' parameters cannot be empty"
             exit 1
           fi
