@@ -58,11 +58,13 @@ func main() {
 			panic("Error occurred while sending request")
 		}
 
-		fmt.Println("Getting n latest versions")
+		fmt.Println("Getting n latest versions...")
 		res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr, *returnMajorMinorPatch)
 		if errRes != nil {
 			panic("Error occurred while fetching LTS versions")
 		}
+
+		fmt.Printf("Received: %s", res)
 
 		fmt.Printf("Writing file to %s...\n", cacheFileName)
 		// prepare file, that will be cached later in action.yaml
