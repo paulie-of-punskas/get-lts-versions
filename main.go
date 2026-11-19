@@ -64,11 +64,8 @@ func main() {
 			panic("Error occurred while fetching LTS versions")
 		}
 
-		fmt.Printf("Received: %s", res)
-
-		fmt.Printf("Writing file to %s...\n", cacheFileName)
+		fmt.Printf("Writing file to JSON: %s\n", cacheFileName)
 		// prepare file, that will be cached later in action.yaml
-		// resAsSingleString := strings.Join(res, "\n") + "\n"
 		errWrite := os.WriteFile(cacheFileName, []byte(resSendRequest), 0644)
 		if errWrite != nil {
 			panic(fmt.Sprintf("Error occurred while writing to disk - %s", errWrite))

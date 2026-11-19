@@ -4,12 +4,10 @@ inputs:
   category:
     description: Type of the product ("os", "lang") are acceptable
     required: true
-    default: "lang"
     type: string
   product_name:
     description: Name of product (language, os etc.) that LTS is required for e.g. python, almalinux, golang.
     required: true
-    default: "go"
     type: string
   versions_to_fetch:
     description: How many long term support versions to fetch and return
