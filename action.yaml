@@ -32,6 +32,14 @@ outputs:
 runs:
   using: "composite"
   steps:
+      - name: Check if required parameters are not empty
+        shell: bash
+        run: |
+          if [[ ${{ inputs.category }} == "" || ${{ inputs.product_name }} == "" ]]; then
+            echo "'category' and 'product_name' parameters cannot be empty"
+            exit 1
+          fi
+
       - name: Check for runner' OS
         shell: bash
         run: |
