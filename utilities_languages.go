@@ -8,51 +8,64 @@ import (
 	"strings"
 )
 
-//go:embed assets/language_names.json
+//go:embed assets/lang_names.json
 var languageNamesJSON []byte
 
-func SanitizeString(strintToSanitize string) string {
-	return strings.ToLower(strings.TrimSpace(strintToSanitize))
+//go:embed assets/os_names.json
+var osNamesJSON []byte
+
+func SanitizeString(stringtToSanitize string) string {
+	stringtToSanitize = strings.ReplaceAll(stringtToSanitize, `"`, "")
+	stringtToSanitize = strings.ReplaceAll(stringtToSanitize, `'`, "")
+	return strings.ToLower(strings.TrimSpace(stringtToSanitize))
 }
 
-func ReadLanguageNames() LanguageNames {
-	var languages LanguageNames
+// Deserialize EOL return
+func ReadProductNames(productType, productName string) ProductNames {
+	var productNames ProductNames
+	var err error
 
-	err := json.Unmarshal(languageNamesJSON, &languages)
-	if err != nil {
-		panic(fmt.Sprintf("Could not parse embedded language_names.json %s", err))
+	if productType == "lang" {
+		err = json.Unmarshal(languageNamesJSON, &productNames)
+	} else {
+		err = json.Unmarshal(osNamesJSON, &productNames)
 	}
 
-	return languages
+	if err != nil {
+		panic(fmt.Sprintf("Could not parse embedded json - %s", err))
+	}
+
+	return productNames
 }
 
 // Convert language name to follow endoflife API convention, e.g. openjdk
-func UnifyName(language string) string {
-	languages := ReadLanguageNames()
-	languageAliases := languages.Aliases
-	normalizedLanguage := SanitizeString(language)
+func UnifyName(productType, productName string) string {
+	productNames := ReadProductNames(productType, productName)
+	productAliases := productNames.Aliases
 
-	if languageAliases[normalizedLanguage] != "" {
-		return languageAliases[normalizedLanguage]
+	normalizedName := SanitizeString(productName)
+
+	if productAliases[normalizedName] != "" {
+		return productAliases[normalizedName]
 	}
 
-	panic(fmt.Sprintf("Could not find alias for '%s'", language))
+	panic(fmt.Sprintf("Could not find alias for '%s'", productName))
 }
 
 // Get full language name from language_names.json > languages[]
-func GetFullLanguageName(language string) string {
-	languagesList := ReadLanguageNames()
-	normalizedLanguage := SanitizeString(language)
+func GetFullProductName(productType, productName string) string {
+	languagesList := ReadProductNames(productType, productName)
+	normalizedLanguage := SanitizeString(productName)
 
-	for j := 0; j < len(languagesList.Languages); j++ {
-		if slices.Contains(languagesList.Languages[j].InputNames, normalizedLanguage) {
-			return languagesList.Languages[j].LanguageFullName
+	for j := 0; j < len(languagesList.Product); j++ {
+		if slices.Contains(languagesList.Product[j].InputNames, normalizedLanguage) {
+			return languagesList.Product[j].FullName
 		}
 	}
 
 	builder := strings.Builder{}
 	builder.WriteString("Could not find full name for '")
-	builder.WriteString(language)
+	builder.WriteString(productName)
 	builder.WriteString("'")
 	panic(builder.String())
 }

@@ -39,7 +39,8 @@ jobs:
         id: go
         uses: ./
         with:
-          language: "go"
+          category: "lang"
+          product_name: "golang"
           versions_to_fetch: "3"
           print_eol_information: "true"
           return_major_minor_patch_version: "false"
@@ -52,7 +53,8 @@ jobs:
         id: python
         uses: ./
         with:
-          language: "python"
+          category: "lang"
+          product_name: "python"
           versions_to_fetch: "5"
           print_eol_information: "false"
           return_major_minor_patch_version: "true"

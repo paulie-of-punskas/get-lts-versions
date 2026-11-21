@@ -1,0 +1,45 @@
+name: Check for language updates
+description: Workflow checks if new languages were added to EOL API
+
+on:
+  push:
+    paths:
+      - '.github/workflows/check-for-new-products.yaml'
+  workflow_dispatch:
+  schedule:
+    - cron: "0 18 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  check-for-language-updates:
+    name: Check if new language/os was added
+    runs-on: ubuntu-slim
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Run script
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const script = require('.github/workflows/scripts/check_for_new_languages.js')
+            const eolData = await script.getAllEOLProducts();
+            if (!Array.isArray(eolData.result) || eolData.result.length === 0) {
+              throw new Error("Could not fetch EOL product data, so the language check was skipped.");
+            }
+
+            const languagesUpToDate = script.areProductNamesUpToDate(eolData, "lang");
+            const osUpToDate = script.areProductNamesUpToDate(eolData, "os");
+
+            if (languagesUpToDate) {
+              console.log("No updates to language names are needed")
+            }
+
+            if (osUpToDate) {
+              console.log("No updates to os names are needed")
+            } else {
+              throw new Error("New languages were added. Please update /assets/lang_names.json and aliases.")
+            }

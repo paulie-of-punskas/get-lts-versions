@@ -6,14 +6,15 @@ import (
 	"os"
 )
 
-var version = "1.1.1"
+var version = "1.2.0"
 
 func main() {
 	versionsToFetchPtr := flag.Int("versions", 3, "")
 	returnMajorMinorPatch := flag.Bool("return_major_minor_patch_version", false, "")
 	checkEOLptr := flag.Bool("check_eol", true, "")
 	writeToGHAptr := flag.Bool("write_to_gha", false, "")
-	parseLanguagePtr := flag.String("parse_language", "", "")
+	productCategoryPtr := flag.String("category", "", "")
+	productNamePtr := flag.String("product_name", "", "")
 	getFileAgePtr := flag.String("get_file_age", "", "")
 	cacheRenewPtr := flag.Bool("cache_renew", false, "")
 	getCachePtr := flag.Bool("get_cache", false, "")
@@ -21,13 +22,19 @@ func main() {
 
 	flag.Parse()
 
+	// apply clean up language, os names
+	*productCategoryPtr = SanitizeString(*productCategoryPtr)
+	*productNamePtr = SanitizeString(*productNamePtr)
+
 	if *printVersion {
 		fmt.Println(version)
 	}
 
-	// case when only language needs to be parsed to GHA
-	if *writeToGHAptr && *parseLanguagePtr != "" {
-		WriteJSONArrayToGitHubOutput("parsed_language_name", UnifyName(*parseLanguagePtr))
+	// case when product name and type need to be parsed to GHA
+	if *writeToGHAptr && *productCategoryPtr != "" && *productNamePtr != "" {
+		WriteJSONArrayToGitHubOutput("parsed_category", *productCategoryPtr)
+		WriteJSONArrayToGitHubOutput("parsed_product_name", UnifyName(*productCategoryPtr, *productNamePtr))
+		fmt.Printf("Writing %s %s to GitHub Output", *productCategoryPtr, UnifyName(*productCategoryPtr, *productNamePtr))
 		return
 	}
 
@@ -35,7 +42,7 @@ func main() {
 	if *writeToGHAptr && *getFileAgePtr != "" {
 		resAge, errAge := GetFileAgeInDays(*getFileAgePtr, false)
 		if errAge != nil {
-			panic("Error occurred while while calculating file age")
+			panic(fmt.Sprintf("Error occurred while calculating file age - %s", errAge))
 		}
 		WriteJSONArrayToGitHubOutput("cache_file_age", resAge)
 		return
@@ -43,29 +50,35 @@ func main() {
 
 	// renew cache function - even if one exists and is not older than 7 days
 	if *cacheRenewPtr {
-		cacheFileName := GetCacheFileFullPath(UnifyName(*parseLanguagePtr), *versionsToFetchPtr)
-
-		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*parseLanguagePtr))
+		fmt.Println("Getting full path...")
+		cacheFileName := CreateAndGetCacheFileFullPath(*productCategoryPtr, UnifyName(*productCategoryPtr, *productNamePtr), *versionsToFetchPtr)
+		fmt.Println("Sending request...")
+		resSendRequest, err := SendRequest("https://endoflife.date/api/v1/products", UnifyName(*productCategoryPtr, *productNamePtr))
 		if err != nil {
 			panic("Error occurred while sending request")
 		}
 
+		fmt.Println("Getting n latest versions...")
 		res, errRes := GetNltsVersionsAndCheckEOLdates(resSendRequest, *versionsToFetchPtr, *checkEOLptr, *returnMajorMinorPatch)
 		if errRes != nil {
 			panic("Error occurred while fetching LTS versions")
 		}
 
+		fmt.Printf("Writing file to JSON: %s\n", cacheFileName)
 		// prepare file, that will be cached later in action.yaml
-		// resAsSingleString := strings.Join(res, "\n") + "\n"
-		os.WriteFile(cacheFileName, []byte(resSendRequest), 0644)
+		errWrite := os.WriteFile(cacheFileName, []byte(resSendRequest), 0644)
+		if errWrite != nil {
+			panic(fmt.Sprintf("Error occurred while writing to disk - %s", errWrite))
+		}
 
 		// return array to GHA
 		WriteJSONArrayToGitHubOutput("lts_versions", res)
+		fmt.Println("Written to GitHub Output")
 		return
 	}
 
 	if *getCachePtr {
-		cacheFileName := GetCacheFileFullPath(UnifyName(*parseLanguagePtr), *versionsToFetchPtr)
+		cacheFileName := CreateAndGetCacheFileFullPath(*productCategoryPtr, UnifyName(*productCategoryPtr, *productNamePtr), *versionsToFetchPtr)
 
 		cacheFileContent, err := os.ReadFile(cacheFileName)
 		if err != nil {
