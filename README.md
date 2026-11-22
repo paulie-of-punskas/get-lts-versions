@@ -1,7 +1,9 @@
 [![CI](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/ci.yaml)
-[![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml)
-[![Test - integration and caching](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache.yaml)
+[![Check for new languages/os](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/check-for-new-products.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/check-for-new-products.yaml)
 [![CodeQL](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/github-code-scanning/codeql)
+[![Test - get LTS versions](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-action.yaml)
+[![Test - os integration and caching](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache-os.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache-os.yaml)
+[![Test - language integration and caching](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache-language.yaml/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/test-cache-language.yaml)
 
 # Info
 Golang CLI & GitHub Action used for fetching Long Term Support versions for different computer software. 
@@ -87,10 +89,11 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Get LTS for Golang
-        uses: paulie-of-punskas/get-lts-versions@35ea0cd71f17ecc12e3aaa147ed41a02a026004b # v1.1.1
+        uses: paulie-of-punskas/get-lts-versions@d3aeaf149804d2c0da37b4b82cdcc21da530244e # v1.2.0
         id: getLTSversion
         with:
-          language: 'golang'
+          category: 'lang'
+          product_name: 'golang'
 
   setup-environment-run-build:
     name: Build | Go ${{ matrix.lts_version }}
