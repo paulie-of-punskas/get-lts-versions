@@ -4,7 +4,7 @@
 [![CodeQL](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/paulie-of-punskas/get-lts-versions/actions/workflows/github-code-scanning/codeql)
 
 # Info
-Golang CLI & GitHub Action used for fetching Long Term Support versions. 
+Golang CLI & GitHub Action used for fetching Long Term Support versions for different computer software. 
 Code sends a GET request to [endoflife.date API](https://endoflife.date/docs/api/v1/) and returns
 an array with a long term support versions - see [Outputs](#outputs).
 If larger number of LTS is requested, then function returns max supported number of versions.
@@ -12,9 +12,15 @@ If larger number of LTS is requested, then function returns max supported number
 # Requirements
 Linux x64 based runner. By default, GitHub Actions provides [Ubuntu based runners](https://github.com/actions/runner-images/tree/main).
 
+# Why should it be used?
+It's easy to lose track with patches, security updates and development of software. 
+This action helps you to assure yourself, that you use latest supported version in your CI/CD pipelines. 
+As someone said: 
+> Better safe than sorry.
+
 ## Features
-- Powered by [endoflife.date](https://endoflife.date) — reliable LTS data of over 20 programming languages
-- Flexible language naming — use common aliases (`go` or `golang`, `java-temurin` or `temurin`, etc.)
+- Powered by [endoflife.date](https://endoflife.date) — reliable LTS data for programming languages, Operating Systems
+- Flexible language and Operating System naming — use common aliases (`go` or `golang`, `java-temurin` or `temurin`, `ubuntu` etc.)
 - Seamless GitHub Actions integration — simple inputs and JSON output for workflow automation
 - No external dependencies — action uses a compiled Golang binary, that is based on native packages.
 - Caching - `get-lts-versions` caches results of endoflife.date and refreshes it weekly.
@@ -22,43 +28,37 @@ Linux x64 based runner. By default, GitHub Actions provides [Ubuntu based runner
 ## Supported programming languages
 | Language Name | Input Name | EndOfLife Name |
 |---|---|---|
-| COBOL | cobol, visual-cobol | visual-cobol |
-| Elixir | elixir | elixir |
-| Erlang | erlang | erlang |
-| Gleam | gleam | gleam |
 | Go | go, golang | go |
 | Groovy | groovy, apache-groovy | apache-groovy |
-| Haskell | ghc, haskell, glasgow-haskell-compiler | ghc |
-| IDL | idl | idl |
-| Java (Alibaba Dragonwell) | java-dragonwell, dragonwell, alibaba-dragonwell | alibaba-dragonwell |
-| Java (Amazon Corretto) | java-corretto, corretto, amazon-corretto | amazon-corretto |
-| Java (Azul Zulu) | java-zulu, zulu, azul-zulu | azul-zulu |
-| Java (BellSoft Liberica) | java-liberica, liberica, bellsoft-liberica | bellsoft-liberica |
-| Java (Eclipse Temurin) | java-temurin, temurin, eclipse-temurin | eclipse-temurin |
-| Java (GraalVM CE) | java-graalvm, graalvm, graalvm-ce | graalvm-ce |
-| Java (IBM Semeru) | java-semeru, semeru, ibm-semeru-runtime | ibm-semeru-runtime |
-| Java (Mandrel) | java-mandrel, mandrel | mandrel |
-| Java (Microsoft) | java-microsoft, microsoft-build-of-openjdk | microsoft-build-of-openjdk |
 | Java (OpenJDK) | java-openjdk, openjdk | openjdk |
-| Java (Oracle GraalVM) | java-oracle-graalvm, oracle-graalvm | oracle-graalvm |
-| Java (Oracle JDK) | java-oracle-jdk, oracle-jdk | oracle-jdk |
-| Java (Red Hat) | java-redhat, redhat-build-of-openjdk | redhat-build-of-openjdk |
-| Java (SapMachine) | java-sapmachine, sapmachine | sapmachine |
-| JRuby | jruby | jruby |
-| Julia | julia | julia |
-| Kotlin | kotlin | kotlin |
-| Lua | lua | lua |
-| Perl | perl | perl |
-| PHP | php | php |
-| PowerShell | powershell, pwsh, windows-powershell | powershell |
 | Python | python | python |
-| Ruby | ruby | ruby |
 | Rust | rust | rust |
 | Scala | scala | scala |
+| ... | ... | ... |
+
+See [full list of supported programming language names](./docs/readme_supported_programming_languages.md)
+
+## Supported Operating Systems
+
+| Language Name | Input Name | EndOfLife Name |
+|---|---|---|
+| AlmaLinux OS | almalinux, alma-linux, alma | almalinux |
+| Apple macOS | macos, mac | macos |
+| CentOS | centos | centos |
+| Debian | debian | debian |
+| Fedora Linux | fedora | fedora |
+| Microsoft Windows Server Core | windows-server-core, windowsservercore | windows-server-core |
+| NetApp ONTAP | netapp-ontap, ontap, ontap-os | netapp-ontap |
+| NixOS | nixos, nixoslinux | nixos |
+| Ubuntu | ubuntu, ubuntu-linux | ubuntu |
+| ... | ... | ... |
+
+See [full list of supported Operating System names](./docs/readme_supported_operating_systems.md)
 
 ## Quickstart
 ### Inputs
-`language` - any name from [supported languages list](#supported-programming-languages)  
+`category` - (required) `os` or `lang`  
+`product_name` - (required) name of the programming language or Operating System (e.g. `golang` or `ubuntu`)  
 `versions_to_fetch` - how many long term support versions to fetch. Must be a positive integer. If none is set,
 max number of supported versions will be returned.  
 `print_eol_information` - additional notice will be printed to user in Actions section, if given version is past or approaching EOL date.  
@@ -66,7 +66,7 @@ max number of supported versions will be returned.
 as it's easier to parse for "actions/setup-<language>".
 
 ### Outputs
-`lts_versions` - JSON array of LTS version strings - e.g. `["25", "24", "23"]`. Long Term Support version strings are returned in "MAJOR.MINOR.PATCH" semantic versioning. Use `fromJson()` to correctly parse strings in GHA workflow expressions: `["26","25"]`. GitHub Actions "setup-<language>" actions will automatically recognize the input.
+`lts_versions` - JSON array of LTS version strings - e.g. `["25", "24", "23"]`. Long Term Support version strings are returned in "MAJOR.MINOR.PATCH" semantic versioning. Use `fromJson()` to correctly parse strings in GHA workflow expressions: `["26","25"]`. E.g. GitHub Actions "setup-<language>" actions will automatically recognize the input.
 
 ### Examples
 ```YAML

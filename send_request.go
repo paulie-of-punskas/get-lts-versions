@@ -10,11 +10,11 @@ import (
 // Sends request to the EOL website.
 // If 200 - returns a Body, if 404 - returns error with language not found information
 // else returns an error depending on the task
-func SendRequest(url, language string) (string, error) {
+func SendRequest(url, language_os string) (string, error) {
 	eolURL := strings.Builder{}
 	eolURL.WriteString(url)
 	eolURL.WriteString("/")
-	eolURL.WriteString(SanitizeString(language))
+	eolURL.WriteString(SanitizeString(language_os))
 
 	req, clientErr := http.NewRequest(http.MethodGet, eolURL.String(), nil)
 
@@ -38,7 +38,7 @@ func SendRequest(url, language string) (string, error) {
 	if res.StatusCode != 200 && res.StatusCode != 404 {
 		return "", fmt.Errorf("HTTP request for %s returned %s", eolURL.String(), res.Status)
 	} else if res.StatusCode == 404 {
-		return "", fmt.Errorf("%s was not found on %s", language, eolURL.String())
+		return "", fmt.Errorf("%s was not found on %s", language_os, eolURL.String())
 	}
 
 	body, readErr := io.ReadAll(res.Body)

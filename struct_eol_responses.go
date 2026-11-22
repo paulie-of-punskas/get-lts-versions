@@ -9,6 +9,7 @@ type EOLresponse struct {
 
 type EOLresponseResult struct {
 	Name     string             `json:"name"`
+	Category string             `json:"category"`
 	Releases []LanguageReleases `json:"releases"`
 }
 

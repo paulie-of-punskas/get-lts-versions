@@ -1,4 +1,4 @@
-name: Test - check if caches exist
+name: Test - check if caches exist for language
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - '*.go'
       - 'go.mod'
       - 'get-lts-versions'
-      - '.github/workflows/test-cache.yaml'
+      - '.github/workflows/test-cache-language.yaml'
   workflow_dispatch:
 
 permissions:
@@ -36,42 +36,52 @@ jobs:
       - name: Unify name
         shell: bash
         id: lts-unified-name
-        run: ./get-lts-versions -parse_language=golang -write_to_gha=true
+        run: ./get-lts-versions -category=lang -product_name=golang -write_to_gha=true
 
       - name: Print the unified name
         shell: bash
         run: |
-          echo Parsed language name: ${{ steps.lts-unified-name.outputs.parsed_language_name }}
+          echo Parsed language name: ${{ steps.lts-unified-name.outputs.parsed_product_name }}
 
       - name: Restore cache
         id: lts-cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
-          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
-          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3
 
       - name: Check for cache age
         id: cache-age
-        run: ./get-lts-versions -write_to_gha=true -get_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
+        run: ./get-lts-versions -write_to_gha=true -get_file_age=${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
 
       - name: Check if cache is older than 7 days
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         id: is-cache-older-than-seven
         shell: bash
-        run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_language_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
+        run: printf "Cache is older than 7 days for ${{ steps.lts-unified-name.outputs.parsed_product_name }} - ${{ steps.cache-age.outputs.cache_file_age }}"
+
+      # - name: Check if cache is 0 (newly created or if does not exist at time of run)
+      #   if: ${{ steps.cache-age.outputs.cache_file_age == 0 }}
+      #   id: is-cache-age-0
+      #   shell: bash
+      #   run: printf "Cache age for ${{ steps.lts-unified-name.outputs.parsed_product_name }} is ${{ steps.cache-age.outputs.cache_file_age }}"
+
+      - name: Check for .cache dir and created file
+        run: |
+          echo "${{ github.workspace }}/.cache/${{ steps.lts-unified-name.outputs.parsed_category }}-${{ steps.lts-unified-name.outputs.parsed_product_name }}-3.json"
+          ls -la "${{ github.workspace }}/.cache" || true
 
       - name: Renew cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         id: cache-renew
-        # run: ./get-lts-versions -language=${{ steps.lts-unified-name.outputs.parsed_language_name }} -write_data_to_file=true
-        run: ./get-lts-versions -parse_language=${{ steps.lts-unified-name.outputs.parsed_language_name }}
+        run: ./get-lts-versions -cache_renew=true -category=lang -product_name=${{ steps.lts-unified-name.outputs.parsed_product_name }} -versions=3
 
       - name: Save cache
         if: ${{ steps.cache-age.outputs.cache_file_age > 7 }}
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
-          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3.json
-          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_language_name) }}-3
+          path: ${{ github.workspace }}/.cache/${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3.json
+          key: lts-versions-${{ fromJSON(steps.lts-unified-name.outputs.parsed_category) }}-${{ fromJSON(steps.lts-unified-name.outputs.parsed_product_name) }}-3
 
 
   fetch-caches:
@@ -98,11 +108,11 @@ jobs:
 
             const getCachesResult = await getCaches();
 
-            // expect 'lts-versions-go' and 'lts-versions-python' to exist
+            // expect 'lts-versions-lang-go' and 'lts-versions-lang-python' to exist
             // that includes cache "from" main and other branches
             let ltsCache = 0;
             getCachesResult.actions_caches.forEach((cache) => {
-                if (cache.key === 'lts-versions-go-3' || cache.key === 'lts-versions-python-3') {
+                if (cache.key === 'lts-versions-lang-go-3' || cache.key === 'lts-versions-lang-python-3') {
                   ltsCache++
                 }
             });

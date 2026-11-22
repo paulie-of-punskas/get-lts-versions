@@ -1,0 +1,338 @@
+{
+  "aliases": {
+    "alibaba-dragonwell": "alibaba-dragonwell",
+    "amazon-corretto": "amazon-corretto",
+    "apache-groovy": "apache-groovy",
+    "azul-zulu": "azul-zulu",
+    "bellsoft-liberica": "bellsoft-liberica",
+    "corretto": "amazon-corretto",
+    "dragonwell": "alibaba-dragonwell",
+    "eclipse-temurin": "eclipse-temurin",
+    "elixir": "elixir",
+    "erlang": "erlang",
+    "erlang-otp": "erlang",
+    "ghc": "ghc",
+    "gleam": "gleam",
+    "go": "go",
+    "golang": "go",
+    "graalvm": "graalvm-ce",
+    "graalvm-ce": "graalvm-ce",
+    "groovy": "apache-groovy",
+    "groovy-lang": "apache-groovy",
+    "haskell": "ghc",
+    "ibm-semeru": "ibm-semeru-runtime",
+    "ibm-semeru-runtime": "ibm-semeru-runtime",
+    "idl": "idl",
+    "jruby": "jruby",
+    "julia": "julia",
+    "julia-lang": "julia",
+    "julialang": "julia",
+    "kotlin": "kotlin",
+    "kotlinlang": "kotlin",
+    "liberica": "bellsoft-liberica",
+    "lua": "lua",
+    "mandrel": "mandrel",
+    "microsoft-build-of-openjdk": "microsoft-build-of-openjdk",
+    "openjdk-builds-from-oracle": "openjdk-builds-from-oracle",
+    "oracle-graalvm": "oracle-graalvm",
+    "oracle-java": "oracle-jdk",
+    "oracle-jdk": "oracle-jdk",
+    "oracle-openjdk": "openjdk-builds-from-oracle",
+    "perl": "perl",
+    "php": "php",
+    "powershell": "powershell",
+    "ps": "powershell",
+    "ps1": "powershell",
+    "pwsh": "powershell",
+    "python": "python",
+    "red-hat-build-of-openjdk": "redhat-build-of-openjdk",
+    "red-hat-openjdk": "redhat-build-of-openjdk",
+    "redhat-build-of-openjdk": "redhat-build-of-openjdk",
+    "redhat-jdk": "redhat-build-of-openjdk",
+    "redhat-openjdk": "redhat-build-of-openjdk",
+    "rh-openjdk": "redhat-build-of-openjdk",
+    "rhjdk": "redhat-build-of-openjdk",
+    "ruby": "ruby",
+    "rust": "rust",
+    "rust-lang": "rust",
+    "rustlang": "rust",
+    "sapmachine": "sapmachine",
+    "scala": "scala",
+    "scala-lang": "scala",
+    "semeru": "ibm-semeru-runtime",
+    "temurin": "eclipse-temurin",
+    "visual-cobol": "visual-cobol",
+    "windows-powershell": "windows-powershell",
+    "zulu": "azul-zulu"
+  },
+  "product": [
+    {
+      "fullName": "Alibaba Dragonwell",
+      "inputNames": [
+        "alibaba-dragonwell",
+        "dragonwell"
+      ],
+      "eolName": "alibaba-dragonwell"
+    },
+    {
+      "fullName": "Amazon Corretto",
+      "inputNames": [
+        "amazon-corretto",
+        "corretto"
+      ],
+      "eolName": "amazon-corretto"
+    },
+    {
+      "fullName": "Apache Groovy",
+      "inputNames": [
+        "apache-groovy",
+        "groovy",
+        "groovy-lang"
+      ],
+      "eolName": "apache-groovy"
+    },
+    {
+      "fullName": "Azul Zulu",
+      "inputNames": [
+        "azul-zulu",
+        "zulu"
+      ],
+      "eolName": "azul-zulu"
+    },
+    {
+      "fullName": "Bellsoft Liberica JDK",
+      "inputNames": [
+        "bellsoft-liberica",
+        "liberica"
+      ],
+      "eolName": "bellsoft-liberica"
+    },
+    {
+      "fullName": "Eclipse Temurin",
+      "inputNames": [
+        "eclipse-temurin",
+        "temurin"
+      ],
+      "eolName": "eclipse-temurin"
+    },
+    {
+      "fullName": "Elixir",
+      "inputNames": [
+        "elixir"
+      ],
+      "eolName": "elixir"
+    },
+    {
+      "fullName": "Erlang",
+      "inputNames": [
+        "erlang",
+        "erlang-otp"
+      ],
+      "eolName": "erlang"
+    },
+    {
+      "fullName": "Glasgow Haskell Compiler (GHC)",
+      "inputNames": [
+        "ghc",
+        "haskell"
+      ],
+      "eolName": "ghc"
+    },
+    {
+      "fullName": "Gleam",
+      "inputNames": [
+        "gleam"
+      ],
+      "eolName": "gleam"
+    },
+    {
+      "fullName": "Go",
+      "inputNames": [
+        "go",
+        "golang"
+      ],
+      "eolName": "go"
+    },
+    {
+      "fullName": "GraalVM Community Edition",
+      "inputNames": [
+        "graalvm-ce",
+        "graalvm"
+      ],
+      "eolName": "graalvm-ce"
+    },
+    {
+      "fullName": "IBM Semeru Runtime",
+      "inputNames": [
+        "ibm-semeru-runtime",
+        "ibm-semeru",
+        "semeru"
+      ],
+      "eolName": "ibm-semeru-runtime"
+    },
+    {
+      "fullName": "IDL",
+      "inputNames": [
+        "idl"
+      ],
+      "eolName": "idl"
+    },
+    {
+      "fullName": "JRuby",
+      "inputNames": [
+        "jruby"
+      ],
+      "eolName": "jruby"
+    },
+    {
+      "fullName": "Julia",
+      "inputNames": [
+        "julia",
+        "julialang",
+        "julia-lang"
+      ],
+      "eolName": "julia"
+    },
+    {
+      "fullName": "Kotlin",
+      "inputNames": [
+        "kotlin",
+        "kotlinlang"
+      ],
+      "eolName": "kotlin"
+    },
+    {
+      "fullName": "Lua",
+      "inputNames": [
+        "lua"
+      ],
+      "eolName": "lua"
+    },
+    {
+      "fullName": "Mandrel",
+      "inputNames": [
+        "mandrel"
+      ],
+      "eolName": "mandrel"
+    },
+    {
+      "fullName": "Microsoft Build of OpenJDK",
+      "inputNames": [
+        "microsoft-build-of-openjdk"
+      ],
+      "eolName": "microsoft-build-of-openjdk"
+    },
+    {
+      "fullName": "OpenJDK builds from Oracle",
+      "inputNames": [
+        "openjdk-builds-from-oracle",
+        "oracle-openjdk"
+      ],
+      "eolName": "openjdk-builds-from-oracle"
+    },
+    {
+      "fullName": "Oracle GraalVM",
+      "inputNames": [
+        "oracle-graalvm"
+      ],
+      "eolName": "oracle-graalvm"
+    },
+    {
+      "fullName": "Oracle JDK",
+      "inputNames": [
+        "oracle-jdk",
+        "oracle-java"
+      ],
+      "eolName": "oracle-jdk"
+    },
+    {
+      "fullName": "Perl",
+      "inputNames": [
+        "perl"
+      ],
+      "eolName": "perl"
+    },
+    {
+      "fullName": "PHP",
+      "inputNames": [
+        "php"
+      ],
+      "eolName": "php"
+    },
+    {
+      "fullName": "Microsoft PowerShell",
+      "inputNames": [
+        "powershell",
+        "pwsh",
+        "ps",
+        "ps1"
+      ],
+      "eolName": "powershell"
+    },
+    {
+      "fullName": "Python",
+      "inputNames": [
+        "python"
+      ],
+      "eolName": "python"
+    },
+    {
+      "fullName": "Red Hat build of OpenJDK",
+      "inputNames": [
+        "redhat-build-of-openjdk",
+        "redhat-openjdk",
+        "redhat-jdk",
+        "red-hat-openjdk",
+        "rh-openjdk",
+        "rhjdk",
+        "red-hat-build-of-openjdk"
+      ],
+      "eolName": "redhat-build-of-openjdk"
+    },
+    {
+      "fullName": "Ruby",
+      "inputNames": [
+        "ruby"
+      ],
+      "eolName": "ruby"
+    },
+    {
+      "fullName": "Rust",
+      "inputNames": [
+        "rust",
+        "rustlang",
+        "rust-lang"
+      ],
+      "eolName": "rust"
+    },
+    {
+      "fullName": "SapMachine",
+      "inputNames": [
+        "sapmachine"
+      ],
+      "eolName": "sapmachine"
+    },
+    {
+      "fullName": "Scala",
+      "inputNames": [
+        "scala",
+        "scala-lang"
+      ],
+      "eolName": "scala"
+    },
+    {
+      "fullName": "Visual COBOL",
+      "inputNames": [
+        "visual-cobol"
+      ],
+      "eolName": "visual-cobol"
+    },
+    {
+      "fullName": "Microsoft Windows PowerShell",
+      "inputNames": [
+        "windows-powershell"
+      ],
+      "eolName": "windows-powershell"
+    }
+  ]
+}

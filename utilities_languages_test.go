@@ -15,9 +15,9 @@ func TestSanitizeString(t *testing.T) {
 }
 
 func TestUnifyName(t *testing.T) {
-	t.Run("Expect 'java-openjdk' to be converted to 'openjdk'", func(t *testing.T) {
-		want := "openjdk"
-		got := UnifyName("java-openjdk")
+	t.Run("Expect 'redhat-build-of-openjdk' to be converted to 'rhjdk'", func(t *testing.T) {
+		want := "redhat-build-of-openjdk"
+		got := UnifyName("lang", "redhat-build-of-openjdk")
 
 		if want != got {
 			t.Errorf("Wanted: %s, got: %s", want, got)
@@ -34,14 +34,14 @@ func TestUnifyName(t *testing.T) {
 			}
 		}()
 
-		UnifyName("labas")
+		UnifyName("lang", "labas")
 	})
 }
 
-func TestGetFullLanguageName(t *testing.T) {
-	t.Run("Expect temurin to have 'Java (Eclipse Temurin)' as full name", func(t *testing.T) {
-		want := "Java (Eclipse Temurin)"
-		got := GetFullLanguageName("temurin")
+func TestGetFullProductName(t *testing.T) {
+	t.Run("Expect 'temurin' to have 'Eclipse Temurin' as full name", func(t *testing.T) {
+		want := "Eclipse Temurin"
+		got := GetFullProductName("lang", "temurin")
 
 		if want != got {
 			t.Errorf("Wanted: %s, got: %s", want, got)
@@ -58,6 +58,24 @@ func TestGetFullLanguageName(t *testing.T) {
 			}
 		}()
 
-		GetFullLanguageName("labas")
+		GetFullProductName("lang", "labas")
+	})
+
+	t.Run("Expect 'ubuntu' to have 'Ubuntu' as full name", func(t *testing.T) {
+		want := "Ubuntu"
+		got := GetFullProductName("os", "ubuntu")
+
+		if want != got {
+			t.Errorf("Wanted: %s, got: %s", want, got)
+		}
+	})
+
+	t.Run("Expect \"ubuntu\" to have 'Ubuntu' as full name", func(t *testing.T) {
+		want := "Ubuntu"
+		got := GetFullProductName("os", "\"ubuntu\"")
+
+		if want != got {
+			t.Errorf("Wanted: %s, got: %s", want, got)
+		}
 	})
 }
